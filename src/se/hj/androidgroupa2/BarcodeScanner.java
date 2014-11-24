@@ -1,9 +1,12 @@
 package se.hj.androidgroupa2;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -17,40 +20,24 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-public class BarcodeScanner extends Activity implements OnClickListener{
+public class BarcodeScanner extends Fragment implements OnClickListener{
 
 	private Button scanBtn;
 	private TextView formatTxt, contentTxt;
-	
+
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_barcode_scanner);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
 		
-		scanBtn = (Button)findViewById(R.id.scan_button);
-		formatTxt = (TextView)findViewById(R.id.scan_format);
-		contentTxt = (TextView)findViewById(R.id.scan_content);
+		View rootView = inflater.inflate(R.layout.activity_barcode_scanner, container, false);
+
+		scanBtn = (Button)rootView.findViewById(R.id.scan_button);
+		formatTxt = (TextView)rootView.findViewById(R.id.scan_format);
+		contentTxt = (TextView)rootView.findViewById(R.id.scan_content);
 		
 		scanBtn.setOnClickListener(this);
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.barcode_scanner, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
+		
+		return rootView;
 	}
 
 	@Override
@@ -75,7 +62,7 @@ public class BarcodeScanner extends Activity implements OnClickListener{
 			formatTxt.setText("FORMAT: " + scanFormat);
 			contentTxt.setText("CONTENT: " + scanContent);
 		}else{
-		    Toast toast = Toast.makeText(getApplicationContext(), 
+		    Toast toast = Toast.makeText(getActivity().getApplicationContext(), 
 		    		"No scan data received!", Toast.LENGTH_SHORT);
 		    toast.show();
 		}
