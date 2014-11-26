@@ -10,6 +10,7 @@ import se.hj.androidgroupa2.objects.User;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -26,6 +27,24 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
+	public static User LoggedInUser = null;
+	
+	public enum NAV_ITEM {
+	    BORROWINGS(0), NOTIFICATIONS(1),
+	    BARCODE_SCANNER(2), ADD_TITLE(3),
+	    SETTINGS(4), LOGIN(10);
+
+	    private int numVal;
+
+	    NAV_ITEM(int numVal) {
+	        this.numVal = numVal;
+	    }
+	    
+	    public int getNumVal() {
+	        return numVal;
+	    }
+	}
+	
 	private DrawerLayout _drawerLayout;
 	private ListView _nav_list;
 	private ActionBarDrawerToggle _actionBarDrawerToggle;
@@ -81,12 +100,15 @@ public class MainActivity extends Activity {
         	selectItem(0);
 		}*/
         
-        Fragment fragment = new TestFragment();
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()
-        				.replace(R.id.content_frame, fragment)
-        				.commit();
-        setTitle("Test Fragment");
+        if (!getSharedPreferences("DeoLibs", MODE_PRIVATE).getBoolean("LoggedIn", false))
+        {
+
+        	FragmentManager fragmentManager = getFragmentManager();
+	        Fragment fragment = new LoginActivity();
+	        fragmentManager.beginTransaction()
+	        				.replace(R.id.content_frame, fragment)
+	        				.commit();
+        }
     }
     
     private ArrayList<NavAdapterItem> createNavItems(String[] items)
@@ -99,6 +121,7 @@ public class MainActivity extends Activity {
     		NavAdapterItem item = new NavAdapterItem();
     		item.Text = items[i];
     		
+    		//TODO: Add enum
     		if (i == 0) item.Icon = getResources().getDrawable(R.drawable.ic_action_storage);
     		else if (i == 1) item.Icon = getResources().getDrawable(R.drawable.ic_action_email);
     		else if (i == 2) item.Icon = getResources().getDrawable(R.drawable.ic_action_camera);
@@ -113,12 +136,19 @@ public class MainActivity extends Activity {
 	public void drawerSelectItem(int position) {
 		
 		// TODO: Select correct fragment and load it in!
-		_nav_list.setItemChecked(position, true);
-		setTitle(_nav_items.get(position).Text);
+		NavAdapterItem item = null;
+		if (position >= 0 && position < _nav_list.getCount())
+		{
+			_nav_list.setItemChecked(position, true);
+			setTitle(_nav_items.get(position).Text);
+			
+			item = _nav_items.get(position);
+		}
+		else return;
 		
-		NavAdapterItem item = _nav_items.get(position);
         FragmentManager fragmentManager = getFragmentManager();
-		if (position == 0)
+        
+		if (position == NAV_ITEM.BORROWINGS.getNumVal())
 		{
 			Fragment fragment = new TestFragment();
 	        fragmentManager.beginTransaction()
@@ -126,7 +156,7 @@ public class MainActivity extends Activity {
 	        				.commit();
 	        setTitle(item.Text);
 		}
-		else if (position == 1)
+		else if (position == NAV_ITEM.NOTIFICATIONS.getNumVal() + 12989812)
 		{
 			LoginUser.LogIn("rob.day@hj.see", "secret", new LoginUser.CallbackReference() {
 				
@@ -141,7 +171,7 @@ public class MainActivity extends Activity {
 				}
 			});
 		}
-		else if (position == 2) // Barcode scanner
+		else if (position == NAV_ITEM.BARCODE_SCANNER.getNumVal())
 		{
 	        Fragment fragment = new BarcodeScanner();
 	        fragmentManager.beginTransaction()
