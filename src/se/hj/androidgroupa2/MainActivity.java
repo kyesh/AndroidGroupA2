@@ -2,6 +2,11 @@ package se.hj.androidgroupa2;
 
 import java.util.ArrayList;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import se.hj.androidgroupa2.objects.LoginUser;
+import se.hj.androidgroupa2.objects.User;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -16,6 +21,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 
 public class MainActivity extends Activity {
@@ -119,6 +125,21 @@ public class MainActivity extends Activity {
 	        				.replace(R.id.content_frame, fragment)
 	        				.commit();
 	        setTitle(item.Text);
+		}
+		else if (position == 1)
+		{
+			LoginUser.LogIn("rob.day@hj.see", "secret", new LoginUser.CallbackReference() {
+				
+				@Override
+				public void callbackFunction(User user) {
+					
+					if (user != null)
+						Toast.makeText(MainActivity.this, 
+								"Welcome " + user.FirstName + " " + user.LastName, Toast.LENGTH_LONG).show();
+					else
+						Toast.makeText(MainActivity.this, "Could not log in", Toast.LENGTH_LONG).show();
+				}
+			});
 		}
 		else if (position == 2) // Barcode scanner
 		{

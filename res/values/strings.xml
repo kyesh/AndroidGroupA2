@@ -17,5 +17,16 @@
 	    <item>Add title</item>
 	    <item>Settings</item>
 	</string-array>
+	
+	<string name="title_activity_search">Search result</string>
+	
+	<string name="title_activity_login">Log in</string>
+    <string name="header">Welcome</string>
+    <string name="subheader">Please log in</string>
+    <string name="email_label">Email</string>
+    <string name="password_label">Password</string>
+    <string name="login_btn">Log in</string>
+    <string name="notnow_btn">Not now</string>
+    <string name="register_label">Need an account?</string>
 
 </resources>
