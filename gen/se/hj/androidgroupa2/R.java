@@ -42,17 +42,18 @@ public final class R {
         public static final int list_activated_background=0x7f020005;
     }
     public static final class id {
-        public static final int action_search=0x7f0a0016;
-        public static final int action_settings=0x7f0a0015;
+        public static final int action_search=0x7f0a0017;
+        public static final int action_settings=0x7f0a0016;
+        public static final int container=0x7f0a000c;
         public static final int content_frame=0x7f0a0009;
         public static final int drawer_layout=0x7f0a0008;
-        public static final int drawer_list_item_dividerBottom=0x7f0a000f;
-        public static final int drawer_list_item_dividerTop=0x7f0a000d;
-        public static final int drawer_list_item_header=0x7f0a000c;
-        public static final int drawer_list_item_icon=0x7f0a000e;
+        public static final int drawer_list_item_dividerBottom=0x7f0a0010;
+        public static final int drawer_list_item_dividerTop=0x7f0a000e;
+        public static final int drawer_list_item_header=0x7f0a000d;
+        public static final int drawer_list_item_icon=0x7f0a000f;
         public static final int drawer_menu=0x7f0a000a;
-        public static final int fragment_search=0x7f0a0010;
-        public static final int fragment_test=0x7f0a0011;
+        public static final int fragment_search=0x7f0a0011;
+        public static final int fragment_test=0x7f0a0012;
         public static final int logInBtn=0x7f0a0007;
         public static final int loginEmail=0x7f0a0003;
         public static final int loginPassword=0x7f0a0004;
@@ -62,22 +63,50 @@ public final class R {
         public static final int scan_button=0x7f0a0000;
         public static final int scan_content=0x7f0a0002;
         public static final int scan_format=0x7f0a0001;
-        public static final int search_item_author=0x7f0a0013;
-        public static final int search_item_title=0x7f0a0012;
-        public static final int search_item_year=0x7f0a0014;
+        public static final int search_item_author=0x7f0a0014;
+        public static final int search_item_title=0x7f0a0013;
+        public static final int search_item_year=0x7f0a0015;
     }
     public static final class layout {
         public static final int activity_barcode_scanner=0x7f030000;
         public static final int activity_login=0x7f030001;
         public static final int activity_main=0x7f030002;
-        public static final int drawer_list_item=0x7f030003;
-        public static final int fragment_search=0x7f030004;
-        public static final int fragment_test=0x7f030005;
-        public static final int search_item=0x7f030006;
+        public static final int activity_title_page=0x7f030003;
+        public static final int drawer_list_item=0x7f030004;
+        public static final int fragment_search=0x7f030005;
+        public static final int fragment_test=0x7f030006;
+        public static final int fragment_title_page=0x7f030007;
+        /** 
+    Layout alias to replace the single-pane version of the layout with a
+    two-pane version on Large screens.
+
+    For more on layout aliases, see:
+    http://developer.android.com/training/multiscreen/screensizes.html#TaskUseAliasFilters
+    
+
+    Layout alias to replace the single-pane version of the layout with a
+    two-pane version on Large screens.
+
+    For more on layout aliases, see:
+    http://developer.android.com/training/multiscreen/screensizes.html#TaskUseAliasFilters
+    
+
+    Layout alias to replace the single-pane version of the layout with a
+    two-pane version on Large screens.
+
+    For more on layout aliases, see:
+    http://developer.android.com/training/multiscreen/screensizes.html#TaskUseAliasFilters
+    
+         */
+        public static final int fragment_tittlepage=0x7f03000b;
+        public static final int fragment_tittlepage_grid=0x7f030008;
+        public static final int fragment_tittlepage_list=0x7f030009;
+        public static final int search_item=0x7f03000a;
     }
     public static final class menu {
         public static final int barcode_scanner=0x7f090000;
         public static final int main=0x7f090001;
+        public static final int title_page=0x7f090002;
     }
     public static final class string {
         public static final int action_settings=0x7f050002;
@@ -96,6 +125,7 @@ public final class R {
         public static final int title_activity_barcode_scanner=0x7f050003;
         public static final int title_activity_login=0x7f050008;
         public static final int title_activity_search=0x7f050007;
+        public static final int title_activity_title_page=0x7f050010;
     }
     public static final class style {
         /** 
