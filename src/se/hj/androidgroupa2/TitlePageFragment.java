@@ -3,6 +3,8 @@ package se.hj.androidgroupa2;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -31,6 +33,7 @@ import android.widget.TextView;
 
 import se.hj.androidgroupa2.dummy.DummyContent;
 
+
 /*
  * How to call a Title Page Fragment
  * 
@@ -47,7 +50,7 @@ public class TitlePageFragment extends Fragment {
 
 	private TextView bookTitle ;
 	private ListView loanables;
-	private ListAdapter loanableAdapter;
+	private LoanableAdapter loanableAdapter;
 	
 	 private class getBookTitle extends AsyncTask<String, Integer, String> {
 	     protected String doInBackground(String... TitleId) {
@@ -96,10 +99,21 @@ public class TitlePageFragment extends Fragment {
 	    	 try{
 	    		//parse results
 	    		 JSONObject resultObject = new JSONObject(result);
-	    		 JSONArray Loanables = resultObject.getJSONArray("Loanables");
+	    		 JSONArray LoanablesJSON = resultObject.getJSONArray("Loanables");
 	    		 JSONObject titleObject = resultObject.getJSONObject("Title");
 	    		 
+	    		 ArrayList<JSONObject> loanableList = new ArrayList<JSONObject>();
 	    		 bookTitle.setText(titleObject.getString("BookTitle"));
+	    		 
+	    		 
+	    		 
+	    		 for(int i = 0; i < LoanablesJSON.length(); i++){
+	    			 loanableList.add(LoanablesJSON.getJSONObject(i));
+	    		 }
+	    		 
+	    		 	loanableAdapter = new LoanableAdapter( getActivity(), R.layout.loanable_layout, R.id.DoeLibsId, loanableList);
+	    			//LoanableAdapter  loanableAdapter = new LoanableAdapter( TitlePageFragment.this , R.layout.loanable_layout, R.id.DoeLibsId ,loanableList );
+	    			loanables.setAdapter(loanableAdapter);
 	    		 
 	    		}
 	    		catch (Exception e) {

@@ -42,9 +42,11 @@ public final class R {
         public static final int list_activated_background=0x7f020005;
     }
     public static final class id {
+        public static final int DoeLibsId=0x7f0a0014;
+        public static final int Location=0x7f0a0015;
         public static final int Title=0x7f0a0012;
-        public static final int action_search=0x7f0a0018;
-        public static final int action_settings=0x7f0a0017;
+        public static final int action_search=0x7f0a001a;
+        public static final int action_settings=0x7f0a0019;
         public static final int content_frame=0x7f0a0009;
         public static final int drawer_layout=0x7f0a0008;
         public static final int drawer_list_item_dividerBottom=0x7f0a000f;
@@ -64,9 +66,9 @@ public final class R {
         public static final int scan_button=0x7f0a0000;
         public static final int scan_content=0x7f0a0002;
         public static final int scan_format=0x7f0a0001;
-        public static final int search_item_author=0x7f0a0015;
-        public static final int search_item_title=0x7f0a0014;
-        public static final int search_item_year=0x7f0a0016;
+        public static final int search_item_author=0x7f0a0017;
+        public static final int search_item_title=0x7f0a0016;
+        public static final int search_item_year=0x7f0a0018;
     }
     public static final class layout {
         public static final int activity_barcode_scanner=0x7f030000;
@@ -97,10 +99,11 @@ public final class R {
     http://developer.android.com/training/multiscreen/screensizes.html#TaskUseAliasFilters
     
          */
-        public static final int fragment_tittlepage=0x7f030009;
+        public static final int fragment_tittlepage=0x7f03000a;
         public static final int fragment_tittlepage_grid=0x7f030006;
         public static final int fragment_tittlepage_list=0x7f030007;
-        public static final int search_item=0x7f030008;
+        public static final int loanable_layout=0x7f030008;
+        public static final int search_item=0x7f030009;
     }
     public static final class menu {
         public static final int barcode_scanner=0x7f090000;
