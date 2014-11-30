@@ -26,21 +26,29 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import se.hj.androidgroupa2.dummy.DummyContent;
 
-/**
- * A fragment representing a list of Items.
- * <p />
- * Large screen devices (such as tablets) are supported by replacing the
- * ListView with a GridView.
- * <p />
- * Activities containing this fragment MUST implement the {@link Callbacks}
- * interface.
+/*
+ * How to call a Title Page Fragment
+ * 
+   			FragmentManager fragmentManager = getFragmentManager();
+	        Fragment fragment = new TitlePageFragment();
+	        Bundle args = new Bundle();
+	        args.putString("TitleId", TitleId);
+	        fragment.setArguments(args);
+	        fragmentManager.beginTransaction()
+	        				.replace(R.id.content_frame, fragment)
+	        				.commit();
  */
 public class TitlePageFragment extends Fragment {
 
+	private TextView bookTitle ;
+	private ListView loanables;
+	private ListAdapter loanableAdapter;
+	
 	 private class getBookTitle extends AsyncTask<String, Integer, String> {
 	     protected String doInBackground(String... TitleId) {
 	    	 
@@ -89,10 +97,9 @@ public class TitlePageFragment extends Fragment {
 	    		//parse results
 	    		 JSONObject resultObject = new JSONObject(result);
 	    		 JSONArray Loanables = resultObject.getJSONArray("Loanables");
-	    		 	    			 Log.i("kyesh", "In Else");
-	    			 JSONObject titleObject = resultObject.getJSONObject("Title");
-	    			 //TitleId = titleObject.getString("TitleId");
-	    			 //Log.i("kyesh", "TitleId:"+TitleId);
+	    		 JSONObject titleObject = resultObject.getJSONObject("Title");
+	    		 
+	    		 bookTitle.setText(titleObject.getString("BookTitle"));
 	    		 
 	    		}
 	    		catch (Exception e) {
@@ -109,7 +116,7 @@ public class TitlePageFragment extends Fragment {
 	 * The Adapter which will be used to populate the ListView/GridView with
 	 * Views.
 	 */
-	private ListAdapter mAdapter;
+
 
 	public TitlePageFragment() {
 	}
@@ -118,10 +125,12 @@ public class TitlePageFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		// TODO: Change Adapter to display your content
-		mAdapter = new ArrayAdapter<DummyContent.DummyItem>(getActivity(),
-				android.R.layout.simple_list_item_1, android.R.id.text1,
-				DummyContent.ITEMS);
+		loanables = (ListView) getView().findViewById(R.id.loanables);
+		bookTitle = (TextView) getView().findViewById(R.id.Title);
+		loanables.setAdapter(loanableAdapter);
+		
+		//loanableAdapter.
+		
 	}
 
 	@Override
@@ -130,9 +139,6 @@ public class TitlePageFragment extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_tittlepage, container,
 				false);
 
-		// Set the adapter
-		mListView = (AbsListView) view.findViewById(android.R.id.list);
-		((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
 
 		return view;
 	}
