@@ -1,8 +1,24 @@
 package se.hj.androidgroupa2;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import android.app.Activity;
+import android.app.FragmentManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,23 +39,70 @@ import se.hj.androidgroupa2.dummy.DummyContent;
  * Activities containing this fragment MUST implement the {@link Callbacks}
  * interface.
  */
-public class TitlePageFragment extends Fragment implements
-		AbsListView.OnItemClickListener {
+public class TitlePageFragment extends Fragment {
 
-	// TODO: Rename parameter arguments, choose names that match
-	// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-	private static final String ARG_PARAM1 = "param1";
-	private static final String ARG_PARAM2 = "param2";
+	 private class getBookTitle extends AsyncTask<String, Integer, String> {
+	     protected String doInBackground(String... TitleId) {
+	    	 
+	    	 Log.i("kyesh", "doInBackground Running:"+TitleId[0]);
+	    	 String APIURL = "http://doelibs-001-site1.myasp.net/api/title/" + TitleId[0];
+	    	 StringBuilder bookBuilder = new StringBuilder();
+	    	 HttpClient bookClient = new DefaultHttpClient();
+	    	 Log.i("kyesh", "APIURL:"+APIURL);
+	    	 try {
+	    		    //get the data
+	    		 HttpGet bookGet = new HttpGet(APIURL);
+	    		 HttpResponse bookResponse = bookClient.execute(bookGet);
+	    		 
+	    		 StatusLine bookSearchStatus = bookResponse.getStatusLine();
+	    		 if (bookSearchStatus.getStatusCode()==200) {
+	    		     //we have a result
+	    			 HttpEntity bookEntity = bookResponse.getEntity();
+	    			 
+	    			 InputStream bookContent = bookEntity.getContent();
+	    			 InputStreamReader bookInput = new InputStreamReader(bookContent);
+	    			 BufferedReader bookReader = new BufferedReader(bookInput);
+	    			 
+	    			 String lineIn;
+	    			 while ((lineIn=bookReader.readLine())!=null) {
+	    			     bookBuilder.append(lineIn);
+	    			 }
+	    			 Log.i("kyesh", "Server Response:"+bookBuilder.toString());
+	    			 return bookBuilder.toString();
+	    			 
+	    		 }
+	    		 
+	    		}
+	    		catch(Exception e){ e.printStackTrace(); }
+	    	 
+	         return null;
+	     }
 
-	// TODO: Rename and change types of parameters
-	private String mParam1;
-	private String mParam2;
+	     protected void onProgressUpdate(Integer... progress) {
+	         //setProgressPercent(progress[0]);
+	     }
 
-	private OnFragmentInteractionListener mListener;
-
-	/**
-	 * The fragment's ListView/GridView.
-	 */
+	     protected void onPostExecute(String result) {
+	    	 String TitleId;
+	    	 Log.i("kyesh", "onPostExecute running");
+	    	 try{
+	    		//parse results
+	    		 JSONObject resultObject = new JSONObject(result);
+	    		 JSONArray Loanables = resultObject.getJSONArray("Loanables");
+	    		 	    			 Log.i("kyesh", "In Else");
+	    			 JSONObject titleObject = resultObject.getJSONObject("Title");
+	    			 //TitleId = titleObject.getString("TitleId");
+	    			 //Log.i("kyesh", "TitleId:"+TitleId);
+	    		 
+	    		}
+	    		catch (Exception e) {
+	    		//no result
+	    			Log.i("kyesh", "Exeception",e);
+	    			e.printStackTrace();
+	    		}
+	     }
+	 }
+	
 	private AbsListView mListView;
 
 	/**
@@ -48,31 +111,12 @@ public class TitlePageFragment extends Fragment implements
 	 */
 	private ListAdapter mAdapter;
 
-	// TODO: Rename and change types of parameters
-	public static TitlePageFragment newInstance(String param1, String param2) {
-		TitlePageFragment fragment = new TitlePageFragment();
-		Bundle args = new Bundle();
-		args.putString(ARG_PARAM1, param1);
-		args.putString(ARG_PARAM2, param2);
-		fragment.setArguments(args);
-		return fragment;
-	}
-
-	/**
-	 * Mandatory empty constructor for the fragment manager to instantiate the
-	 * fragment (e.g. upon screen orientation changes).
-	 */
 	public TitlePageFragment() {
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		if (getArguments() != null) {
-			mParam1 = getArguments().getString(ARG_PARAM1);
-			mParam2 = getArguments().getString(ARG_PARAM2);
-		}
 
 		// TODO: Change Adapter to display your content
 		mAdapter = new ArrayAdapter<DummyContent.DummyItem>(getActivity(),
@@ -90,65 +134,7 @@ public class TitlePageFragment extends Fragment implements
 		mListView = (AbsListView) view.findViewById(android.R.id.list);
 		((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
 
-		// Set OnItemClickListener so we can be notified on item clicks
-		mListView.setOnItemClickListener(this);
-
 		return view;
-	}
-
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		try {
-			mListener = (OnFragmentInteractionListener) activity;
-		} catch (ClassCastException e) {
-			throw new ClassCastException(activity.toString()
-					+ " must implement OnFragmentInteractionListener");
-		}
-	}
-
-	@Override
-	public void onDetach() {
-		super.onDetach();
-		mListener = null;
-	}
-
-	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
-		if (null != mListener) {
-			// Notify the active callbacks interface (the activity, if the
-			// fragment is attached to one) that an item has been selected.
-			mListener
-					.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
-		}
-	}
-
-	/**
-	 * The default content for this Fragment has a TextView that is shown when
-	 * the list is empty. If you would like to change the text, call this method
-	 * to supply the text it should use.
-	 */
-	public void setEmptyText(CharSequence emptyText) {
-		View emptyView = mListView.getEmptyView();
-
-		if (emptyText instanceof TextView) {
-			((TextView) emptyView).setText(emptyText);
-		}
-	}
-
-	/**
-	 * This interface must be implemented by activities that contain this
-	 * fragment to allow an interaction in this fragment to be communicated to
-	 * the activity and potentially other fragments contained in that activity.
-	 * <p>
-	 * See the Android Training lesson <a href=
-	 * "http://developer.android.com/training/basics/fragments/communicating.html"
-	 * >Communicating with Other Fragments</a> for more information.
-	 */
-	public interface OnFragmentInteractionListener {
-		// TODO: Update argument type and name
-		public void onFragmentInteraction(String id);
 	}
 
 }
