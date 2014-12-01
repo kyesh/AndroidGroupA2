@@ -150,11 +150,15 @@ public class MainActivity extends Activity {
         
 		if (position == NAV_ITEM.BORROWINGS.getNumVal())
 		{
-			Fragment fragment = new TestFragment();
-	        fragmentManager.beginTransaction()
-	        				.replace(R.id.content_frame, fragment)
-	        				.commit();
-	        setTitle(item.Text);
+			Fragment fragment = new TitleDetailFragment();
+			fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+			setTitle(item.Text);
+			
+//			Fragment fragment = new TestFragment();
+//	        fragmentManager.beginTransaction()
+//	        				.replace(R.id.content_frame, fragment)
+//	        				.commit();
+//	        setTitle(item.Text);
 		}
 		else if (position == NAV_ITEM.NOTIFICATIONS.getNumVal() + 12989812)
 		{
