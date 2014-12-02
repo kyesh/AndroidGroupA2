@@ -24,6 +24,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -32,6 +33,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import se.hj.androidgroupa2.dummy.DummyContent;
+import se.hj.androidgroupa2.objects.OnFragmentCompleteListener;
+import se.hj.androidgroupa2.objects.Title;
 
 
 /*
@@ -51,6 +54,9 @@ public class TitlePageFragment extends Fragment {
 	private TextView bookTitle ;
 	private ListView loanables;
 	private LoanableAdapter loanableAdapter;
+	
+	private OnFragmentCompleteListener _callbackActivity;
+	private Title _title;
 	
 	 private class getBookTitle extends AsyncTask<String, Integer, String> {
 	     protected String doInBackground(String... TitleId) {
@@ -101,6 +107,7 @@ public class TitlePageFragment extends Fragment {
 	    		 JSONObject resultObject = new JSONObject(result);
 	    		 JSONArray LoanablesJSON = resultObject.getJSONArray("Loanables");
 	    		 JSONObject titleObject = resultObject.getJSONObject("Title");
+	    		 _title = Title.parseTitleFromJSONObject(titleObject);
 	    		 
 	    		 ArrayList<JSONObject> loanableList = new ArrayList<JSONObject>();
 	    		 bookTitle.setText(titleObject.getString("BookTitle"));
@@ -136,6 +143,13 @@ public class TitlePageFragment extends Fragment {
 	}
 
 	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		
+		_callbackActivity = (OnFragmentCompleteListener) activity;
+	}
+	
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
@@ -152,6 +166,18 @@ public class TitlePageFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_tittlepage, container,
 				false);
+		bookTitle = (TextView) view.findViewById(R.id.Title);
+		
+		bookTitle.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Bundle args = new Bundle();
+				args.putSerializable("TAG_TO_TITLE", _title);
+				Fragment fragment = new TitleDetailFragment();
+				fragment.setArguments(args);
+				_callbackActivity.onFragmentComplete(TitlePageFragment.this, fragment);
+			}
+		});
 
 
 		return view;

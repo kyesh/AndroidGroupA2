@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 public class TitleDetailFragment extends Fragment {
 	
+	private Title title;
+	
 	private TextView _title ;
 	private TextView _authors;
 	private TextView _ISBN10;
@@ -28,6 +30,44 @@ public class TitleDetailFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_titledetails, container, false);
 		getActivity().setTitle("Title details");
+		
+		_title = (TextView) rootView.findViewById(R.id.TitleDetails_Title);
+		_authors = (TextView) rootView.findViewById(R.id.TitleDetails_Author);
+		_ISBN10 = (TextView) rootView.findViewById(R.id.TitleDetails_ISBN10);
+		_ISBN13 = (TextView) rootView.findViewById(R.id.TitleDetails_ISBN13);
+		_publicationYear = (TextView) rootView.findViewById(R.id.TitleDetails_Puplicationyear);
+		_publisher = (TextView) rootView.findViewById(R.id.TitleDetails_Publisher);
+		_topics = (TextView) rootView.findViewById(R.id.TitleDetails_Topics);
+		
+		Bundle args = getArguments();
+	    Title title = (Title) args
+	        .getSerializable("TAG_TO_TITLE");
+		
+//		title = new Title();
+//		title.BookTitle = "Emil lagar mat";
+//		title.ISBN10 = "1234567890";
+//		title.ISBN13 = "1234567890123";
+//		title.EditionYear = 2014;
+		
+		if(title != null)
+		{
+	    _title.setText(title.BookTitle);
+	    _authors.setText("Emil lygnebrandt, Joanthan Holm, Alexander Lagerqvist");
+	    _ISBN10.setText(title.ISBN10);
+	    _ISBN13.setText(title.ISBN13);
+	    _publicationYear.setText(title.EditionYear.toString());
+	    _publisher.setText("Bonniers");
+	    _topics.setText("Food and stuff");
+		}
+	    
+//	    _title.setText(title.BookTitle);
+//	    _authors.setText(title.);
+//	    _ISBN10.setText(title.ISBN10);
+//	    _ISBN13.setText(title.ISBN13);
+//	    _publicationYear.setText(title.EditionYear);
+//	    _publisher.setText(title.Publisher.Name);
+//	    _title.setText(title.);
+		
 		return rootView;
 		
 	}
@@ -36,25 +76,14 @@ public class TitleDetailFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		_title = (TextView) getView().findViewById(R.id.TitleDetails_Title);
-		_authors = (TextView) getView().findViewById(R.id.TitleDetails_Author);
-		_ISBN10 = (TextView) getView().findViewById(R.id.TitleDetails_ISBN10);
-		_ISBN13 = (TextView) getView().findViewById(R.id.TitleDetails_ISBN13);
-		_publicationYear = (TextView) getView().findViewById(R.id.TitleDetails_Puplicationyear);
-		_publisher = (TextView) getView().findViewById(R.id.TitleDetails_Publisher);
-		_topics = (TextView) getView().findViewById(R.id.TitleDetails_Topics);
+		
+		
 		
 //		Bundle args = getArguments();
 //	    Title title = (Title) args.getSerializable(TAG_TITLE);
 //	    
-//	    _title.setText(title.BookTitle);
-//	    _authors.setText(title.);
-//	    _ISBN10.setText(title.ISBN10);
-//	    _ISBN13.setText(title.ISBN13);
-//	    _publicationYear.setText(title.EditionYear);
-//	    _publisher.setText(title.Publisher.Name);
-//	    _title.setText(title.);
-
 	}
+	
+	
 }
 

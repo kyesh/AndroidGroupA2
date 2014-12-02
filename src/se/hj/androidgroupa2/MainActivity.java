@@ -25,9 +25,11 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnKeyListener;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -213,6 +215,7 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 			fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 			setTitle(item.Text);
 			
+					
 //			Fragment fragment = new TestFragment();
 //	        fragmentManager.beginTransaction()
 //	        				.replace(R.id.content_frame, fragment)
@@ -342,6 +345,18 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 				setActiveFragment(new TestFragment());
 			}
 		}
+		else if (sender.getClass() == TitlePageFragment.class)
+		{
+			if (params != null)
+			{
+				TitleDetailFragment fragment = (TitleDetailFragment) params;
+//				getFragmentManager()
+//				    .beginTransaction()
+//				    .replace(R.id.content_frame, fragment, "TAG_TO_FRAGMENT")
+//				    .addToBackStack("TAG_TO_FRAGMENT").commit();
+				setActiveFragment(fragment);
+			}
+		}
 	}
     
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
@@ -365,4 +380,6 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 			return true;
 		}
     }
+    
+    
 }
