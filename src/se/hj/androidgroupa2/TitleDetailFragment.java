@@ -56,7 +56,7 @@ public class TitleDetailFragment extends Fragment {
 	    _ISBN10.setText(title.ISBN10);
 	    _ISBN13.setText(title.ISBN13);
 	    _publicationYear.setText(title.EditionYear.toString());
-	    _publisher.setText("Bonniers");
+	    _publisher.setText(title.Publisher.Name);
 	    _topics.setText("Food and stuff");
 		}
 	    
@@ -75,9 +75,6 @@ public class TitleDetailFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		
-		
 		
 //		Bundle args = getArguments();
 //	    Title title = (Title) args.getSerializable(TAG_TITLE);
