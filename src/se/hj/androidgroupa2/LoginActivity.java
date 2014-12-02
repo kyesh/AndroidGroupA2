@@ -13,13 +13,16 @@ import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 public class LoginActivity extends Fragment {
 	
@@ -31,6 +34,7 @@ public class LoginActivity extends Fragment {
 	Button _loginBtn;
 	
 	OnFragmentCompleteListener _fragmentCallback;
+	
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -52,6 +56,19 @@ public class LoginActivity extends Fragment {
     	_emailBox = (EditText) rootView.findViewById(R.id.loginEmail);
         _passwordBox = (EditText) rootView.findViewById(R.id.loginPassword);
         _error = (TextView) rootView.findViewById(R.id.login_error);
+        
+        _passwordBox.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+			@Override
+			public boolean onEditorAction(TextView v, int actionId,
+					KeyEvent event) {
+				if(actionId==EditorInfo.IME_ACTION_DONE)
+				{
+					onLogIn(v);
+				}
+				return false;
+			}
+        });
         
         _notNowBtn = (Button) rootView.findViewById(R.id.notNowBtn);
         _notNowBtn.setOnClickListener(new OnClickListener() {
@@ -121,4 +138,6 @@ public class LoginActivity extends Fragment {
         //startActivity(intent);
     	_fragmentCallback.onFragmentComplete(this, null);
     }
+    
+
 }
