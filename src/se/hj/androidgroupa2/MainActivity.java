@@ -425,7 +425,7 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 //				    .beginTransaction()
 //				    .replace(R.id.content_frame, fragment, "TAG_TO_FRAGMENT")
 //				    .addToBackStack("TAG_TO_FRAGMENT").commit();
-				setActiveFragment(fragment);
+				setActiveFragment(fragment, R.string.title_activity_title_page, true);
 			}
 		}
 	}
