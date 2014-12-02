@@ -3,6 +3,7 @@ package se.hj.androidgroupa2;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.Header;
 import org.apache.http.message.BasicHeader;
@@ -10,6 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import se.hj.androidgroupa2.objects.ApiHelper;
+import se.hj.androidgroupa2.objects.ExtendedTitle;
 import se.hj.androidgroupa2.objects.LoginUser;
 import se.hj.androidgroupa2.objects.OnFragmentCompleteListener;
 import se.hj.androidgroupa2.objects.StoredDataName;
@@ -117,7 +119,15 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
         
         boolean userLoggedIn = checkForLoggedInUser();
         
-        _nav_items = createNavItems(getResources().getStringArray(R.array.nav_list_items)); 
+//        _nav_items = createNavItems(getResources().getStringArray(R.array.nav_list_items)); 
+//        _nav_list.setAdapter(new NavAdapter(
+//        		this,
+//        		R.layout.drawer_list_item,
+//        		android.R.id.text1,
+//        		_nav_items));
+//        _nav_list.setOnItemClickListener(new DrawerItemClickListener());
+
+        _nav_items = createNavItems(getResources().getStringArray(R.array.nav_list_items));
         _nav_list.setAdapter(new NavAdapter(
         		this,
         		R.layout.drawer_list_item,
@@ -333,6 +343,11 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 			_nav_users_name.setText(R.string.nav_user_notLoggedIn_name);
 			_nav_users_email.setVisibility(View.GONE);
 		}
+
+      NavAdapter adapter = (NavAdapter) _nav_list.getAdapter();
+      adapter.clear();
+      adapter.addAll(createNavItems(getResources().getStringArray(R.array.nav_list_items)));
+      adapter.notifyDataSetChanged();
 	}
 	
 	public void onNavLoginClick(View textView)
@@ -404,7 +419,7 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 			LoginActivity fragment = (LoginActivity) sender;
 			if (params != null)
 			{
-				User param = (User) params;
+				User param = ApiHelper.LoggedInUser;
 				Toast.makeText(this, "Welcome " + param.FirstName + " " + param.LastName, Toast.LENGTH_SHORT).show();
 				setLoggedInUser(param);
 				//TODO: set fragment to borrowings
@@ -412,7 +427,7 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 			}
 			else
 			{
-				setLoggedInUser(null);
+				setLoggedInUser(ApiHelper.LoggedInUser);
 				setActiveFragment(new TestFragment(), R.string.title_activity_borrowings, false);
 			}
 		}

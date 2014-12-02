@@ -24,7 +24,7 @@ public class LoginUser extends AsyncTask<String, Void, User> {
 		
 		ApiHelper.AuthentificationHeader = new BasicHeader("Authorization", "Basic " + 
 				Base64.encodeToString((username + ":" + password).getBytes(),
-				Base64.NO_PADDING | Base64.NO_WRAP));
+				Base64.NO_WRAP));
 		JSONObject result = ApiHelper.getFromApi("http://doelibs-001-site1.myasp.net/api/User");
 		User loggedInUser = User.parseUserFromJSONObject(result);
 		if (loggedInUser != null)
