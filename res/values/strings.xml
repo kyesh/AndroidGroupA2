@@ -30,5 +30,13 @@
     <string name="notnow_btn">Not now</string>
     <string name="register_label">Need an account?</string>
     <string name="title_activity_title_page">TitlePage</string>
+    
+    <string name="TitleDetail_Title">Title :</string>
+    <string name="TitleDetail_Authors">Authors :</string>
+    <string name="TitleDetail_ISBN10">ISBN 10 :</string>
+    <string name="TitleDetail_ISBN13">ISBN 13 :</string>
+    <string name="TitleDetail_Publisher">Publisher :</string>
+    <string name="TitleDetail_Publicationyear">Publication year :</string>
+    <string name="TitleDetail_Topics">Topics :</string>
 
 </resources>
