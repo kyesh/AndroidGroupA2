@@ -9,6 +9,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHeader;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -16,14 +17,14 @@ import android.util.Log;
 
 public class ApiHelper {
 
-	public static Header AuthentificationHeader;
+	public static BasicHeader AuthentificationHeader;
 	public static User LoggedInUser;
 	
 	public static JSONObject getFromApi(String url)
 	{
 		HttpClient client = new DefaultHttpClient();
 		HttpGet get = new HttpGet(url);
-		get.addHeader(AuthentificationHeader);
+		if (AuthentificationHeader != null) get.addHeader(AuthentificationHeader);
 		
 		try {
 			HttpResponse response = client.execute(get);

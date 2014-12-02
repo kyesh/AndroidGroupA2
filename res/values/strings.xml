@@ -21,6 +21,8 @@
     </string-array>
 
     <string name="title_activity_search">Search result</string>
+    <string name="title_activity_borrowings">Borrowings</string>
+    <string name="title_activity_titleDetailsPage">Title details</string>
     <string name="title_activity_login">Log in</string>
     <string name="header">Welcome</string>
     <string name="subheader">Please log in</string>

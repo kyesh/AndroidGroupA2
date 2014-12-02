@@ -44,26 +44,18 @@ public final class R {
         public static final int list_activated_background=0x7f020005;
     }
     public static final class id {
-<<<<<<< HEAD
-        public static final int DoeLibsId=0x7f0a0017;
-        public static final int Location=0x7f0a0018;
-        public static final int Title=0x7f0a0015;
-        public static final int action_search=0x7f0a001d;
-        public static final int action_settings=0x7f0a001c;
-=======
-        public static final int DoeLibsId=0x7f0a001b;
-        public static final int Location=0x7f0a001c;
-        public static final int Title=0x7f0a0019;
-        public static final int TitleDetails_Author=0x7f0a0013;
-        public static final int TitleDetails_ISBN10=0x7f0a0014;
-        public static final int TitleDetails_ISBN13=0x7f0a0015;
-        public static final int TitleDetails_Publisher=0x7f0a0017;
-        public static final int TitleDetails_Puplicationyear=0x7f0a0016;
-        public static final int TitleDetails_Title=0x7f0a0012;
-        public static final int TitleDetails_Topics=0x7f0a0018;
-        public static final int action_search=0x7f0a0021;
-        public static final int action_settings=0x7f0a0020;
->>>>>>> origin/master
+        public static final int DoeLibsId=0x7f0a001e;
+        public static final int Location=0x7f0a001f;
+        public static final int Title=0x7f0a001c;
+        public static final int TitleDetails_Author=0x7f0a0016;
+        public static final int TitleDetails_ISBN10=0x7f0a0017;
+        public static final int TitleDetails_ISBN13=0x7f0a0018;
+        public static final int TitleDetails_Publisher=0x7f0a001a;
+        public static final int TitleDetails_Puplicationyear=0x7f0a0019;
+        public static final int TitleDetails_Title=0x7f0a0015;
+        public static final int TitleDetails_Topics=0x7f0a001b;
+        public static final int action_search=0x7f0a0024;
+        public static final int action_settings=0x7f0a0023;
         public static final int content_frame=0x7f0a0009;
         public static final int drawer_layout=0x7f0a0008;
         public static final int drawer_list_item_dividerBottom=0x7f0a0012;
@@ -71,15 +63,9 @@ public final class R {
         public static final int drawer_list_item_header=0x7f0a000f;
         public static final int drawer_list_item_icon=0x7f0a0011;
         public static final int drawer_menu=0x7f0a000a;
-<<<<<<< HEAD
         public static final int fragment_search=0x7f0a0013;
         public static final int fragment_test=0x7f0a0014;
-        public static final int loanables=0x7f0a0016;
-=======
-        public static final int fragment_search=0x7f0a0010;
-        public static final int fragment_test=0x7f0a0011;
-        public static final int loanables=0x7f0a001a;
->>>>>>> origin/master
+        public static final int loanables=0x7f0a001d;
         public static final int logInBtn=0x7f0a0007;
         public static final int loginEmail=0x7f0a0003;
         public static final int loginPassword=0x7f0a0004;
@@ -92,15 +78,9 @@ public final class R {
         public static final int scan_button=0x7f0a0000;
         public static final int scan_content=0x7f0a0002;
         public static final int scan_format=0x7f0a0001;
-<<<<<<< HEAD
-        public static final int search_item_author=0x7f0a001a;
-        public static final int search_item_title=0x7f0a0019;
-        public static final int search_item_year=0x7f0a001b;
-=======
-        public static final int search_item_author=0x7f0a001e;
-        public static final int search_item_title=0x7f0a001d;
-        public static final int search_item_year=0x7f0a001f;
->>>>>>> origin/master
+        public static final int search_item_author=0x7f0a0021;
+        public static final int search_item_title=0x7f0a0020;
+        public static final int search_item_year=0x7f0a0022;
     }
     public static final class layout {
         public static final int activity_barcode_scanner=0x7f030000;
@@ -144,32 +124,34 @@ public final class R {
         public static final int title_page=0x7f090002;
     }
     public static final class string {
-        public static final int TitleDetail_Authors=0x7f050012;
-        public static final int TitleDetail_ISBN10=0x7f050013;
-        public static final int TitleDetail_ISBN13=0x7f050014;
-        public static final int TitleDetail_Publicationyear=0x7f050016;
-        public static final int TitleDetail_Publisher=0x7f050015;
-        public static final int TitleDetail_Title=0x7f050011;
-        public static final int TitleDetail_Topics=0x7f050017;
+        public static final int TitleDetail_Authors=0x7f050016;
+        public static final int TitleDetail_ISBN10=0x7f050017;
+        public static final int TitleDetail_ISBN13=0x7f050018;
+        public static final int TitleDetail_Publicationyear=0x7f05001a;
+        public static final int TitleDetail_Publisher=0x7f050019;
+        public static final int TitleDetail_Title=0x7f050015;
+        public static final int TitleDetail_Topics=0x7f05001b;
         public static final int action_settings=0x7f050002;
         public static final int app_name=0x7f050000;
         public static final int drawer_close=0x7f050008;
         public static final int drawer_open=0x7f050007;
-        public static final int email_label=0x7f05000d;
-        public static final int header=0x7f05000b;
+        public static final int email_label=0x7f05000f;
+        public static final int header=0x7f05000d;
         public static final int hello_world=0x7f050001;
-        public static final int login_btn=0x7f05000f;
+        public static final int login_btn=0x7f050011;
         public static final int nav_user_notLoggedIn_button=0x7f050006;
         public static final int nav_user_notLoggedIn_name=0x7f050005;
-        public static final int notnow_btn=0x7f050010;
-        public static final int password_label=0x7f05000e;
-        public static final int register_label=0x7f050011;
+        public static final int notnow_btn=0x7f050012;
+        public static final int password_label=0x7f050010;
+        public static final int register_label=0x7f050013;
         public static final int scan=0x7f050004;
-        public static final int subheader=0x7f05000c;
+        public static final int subheader=0x7f05000e;
         public static final int title_activity_barcode_scanner=0x7f050003;
-        public static final int title_activity_login=0x7f05000a;
+        public static final int title_activity_borrowings=0x7f05000a;
+        public static final int title_activity_login=0x7f05000c;
         public static final int title_activity_search=0x7f050009;
-        public static final int title_activity_title_page=0x7f050012;
+        public static final int title_activity_titleDetailsPage=0x7f05000b;
+        public static final int title_activity_title_page=0x7f050014;
     }
     public static final class style {
         /** 

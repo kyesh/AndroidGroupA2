@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
 import org.apache.http.Header;
+import org.apache.http.message.BasicHeader;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -13,6 +14,8 @@ import se.hj.androidgroupa2.objects.LoginUser;
 import se.hj.androidgroupa2.objects.OnFragmentCompleteListener;
 import se.hj.androidgroupa2.objects.StoredDataName;
 import se.hj.androidgroupa2.objects.User;
+import se.hj.androidgroupa2.objects.UserCategory;
+import se.hj.androidgroupa2.objects.UserCategory.CATEGORY;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -40,14 +43,43 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 
 	public static User LoggedInUser = null;
 	
-	public enum NAV_ITEM {
+	public enum NAV_ITEM_STAFF {
 	    BORROWINGS(0), NOTIFICATIONS(1),
 	    BARCODE_SCANNER(2), ADD_TITLE(3),
-	    SETTINGS(4), LOGIN(10);
+	    SETTINGS(4);
 
 	    private int numVal;
 
-	    NAV_ITEM(int numVal) {
+	    NAV_ITEM_STAFF(int numVal) {
+	        this.numVal = numVal;
+	    }
+	    
+	    public int getNumVal() {
+	        return numVal;
+	    }
+	}
+	public enum NAV_ITEM_STUDENT {
+	    BORROWINGS(0), NOTIFICATIONS(1),
+	    BARCODE_SCANNER(2),
+	    SETTINGS(3);
+
+	    private int numVal;
+
+	    NAV_ITEM_STUDENT(int numVal) {
+	        this.numVal = numVal;
+	    }
+	    
+	    public int getNumVal() {
+	        return numVal;
+	    }
+	}
+	public enum NAV_ITEM_UNKNOWN {
+	    BARCODE_SCANNER(0),
+	    SETTINGS(1);
+
+	    private int numVal;
+
+	    NAV_ITEM_UNKNOWN(int numVal) {
 	        this.numVal = numVal;
 	    }
 	    
@@ -80,6 +112,8 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
         _nav_users_name = (TextView) findViewById(R.id.nav_users_name);
         _nav_users_email = (TextView) findViewById(R.id.nav_users_email);
         _nav_user = (LinearLayout) findViewById(R.id.nav_user);
+        
+        boolean userLoggedIn = checkForLoggedInUser();
         
         _nav_items = createNavItems(getResources().getStringArray(R.array.nav_list_items)); 
         _nav_list.setAdapter(new NavAdapter(
@@ -119,23 +153,39 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
         	selectItem(0);
 		}*/
 
-        checkForLoggedInUser();
+    	if (userLoggedIn)
+    	{
+    		setLoggedInUser(ApiHelper.LoggedInUser);
+    		// TODO: set to borrower fragment
+    		setActiveFragment(new TestFragment(), R.string.title_activity_borrowings, false);
+    	}
+    	else
+    	{
+    		setLoggedInUser(null);
+    		setActiveFragment(new LoginActivity(), R.string.title_activity_login, false);
+    	}
     }
     
-    private void setActiveFragment(Fragment fragment)
+    private void setActiveFragment(Fragment fragment, int titleRes, boolean useBackStack)
+    {
+    	setActiveFragment(fragment, getResources().getString(titleRes), useBackStack);
+    }
+    
+    private void setActiveFragment(Fragment fragment, String title, boolean useBackStack)
     {
     	_drawerLayout.closeDrawers();
+    	setTitle(title);
     	FragmentManager fragmentManager = getFragmentManager();
     	
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.content_frame, fragment);
-        transaction.commit();
+        transaction.commit();    	
     }
     
-    private void checkForLoggedInUser()
+    private boolean checkForLoggedInUser()
     {
     	User currentUser = null;
-    	Header authHeader = null;
+    	BasicHeader authHeader = null;
     	
     	boolean success = false;
     	
@@ -145,10 +195,16 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
     		currentUser = (User) serializer.readObject();
     		input.close();
 
-    		input = openFileInput(StoredDataName.FILE_AUTH_HEADER);
-    		serializer = new ObjectInputStream(input);
-    		authHeader = (Header) serializer.readObject();
-    		input.close();
+    		/*FileInputStream input2 = openFileInput(StoredDataName.FILE_AUTH_HEADER);
+    		ObjectInputStream serializer2 = new ObjectInputStream(input2);
+    		authHeader = (BasicHeader) serializer2.readObject();
+    		input2.close();*/
+    		
+    		SharedPreferences pref = getSharedPreferences(StoredDataName.SHARED_PREF, MODE_PRIVATE);
+    		String headerName = pref.getString(StoredDataName.PREF_AUTH_HEADER_NAME, "");
+    		String headerValue = pref.getString(StoredDataName.PREF_AUTH_HEADER_VALUE, "");
+    		if (headerName.isEmpty() || headerValue.isEmpty()) throw new Exception("Header load failed.");
+    		authHeader = new BasicHeader(headerName, headerValue);
 		}
 		catch (Exception e) {
 			Log.e("FILE_USER", e.getMessage());
@@ -160,14 +216,11 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
     	{
     		ApiHelper.LoggedInUser = currentUser;
     		ApiHelper.AuthentificationHeader = authHeader;
-    		setLoggedInUser(currentUser);
-    		// TODO: set fragment to borrowings
-    		setActiveFragment(new TestFragment());
+    		return true;
     	}
     	else
     	{
-    		setLoggedInUser(currentUser);
-    		setActiveFragment(new LoginActivity());
+    		return false;
     	}
     }
     
@@ -181,12 +234,25 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
     		NavAdapterItem item = new NavAdapterItem();
     		item.Text = items[i];
     		
-    		if (i == NAV_ITEM.BORROWINGS.getNumVal()) item.Icon = getResources().getDrawable(R.drawable.ic_action_storage);
-    		else if (i == NAV_ITEM.NOTIFICATIONS.getNumVal()) item.Icon = getResources().getDrawable(R.drawable.ic_action_email);
-    		else if (i == NAV_ITEM.BARCODE_SCANNER.getNumVal()) item.Icon = getResources().getDrawable(R.drawable.ic_action_camera);
-    		else if (i == NAV_ITEM.ADD_TITLE.getNumVal()) item.DividerTop = true;
-    		else if (i == NAV_ITEM.SETTINGS.getNumVal()) item.DividerTop = true;
+    		int userCat = UserCategory.CATEGORY.UNKNOWN.getNumVal();
+    		if (ApiHelper.LoggedInUser != null) userCat = ApiHelper.LoggedInUser.Category.CategoryId;
     		
+    		if (i == NAV_ITEM_STAFF.BORROWINGS.getNumVal()) item.Icon = getResources().getDrawable(R.drawable.ic_action_storage);
+    		else if (i == NAV_ITEM_STAFF.NOTIFICATIONS.getNumVal()) item.Icon = getResources().getDrawable(R.drawable.ic_action_email);
+    		else if (i == NAV_ITEM_STAFF.BARCODE_SCANNER.getNumVal()) item.Icon = getResources().getDrawable(R.drawable.ic_action_camera);
+    		else if (i == NAV_ITEM_STAFF.ADD_TITLE.getNumVal()) item.DividerTop = true;
+    		else if (i == NAV_ITEM_STAFF.SETTINGS.getNumVal()) item.DividerTop = true;
+    		
+    		if (userCat != UserCategory.CATEGORY.STAFF.getNumVal())
+    		{
+        		if (i == NAV_ITEM_STAFF.ADD_TITLE.getNumVal()) continue;
+        		
+        		if (userCat != UserCategory.CATEGORY.STUDENT.getNumVal())
+        		{
+            		if (i == NAV_ITEM_STAFF.BORROWINGS.getNumVal() || i == NAV_ITEM_STAFF.NOTIFICATIONS.getNumVal())
+            			continue;
+        		}
+    		}
     		list.add(item);
     	}
 		return list;
@@ -194,56 +260,57 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
     
 	public void drawerSelectItem(int position) {
 		
-		// TODO: Select correct fragment and load it in!
 		NavAdapterItem item = null;
+		int realPos = 0;
 		if (position >= 0 && position < _nav_list.getCount())
 		{
 			_nav_list.setItemChecked(position, true);
-			setTitle(_nav_items.get(position).Text);
-			
 			item = _nav_items.get(position);
+			
+			if (ApiHelper.LoggedInUser == null)
+			{
+				if (position == NAV_ITEM_UNKNOWN.BARCODE_SCANNER.getNumVal())
+					realPos = NAV_ITEM_STAFF.BARCODE_SCANNER.getNumVal();
+				else if (position == NAV_ITEM_UNKNOWN.SETTINGS.getNumVal())
+					realPos = NAV_ITEM_STAFF.SETTINGS.getNumVal();
+			}
+			else if (ApiHelper.LoggedInUser.Category.CategoryId == UserCategory.CATEGORY.STUDENT.getNumVal())
+			{
+				if (position == NAV_ITEM_STUDENT.BORROWINGS.getNumVal())
+					realPos = NAV_ITEM_STAFF.BORROWINGS.getNumVal();
+				else if (position == NAV_ITEM_STUDENT.NOTIFICATIONS.getNumVal())
+					realPos = NAV_ITEM_STAFF.NOTIFICATIONS.getNumVal();
+				else if (position == NAV_ITEM_STUDENT.BARCODE_SCANNER.getNumVal())
+					realPos = NAV_ITEM_STAFF.BARCODE_SCANNER.getNumVal();
+				else if (position == NAV_ITEM_STUDENT.SETTINGS.getNumVal())
+					realPos = NAV_ITEM_STAFF.SETTINGS.getNumVal();
+			}
+			else
+				realPos = position;
 		}
 		else return;
-		
-        FragmentManager fragmentManager = getFragmentManager();
         
-		if (position == NAV_ITEM.BORROWINGS.getNumVal())
+		if (realPos == NAV_ITEM_STAFF.BORROWINGS.getNumVal())
 		{
-			Fragment fragment = new TitleDetailFragment();
-			fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-			setTitle(item.Text);
-			
-//			Fragment fragment = new TestFragment();
-//	        fragmentManager.beginTransaction()
-//	        				.replace(R.id.content_frame, fragment)
-//	        				.commit();
-//	        setTitle(item.Text);
+			//setActiveFragment(new TitleDetailFragment(), R.string.title_activity_titleDetailsPage, false);
+			setActiveFragment(new TestFragment(), item.Text, false);
 		}
-		else if (position == NAV_ITEM.NOTIFICATIONS.getNumVal() + 12989812)
+		else if (realPos == NAV_ITEM_STAFF.NOTIFICATIONS.getNumVal())
 		{
-			LoginUser.logIn("rob.day@hj.see", "secret", new LoginUser.CallbackReference() {
-				
-				@Override
-				public void callbackFunction(User user) {
-					
-					if (user != null)
-						Toast.makeText(MainActivity.this, 
-								"Welcome " + user.FirstName + " " + user.LastName, Toast.LENGTH_LONG).show();
-					else
-						Toast.makeText(MainActivity.this, "Could not log in", Toast.LENGTH_LONG).show();
-				}
-			});
+			//TODO: Start notifications activity
 		}
-		else if (position == NAV_ITEM.BARCODE_SCANNER.getNumVal())
+		else if (realPos == NAV_ITEM_STAFF.BARCODE_SCANNER.getNumVal())
 		{
-	        Fragment fragment = new BarcodeScanner();
-	        fragmentManager.beginTransaction()
-	        				.replace(R.id.content_frame, fragment)
-	        				.commit();
-	        setTitle(item.Text);
+	        setActiveFragment(new BarcodeScanner(), item.Text, true);
 		}
-		
-		_drawerLayout.closeDrawers();
+		else if (realPos == NAV_ITEM_STAFF.ADD_TITLE.getNumVal())
+		{
+			//TODO: Start add title activity
+		}
+		else if (realPos == NAV_ITEM_STAFF.SETTINGS.getNumVal())
+		{
+	        // TODO: Start settings activity
+		}
 	}
 	
 	public void setLoggedInUser(User user)
@@ -268,7 +335,7 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 	
 	public void onNavLoginClick(View textView)
 	{
-		setActiveFragment(new LoginActivity());
+		setActiveFragment(new LoginActivity(), R.string.title_activity_login, true);
 	}
 	
 	@Override
@@ -339,7 +406,12 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 				Toast.makeText(this, "Welcome " + param.FirstName + " " + param.LastName, Toast.LENGTH_SHORT).show();
 				setLoggedInUser(param);
 				//TODO: set fragment to borrowings
-				setActiveFragment(new TestFragment());
+				setActiveFragment(new TestFragment(), R.string.title_activity_borrowings, false);
+			}
+			else
+			{
+				setLoggedInUser(null);
+				setActiveFragment(new TestFragment(), R.string.title_activity_borrowings, false);
 			}
 		}
 	}
@@ -360,8 +432,14 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 
 		@Override
 		public boolean onQueryTextSubmit(String query) {
-			// TODO: Launch searchResult fragment
-			setTitle(query);
+
+			if (query.isEmpty()) return false;
+			Bundle args = new Bundle();
+			args.putString(StoredDataName.ARGS_SEARCH_QUERY, query);
+			SearchActivity fragment = new SearchActivity();
+			fragment.setArguments(args);
+			setActiveFragment(fragment, R.string.title_activity_search, true);
+			
 			return true;
 		}
     }

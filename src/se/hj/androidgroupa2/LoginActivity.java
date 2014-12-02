@@ -10,6 +10,7 @@ import se.hj.androidgroupa2.objects.StoredDataName;
 import se.hj.androidgroupa2.objects.User;
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -86,23 +87,27 @@ public class LoginActivity extends Fragment {
         //LoginUser.logIn("rob.day@hj.see", "secret", new LoginUser.CallbackReference() {
 			@Override
 			public void callbackFunction(User user) {
-				if (user == null)
+				if (ApiHelper.LoggedInUser == null || ApiHelper.AuthentificationHeader == null)
 		        	_error.setText("Wrong email or password");
 				else
 				{
 					try {
-						FileOutputStream output = getActivity().openFileOutput(StoredDataName.FILE_CURRENT_USER, Activity.MODE_PRIVATE);
+						FileOutputStream output = getActivity().openFileOutput(StoredDataName.FILE_CURRENT_USER, MainActivity.MODE_PRIVATE);
 						ObjectOutputStream serializer = new ObjectOutputStream(output);
 						serializer.writeObject(ApiHelper.LoggedInUser);
 						output.close();
 						
-						output = getActivity().openFileOutput(StoredDataName.FILE_AUTH_HEADER, Activity.MODE_PRIVATE);
+						/*output = getActivity().openFileOutput(StoredDataName.FILE_AUTH_HEADER, MainActivity.MODE_PRIVATE);
 						serializer = new ObjectOutputStream(output);
 						serializer.writeObject(ApiHelper.AuthentificationHeader);
-						output.close();
+						output.close();*/
+						SharedPreferences.Editor pref = getActivity().getSharedPreferences(StoredDataName.SHARED_PREF, MainActivity.MODE_PRIVATE).edit();
+						pref.putString(StoredDataName.PREF_AUTH_HEADER_NAME, ApiHelper.AuthentificationHeader.getName());
+						pref.putString(StoredDataName.PREF_AUTH_HEADER_VALUE, ApiHelper.AuthentificationHeader.getValue());
+						pref.commit();
 					}
 					catch (Exception e) {
-						Log.e("FILE_LOGIN", e.getMessage());
+						Log.e("FILE_LOGIN", e.getMessage() + " | " + ApiHelper.AuthentificationHeader.toString());
 					}
 					_fragmentCallback.onFragmentComplete(LoginActivity.this, user);
 				}

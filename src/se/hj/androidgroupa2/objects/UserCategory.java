@@ -8,6 +8,20 @@ public class UserCategory implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
+	public enum CATEGORY {
+	    STAFF(1), STUDENT(2), UNKNOWN(0);
+
+	    private int numVal;
+
+	    CATEGORY(int numVal) {
+	        this.numVal = numVal;
+	    }
+	    
+	    public int getNumVal() {
+	        return numVal;
+	    }
+	}
+	
 	public Integer CategoryId;
     public String Name;
     public Integer LoanPeriod;
