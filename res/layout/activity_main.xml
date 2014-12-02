@@ -23,29 +23,34 @@
 		>
 		
 	    <LinearLayout 
+	        android:id="@+id/nav_user"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:paddingTop="@dimen/nav_user_bar_padding"
 	        android:paddingBottom="@dimen/nav_user_bar_padding"
 	        android:paddingLeft="16dp"
 	        android:paddingRight="16dp"
-	        android:background="#00FC7E"
+	        android:background="@color/nav_user_notLoggedIn"
 	        android:orientation="vertical"
 	        android:textSize="16sp"
+	        android:onClick="onNavLoginClick"
 	        >
 		        
 	        <TextView
+	            android:id="@+id/nav_users_name"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:text="Jonathan Holm"
+	            android:text="@string/nav_user_notLoggedIn_name"
 	        	android:textSize="21sp"
 	        	android:textStyle="bold"
+	        	android:gravity="center"
 	            />
 	        
 		    <TextView
+		        android:id="@+id/nav_users_email"
 		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content"
-		        android:text="jonathan.eric.holm@gmail.com"
+		        android:text="@string/nav_user_notLoggedIn_button"
 	        	android:textSize="16sp"
 		        />
 		        

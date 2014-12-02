@@ -1,10 +1,14 @@
 package se.hj.androidgroupa2.objects;
 
+import java.io.Serializable;
+
 import org.json.JSONObject;
 
-public class User {
+public class User implements Serializable {
 
-    public Integer UserId;
+	private static final long serialVersionUID = 1L;
+	
+	public Integer UserId;
     public UserCategory Category;
     public String EMail;
     public String FirstName;
@@ -18,6 +22,7 @@ public class User {
 	
 	public static User parseUserFromJSONObject(JSONObject json)
 	{
+    	if (json == null) return null;
 		User user = new User();
 		
 		user.UserId = (Integer)json.opt("UserId");

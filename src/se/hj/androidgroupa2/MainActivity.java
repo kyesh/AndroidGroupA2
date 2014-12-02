@@ -1,31 +1,42 @@
 package se.hj.androidgroupa2;
 
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
+import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import se.hj.androidgroupa2.objects.ApiHelper;
 import se.hj.androidgroupa2.objects.LoginUser;
+import se.hj.androidgroupa2.objects.OnFragmentCompleteListener;
+import se.hj.androidgroupa2.objects.StoredDataName;
 import se.hj.androidgroupa2.objects.User;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements OnFragmentCompleteListener {
 
 	public static User LoggedInUser = null;
 	
@@ -53,6 +64,10 @@ public class MainActivity extends Activity {
 	private CharSequence _generalTitle;
 	private CharSequence _drawerTitle;
 	
+	private TextView _nav_users_name;
+	private TextView _nav_users_email;
+	private LinearLayout _nav_user;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +76,10 @@ public class MainActivity extends Activity {
         _drawerTitle = _generalTitle = getTitle();
         _drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         _nav_list = (ListView) findViewById(R.id.nav_list);
+        
+        _nav_users_name = (TextView) findViewById(R.id.nav_users_name);
+        _nav_users_email = (TextView) findViewById(R.id.nav_users_email);
+        _nav_user = (LinearLayout) findViewById(R.id.nav_user);
         
         _nav_items = createNavItems(getResources().getStringArray(R.array.nav_list_items)); 
         _nav_list.setAdapter(new NavAdapter(
@@ -99,16 +118,57 @@ public class MainActivity extends Activity {
 		{
         	selectItem(0);
 		}*/
-        
-        if (!getSharedPreferences("DeoLibs", MODE_PRIVATE).getBoolean("LoggedIn", false))
-        {
 
-        	FragmentManager fragmentManager = getFragmentManager();
-	        Fragment fragment = new LoginActivity();
-	        fragmentManager.beginTransaction()
-	        				.replace(R.id.content_frame, fragment)
-	        				.commit();
-        }
+        checkForLoggedInUser();
+    }
+    
+    private void setActiveFragment(Fragment fragment)
+    {
+    	_drawerLayout.closeDrawers();
+    	FragmentManager fragmentManager = getFragmentManager();
+    	
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.content_frame, fragment);
+        transaction.commit();
+    }
+    
+    private void checkForLoggedInUser()
+    {
+    	User currentUser = null;
+    	Header authHeader = null;
+    	
+    	boolean success = false;
+    	
+    	try {
+    		FileInputStream input = openFileInput(StoredDataName.FILE_CURRENT_USER);
+    		ObjectInputStream serializer = new ObjectInputStream(input);
+    		currentUser = (User) serializer.readObject();
+    		input.close();
+
+    		input = openFileInput(StoredDataName.FILE_AUTH_HEADER);
+    		serializer = new ObjectInputStream(input);
+    		authHeader = (Header) serializer.readObject();
+    		input.close();
+		}
+		catch (Exception e) {
+			Log.e("FILE_USER", e.getMessage());
+		}
+    	
+    	if (currentUser != null && authHeader != null) success = true;
+    	
+    	if (success)
+    	{
+    		ApiHelper.LoggedInUser = currentUser;
+    		ApiHelper.AuthentificationHeader = authHeader;
+    		setLoggedInUser(currentUser);
+    		// TODO: set fragment to borrowings
+    		setActiveFragment(new TestFragment());
+    	}
+    	else
+    	{
+    		setLoggedInUser(currentUser);
+    		setActiveFragment(new LoginActivity());
+    	}
     }
     
     private ArrayList<NavAdapterItem> createNavItems(String[] items)
@@ -121,12 +181,11 @@ public class MainActivity extends Activity {
     		NavAdapterItem item = new NavAdapterItem();
     		item.Text = items[i];
     		
-    		//TODO: Add enum
-    		if (i == 0) item.Icon = getResources().getDrawable(R.drawable.ic_action_storage);
-    		else if (i == 1) item.Icon = getResources().getDrawable(R.drawable.ic_action_email);
-    		else if (i == 2) item.Icon = getResources().getDrawable(R.drawable.ic_action_camera);
-    		else if (i == 3) item.DividerTop = true;
-    		else if (i == 4) item.DividerTop = true;
+    		if (i == NAV_ITEM.BORROWINGS.getNumVal()) item.Icon = getResources().getDrawable(R.drawable.ic_action_storage);
+    		else if (i == NAV_ITEM.NOTIFICATIONS.getNumVal()) item.Icon = getResources().getDrawable(R.drawable.ic_action_email);
+    		else if (i == NAV_ITEM.BARCODE_SCANNER.getNumVal()) item.Icon = getResources().getDrawable(R.drawable.ic_action_camera);
+    		else if (i == NAV_ITEM.ADD_TITLE.getNumVal()) item.DividerTop = true;
+    		else if (i == NAV_ITEM.SETTINGS.getNumVal()) item.DividerTop = true;
     		
     		list.add(item);
     	}
@@ -158,7 +217,7 @@ public class MainActivity extends Activity {
 		}
 		else if (position == NAV_ITEM.NOTIFICATIONS.getNumVal() + 12989812)
 		{
-			LoginUser.LogIn("rob.day@hj.see", "secret", new LoginUser.CallbackReference() {
+			LoginUser.logIn("rob.day@hj.see", "secret", new LoginUser.CallbackReference() {
 				
 				@Override
 				public void callbackFunction(User user) {
@@ -181,6 +240,31 @@ public class MainActivity extends Activity {
 		}
 		
 		_drawerLayout.closeDrawers();
+	}
+	
+	public void setLoggedInUser(User user)
+	{
+		Resources res = getResources();
+		if (user != null)
+		{
+			_nav_user.setBackgroundColor(res.getColor(R.color.nav_user_loggedIn));
+			_nav_users_name.setGravity(Gravity.LEFT);
+			_nav_users_name.setText(user.FirstName + " " + user.LastName);
+			_nav_users_email.setText(user.EMail);
+			_nav_users_email.setVisibility(View.VISIBLE);
+		}
+		else
+		{
+			_nav_user.setBackgroundColor(res.getColor(R.color.nav_user_notLoggedIn));
+			_nav_users_name.setGravity(Gravity.CENTER);
+			_nav_users_name.setText(R.string.nav_user_notLoggedIn_name);
+			_nav_users_email.setVisibility(View.GONE);
+		}
+	}
+	
+	public void onNavLoginClick(View textView)
+	{
+		setActiveFragment(new LoginActivity());
 	}
 	
 	@Override
@@ -238,6 +322,23 @@ public class MainActivity extends Activity {
     	super.onConfigurationChanged(newConfig);
     	_actionBarDrawerToggle.onConfigurationChanged(newConfig);
     }
+
+	@Override
+	public void onFragmentComplete(Fragment sender, Object params) {
+		
+		if (sender.getClass() == LoginActivity.class)
+		{
+			LoginActivity fragment = (LoginActivity) sender;
+			if (params != null)
+			{
+				User param = (User) params;
+				Toast.makeText(this, "Welcome " + param.FirstName + " " + param.LastName, Toast.LENGTH_SHORT).show();
+				setLoggedInUser(param);
+				//TODO: set fragment to borrowings
+				setActiveFragment(new TestFragment());
+			}
+		}
+	}
     
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
     	@Override
