@@ -443,6 +443,19 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 				setActiveFragment(fragment, R.string.title_activity_title_page, true);
 			}
 		}
+		else if (sender.getClass() == SearchActivity.class)
+		{
+			if (params != null)
+			{
+				ExtendedTitle title = (ExtendedTitle) params;
+				
+		        Fragment fragment = new TitlePageFragment();
+		        Bundle args = new Bundle();
+		        args.putString("TitleId", title.TitleInformation.TitleId.toString());
+		        fragment.setArguments(args);
+		        setActiveFragment(fragment, R.string.title_activity_title_page, true);
+			}
+		}
 	}
     
     private class DrawerItemClickListener implements ListView.OnItemClickListener {

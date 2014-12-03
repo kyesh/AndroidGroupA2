@@ -2,6 +2,7 @@ package se.hj.androidgroupa2;
 
 import java.util.List;
 
+import se.hj.androidgroupa2.objects.ExtendedTitle;
 import se.hj.androidgroupa2.objects.Title;
 import android.content.Context;
 import android.view.View;
@@ -10,14 +11,14 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class SearchAdapter extends ArrayAdapter<Title> {
+public class SearchAdapter extends ArrayAdapter<ExtendedTitle> {
 	
 	private TextView _title;
 	private TextView _authors;
 	private TextView _editionYear;
 
 	public SearchAdapter(Context context, int resource, int textViewResourceId,
-			List<Title> objects) {
+			List<ExtendedTitle> objects) {
 		super(context, resource, textViewResourceId, objects);
 	}
 
@@ -29,11 +30,11 @@ public class SearchAdapter extends ArrayAdapter<Title> {
 		_authors = (TextView) view.findViewById(R.id.search_item_author);
 		_editionYear = (TextView) view.findViewById(R.id.search_item_year);
 		
-		Title title = getItem(position);
+		ExtendedTitle title = getItem(position);
 		
-		_title.setText(title.BookTitle);
-		_authors.setText("");
-		_editionYear.setText(title.EditionYear);
+		_title.setText(title.TitleInformation.BookTitle);
+		_authors.setText(title.Authors.toString());
+		_editionYear.setText(title.TitleInformation.EditionYear);
 		
 		return view;
 	}
