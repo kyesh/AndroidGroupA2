@@ -11,6 +11,7 @@
     <string name="nav_user_notLoggedIn_button">log in</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+    <string name="actionBar_search">Search titles</string>
 
     <string-array name="nav_list_items">
         <item>Borrowings</item>

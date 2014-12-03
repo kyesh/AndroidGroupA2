@@ -34,7 +34,7 @@ public class SearchAdapter extends ArrayAdapter<ExtendedTitle> {
 		
 		_title.setText(title.TitleInformation.BookTitle);
 		_authors.setText(title.Authors.toString());
-		_editionYear.setText(title.TitleInformation.EditionYear);
+		_editionYear.setText(title.TitleInformation.EditionYear.toString());
 		
 		return view;
 	}

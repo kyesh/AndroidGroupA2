@@ -7,6 +7,7 @@ import se.hj.androidgroupa2.objects.ExtendedTitle;
 import se.hj.androidgroupa2.objects.OnFragmentCompleteListener;
 import se.hj.androidgroupa2.objects.StoredDataName;
 import se.hj.androidgroupa2.objects.Title;
+import se.hj.androidgroupa2.objects.Author;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
@@ -54,17 +55,35 @@ public class SearchActivity extends Fragment {
 		
 		Bundle bundle = getArguments();
 		String query = bundle.getString(StoredDataName.ARGS_SEARCH_QUERY);
-		ExtendedTitle.getTitlesFromSearch(query, new ExtendedTitle.CallbackReference() {
-			@Override
-			public void callbackFunction(List<ExtendedTitle> titles) {
-				/*SearchAdapter adapter = (SearchAdapter) _listview.getAdapter();
-				adapter.clear();
-				_items = titles;
-				adapter.addAll(titles);
-				adapter.notifyDataSetChanged();*/
-				//TODO: FIXXX!!
-			}
-		});
+//		ExtendedTitle.getTitlesFromSearch(query, new ExtendedTitle.CallbackReference() {
+//			@Override
+//			public void callbackFunction(List<ExtendedTitle> titles) {
+//				SearchAdapter adapter = (SearchAdapter) _listview.getAdapter();
+//				_items.clear();
+//				_items.addAll(titles);
+//				adapter.clear();
+//				adapter.addAll(_items);
+//				
+////				ExtendedTitle test = new ExtendedTitle();
+////				test.TitleInformation = new Title();
+////				test.TitleInformation.BookTitle = "OAOAOAOAOA";
+////				test.TitleInformation.EditionYear = 2050;
+////				test.Authors = new ArrayList<Author>();
+////				adapter.add(test);
+//				
+//				adapter.notifyDataSetChanged();
+//				//TODO: FIXXX!!
+//			}
+//		});
+		
+
+		ExtendedTitle test = new ExtendedTitle();
+		test.TitleInformation = new Title();
+		test.TitleInformation.BookTitle = "OAOAOAOAOA";
+		test.TitleInformation.EditionYear = 2050;
+		test.Authors = new ArrayList<Author>();
+		adapter.add(test);
+		adapter.notifyDataSetChanged();
 		
 		return mainView;
 	}

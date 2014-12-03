@@ -104,6 +104,8 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 	private TextView _nav_users_email;
 	private LinearLayout _nav_user;
 	
+	private MenuItem _actionBar_searchItem;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -367,7 +369,8 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
     	getMenuInflater().inflate(R.menu.main, menu);
-    	SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+    	_actionBar_searchItem = menu.findItem(R.id.action_search);
+    	SearchView searchView = (SearchView) _actionBar_searchItem.getActionView();
     	searchView.setOnQueryTextListener(new SearchBarOnQueryListener());
     	
     	return super.onCreateOptionsMenu(menu);
@@ -476,6 +479,10 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 		public boolean onQueryTextSubmit(String query) {
 
 			if (query.isEmpty()) return false;
+
+			if (_actionBar_searchItem != null)
+				_actionBar_searchItem.collapseActionView();
+			
 			Bundle args = new Bundle();
 			args.putString(StoredDataName.ARGS_SEARCH_QUERY, query);
 			SearchActivity fragment = new SearchActivity();
