@@ -2,6 +2,7 @@ package se.hj.androidgroupa2;
 
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
+import java.security.acl.LastOwnerException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -120,14 +121,6 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
         _nav_user = (LinearLayout) findViewById(R.id.nav_user);
         
         boolean userLoggedIn = checkForLoggedInUser();
-        
-//        _nav_items = createNavItems(getResources().getStringArray(R.array.nav_list_items)); 
-//        _nav_list.setAdapter(new NavAdapter(
-//        		this,
-//        		R.layout.drawer_list_item,
-//        		android.R.id.text1,
-//        		_nav_items));
-//        _nav_list.setOnItemClickListener(new DrawerItemClickListener());
 
         _nav_items = createNavItems(getResources().getStringArray(R.array.nav_list_items));
         _nav_list.setAdapter(new NavAdapter(
@@ -149,17 +142,22 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
         {
         	public void onDrawerClosed(View view)
         	{
+        		setActionBarArrow();
         		getActionBar().setTitle(_generalTitle);
         		invalidateOptionsMenu();
         	}
         	
         	public void onDrawerOpened(View view)
         	{
+        		_actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
         		getActionBar().setTitle(_drawerTitle);
         		invalidateOptionsMenu();
         	}
         };
         _drawerLayout.setDrawerListener(_actionBarDrawerToggle);
+        
+        getFragmentManager().addOnBackStackChangedListener(new FragmentManagerBackStackListener());
+        setActionBarArrow();
         
         // TODO: Set fragment to start with and check for saved instance.
         /*if (savedInstanceState == null)
@@ -191,8 +189,18 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
     	setTitle(title);
     	FragmentManager fragmentManager = getFragmentManager();
     	
+    	Fragment check = fragmentManager.findFragmentByTag(fragment.getClass().toString());
+    	if (check != null && check.isVisible())
+    	{
+    		fragmentManager.popBackStackImmediate();
+    	}
+    	
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.content_frame, fragment);
+        transaction.replace(R.id.content_frame, fragment, fragment.getClass().toString());
+        if (useBackStack)
+        	transaction.addToBackStack(null);
+        else
+        	fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         transaction.commit();    	
     }
     
@@ -357,6 +365,12 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 		setActiveFragment(new LoginActivity(), R.string.title_activity_login, true);
 	}
 	
+	private void setActionBarArrow()
+	{
+		int backStackCount = getFragmentManager().getBackStackEntryCount();
+		_actionBarDrawerToggle.setDrawerIndicatorEnabled(backStackCount == 0);
+	}
+	
 	@Override
 	public void onBackPressed() {
 		if (_drawerLayout.isDrawerOpen(Gravity.LEFT))
@@ -386,12 +400,16 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-    	if (_actionBarDrawerToggle.onOptionsItemSelected(item)) return true;
+    	if (_actionBarDrawerToggle.isDrawerIndicatorEnabled() &&
+    			_actionBarDrawerToggle.onOptionsItemSelected(item)) 
+    		return true;
     	
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_settings)
             return true;
-        }
+        else if (id == android.R.id.home && getFragmentManager().popBackStackImmediate())
+        	return true;
+        	
         return super.onOptionsItemSelected(item);
     }
     
@@ -412,6 +430,11 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
     public void onConfigurationChanged(Configuration newConfig) {
     	super.onConfigurationChanged(newConfig);
     	_actionBarDrawerToggle.onConfigurationChanged(newConfig);
+    }
+    
+    @Override
+    protected void onDestroy() {
+    	super.onDestroy();
     }
 
 	@Override
@@ -438,12 +461,12 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 		{
 			if (params != null)
 			{
-				TitleDetailFragment fragment = (TitleDetailFragment) params;
+//				TitleDetailFragment fragment = (TitleDetailFragment) params;
 //				getFragmentManager()
 //				    .beginTransaction()
 //				    .replace(R.id.content_frame, fragment, "TAG_TO_FRAGMENT")
 //				    .addToBackStack("TAG_TO_FRAGMENT").commit();
-				setActiveFragment(fragment, R.string.title_activity_title_page, true);
+//				setActiveFragment(fragment, R.string.title_activity_title_page, true);
 			}
 		}
 		else if (sender.getClass() == SearchActivity.class)
@@ -451,12 +474,19 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 			if (params != null)
 			{
 				ExtendedTitle title = (ExtendedTitle) params;
-				
+				/*
 		        Fragment fragment = new TitlePageFragment();
 		        Bundle args = new Bundle();
 		        args.putString("TitleId", title.TitleInformation.TitleId.toString());
 		        fragment.setArguments(args);
 		        setActiveFragment(fragment, R.string.title_activity_title_page, true);
+		        */
+				
+				Fragment fragment = new TitleDetailFragment();
+				Bundle args = new Bundle();
+				args.putSerializable(StoredDataName.ARGS_EXTENDED_TITLE, title);
+				fragment.setArguments(args);
+				setActiveFragment(fragment, "Title details", true);
 			}
 		}
 	}
@@ -481,7 +511,11 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 			if (query.isEmpty()) return false;
 
 			if (_actionBar_searchItem != null)
+			{
 				_actionBar_searchItem.collapseActionView();
+				SearchView searchView = (SearchView) _actionBar_searchItem.getActionView();
+				searchView.clearFocus();
+			}
 			
 			Bundle args = new Bundle();
 			args.putString(StoredDataName.ARGS_SEARCH_QUERY, query);
@@ -493,5 +527,11 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 		}
     }
     
-    
+    private class FragmentManagerBackStackListener implements FragmentManager.OnBackStackChangedListener
+    {
+		@Override
+		public void onBackStackChanged() {
+			setActionBarArrow();
+		}
+    }
 }

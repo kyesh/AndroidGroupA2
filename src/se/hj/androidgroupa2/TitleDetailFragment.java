@@ -1,5 +1,7 @@
 package se.hj.androidgroupa2;
 
+import se.hj.androidgroupa2.objects.ExtendedTitle;
+import se.hj.androidgroupa2.objects.StoredDataName;
 import se.hj.androidgroupa2.objects.Title;
 import android.app.Fragment;
 import android.os.Bundle;
@@ -10,8 +12,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class TitleDetailFragment extends Fragment {
-	
-	private Title title;
 	
 	private TextView _title ;
 	private TextView _authors;
@@ -28,8 +28,8 @@ public class TitleDetailFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		
 		View rootView = inflater.inflate(R.layout.fragment_titledetails, container, false);
-		getActivity().setTitle("Title details");
 		
 		_title = (TextView) rootView.findViewById(R.id.TitleDetails_Title);
 		_authors = (TextView) rootView.findViewById(R.id.TitleDetails_Author);
@@ -40,47 +40,42 @@ public class TitleDetailFragment extends Fragment {
 		_topics = (TextView) rootView.findViewById(R.id.TitleDetails_Topics);
 		
 		Bundle args = getArguments();
-	    Title title = (Title) args
-	        .getSerializable("TAG_TO_TITLE");
+	    ExtendedTitle title = (ExtendedTitle) args.getSerializable(StoredDataName.ARGS_EXTENDED_TITLE);
 		
-//		title = new Title();
-//		title.BookTitle = "Emil lagar mat";
-//		title.ISBN10 = "1234567890";
-//		title.ISBN13 = "1234567890123";
-//		title.EditionYear = 2014;
-		
-		if(title != null)
+		if (title != null)
 		{
-	    _title.setText(title.BookTitle);
-	    _authors.setText("Emil lygnebrandt, Joanthan Holm, Alexander Lagerqvist");
-	    _ISBN10.setText(title.ISBN10);
-	    _ISBN13.setText(title.ISBN13);
-	    _publicationYear.setText(title.EditionYear.toString());
-	    _publisher.setText(title.Publisher.Name);
-	    _topics.setText("Food and stuff");
+		    _title.setText(title.TitleInformation.BookTitle);
+		    
+		    String authors = "";
+		    for (int i = 0; i < title.Authors.size(); i++)
+		    {
+		    	if (i == 0)
+		    		authors += title.Authors.get(i).Name;
+		    	else
+		    		authors = authors + ", " + title.Authors.get(i).Name;
+		    }
+		    _authors.setText(authors);
+		    _ISBN10.setText(title.TitleInformation.ISBN10);
+		    _ISBN13.setText(title.TitleInformation.ISBN13);
+		    _publicationYear.setText(title.TitleInformation.EditionYear.toString());
+		    _publisher.setText(title.TitleInformation.Publisher.Name);
+
+		    String topics = "";
+		    for (int i = 0; i < title.Topics.size(); i++)
+		    {
+		    	if (i == 0)
+		    		topics += title.Topics.get(i).TopicName;
+		    	else
+		    		topics = topics + ", " + title.Topics.get(i).TopicName;
+		    }
+		    _topics.setText(topics);
 		}
-	    
-//	    _title.setText(title.BookTitle);
-//	    _authors.setText(title.);
-//	    _ISBN10.setText(title.ISBN10);
-//	    _ISBN13.setText(title.ISBN13);
-//	    _publicationYear.setText(title.EditionYear);
-//	    _publisher.setText(title.Publisher.Name);
-//	    _title.setText(title.);
-		
 		return rootView;
-		
 	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-//		Bundle args = getArguments();
-//	    Title title = (Title) args.getSerializable(TAG_TITLE);
-//	    
 	}
-	
-	
 }
 

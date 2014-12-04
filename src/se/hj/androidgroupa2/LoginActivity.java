@@ -10,7 +10,10 @@ import se.hj.androidgroupa2.objects.StoredDataName;
 import se.hj.androidgroupa2.objects.User;
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -22,6 +25,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.TextView.OnEditorActionListener;
 
 public class LoginActivity extends Fragment {
@@ -100,36 +104,47 @@ public class LoginActivity extends Fragment {
         	return;
         }
         
-        LoginUser.logIn(email, password, new LoginUser.CallbackReference() {
-        //LoginUser.logIn("rob.day@hj.see", "secret", new LoginUser.CallbackReference() {
-			@Override
-			public void callbackFunction(User user) {
-				if (ApiHelper.LoggedInUser == null || ApiHelper.AuthentificationHeader == null)
-		        	_error.setText("Wrong email or password");
-				else
-				{
-					try {
-						FileOutputStream output = getActivity().openFileOutput(StoredDataName.FILE_CURRENT_USER, MainActivity.MODE_PRIVATE);
-						ObjectOutputStream serializer = new ObjectOutputStream(output);
-						serializer.writeObject(ApiHelper.LoggedInUser);
-						output.close();
-						
-						/*output = getActivity().openFileOutput(StoredDataName.FILE_AUTH_HEADER, MainActivity.MODE_PRIVATE);
-						serializer = new ObjectOutputStream(output);
-						serializer.writeObject(ApiHelper.AuthentificationHeader);
-						output.close();*/
-						SharedPreferences.Editor pref = getActivity().getSharedPreferences(StoredDataName.SHARED_PREF, MainActivity.MODE_PRIVATE).edit();
-						pref.putString(StoredDataName.PREF_AUTH_HEADER_NAME, ApiHelper.AuthentificationHeader.getName());
-						pref.putString(StoredDataName.PREF_AUTH_HEADER_VALUE, ApiHelper.AuthentificationHeader.getValue());
-						pref.commit();
+
+		ConnectivityManager conManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo info = conManager.getActiveNetworkInfo();
+		
+		if (info != null && info.isConnected())
+		{
+	        LoginUser.logIn(email, password, new LoginUser.CallbackReference() {
+	        //LoginUser.logIn("rob.day@hj.see", "secret", new LoginUser.CallbackReference() {
+				@Override
+				public void callbackFunction(User user) {
+					if (ApiHelper.LoggedInUser == null || ApiHelper.AuthentificationHeader == null)
+			        	_error.setText("Wrong email or password");
+					else
+					{
+						try {
+							FileOutputStream output = getActivity().openFileOutput(StoredDataName.FILE_CURRENT_USER, MainActivity.MODE_PRIVATE);
+							ObjectOutputStream serializer = new ObjectOutputStream(output);
+							serializer.writeObject(ApiHelper.LoggedInUser);
+							output.close();
+							
+							/*output = getActivity().openFileOutput(StoredDataName.FILE_AUTH_HEADER, MainActivity.MODE_PRIVATE);
+							serializer = new ObjectOutputStream(output);
+							serializer.writeObject(ApiHelper.AuthentificationHeader);
+							output.close();*/
+							SharedPreferences.Editor pref = getActivity().getSharedPreferences(StoredDataName.SHARED_PREF, MainActivity.MODE_PRIVATE).edit();
+							pref.putString(StoredDataName.PREF_AUTH_HEADER_NAME, ApiHelper.AuthentificationHeader.getName());
+							pref.putString(StoredDataName.PREF_AUTH_HEADER_VALUE, ApiHelper.AuthentificationHeader.getValue());
+							pref.commit();
+						}
+						catch (Exception e) {
+							Log.e("FILE_LOGIN", e.getMessage() + " | " + ApiHelper.AuthentificationHeader.toString());
+						}
+						_fragmentCallback.onFragmentComplete(LoginActivity.this, user);
 					}
-					catch (Exception e) {
-						Log.e("FILE_LOGIN", e.getMessage() + " | " + ApiHelper.AuthentificationHeader.toString());
-					}
-					_fragmentCallback.onFragmentComplete(LoginActivity.this, user);
 				}
-			}
-		});
+			});
+		}
+		else
+		{
+			Toast.makeText(getActivity(), "You are not connected to the internet", Toast.LENGTH_LONG).show();
+		}
     }
     
     public void onNotNow(View v){

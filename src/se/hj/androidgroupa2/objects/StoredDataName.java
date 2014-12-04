@@ -9,4 +9,5 @@ public final class StoredDataName {
 	public static final String PREF_AUTH_HEADER_VALUE = "authHeaderValue";
 	
 	public static final String ARGS_SEARCH_QUERY = "searchQuery";
+	public static final String ARGS_EXTENDED_TITLE = "extendedTitle";
 }

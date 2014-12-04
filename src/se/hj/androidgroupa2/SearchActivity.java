@@ -10,11 +10,17 @@ import se.hj.androidgroupa2.objects.Title;
 import se.hj.androidgroupa2.objects.Author;
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
@@ -22,6 +28,7 @@ import android.widget.ListView;
 public class SearchActivity extends Fragment {
 	
 	private ListView _listview;
+	private ProgressBar _progressBar;
 	private List<ExtendedTitle> _items = new ArrayList<ExtendedTitle>();
 	
 	private OnFragmentCompleteListener _callbackActivity;
@@ -41,8 +48,14 @@ public class SearchActivity extends Fragment {
 		getActivity().setTitle(R.string.title_activity_search);
 		
 		_listview = (ListView) mainView.findViewById(R.id.fragment_search);
+		_progressBar = (ProgressBar) mainView.findViewById(R.id.search_progressBar);
+		if (savedInstanceState != null)
+		{
+			_progressBar.setVisibility(View.GONE);
+			_listview.setVisibility(View.VISIBLE);
+		}
 		
-		SearchAdapter adapter = new SearchAdapter(getActivity(), R.layout.fragment_search, R.id.search_item_title, _items);
+		SearchAdapter adapter = new SearchAdapter(getActivity(), R.layout.search_item, R.id.search_item_title, _items);
 		
 		_listview.setAdapter(adapter);
 		_listview.setOnItemClickListener(new OnItemClickListener() {
@@ -53,38 +66,34 @@ public class SearchActivity extends Fragment {
 			}
 		});
 		
-		Bundle bundle = getArguments();
-		String query = bundle.getString(StoredDataName.ARGS_SEARCH_QUERY);
-//		ExtendedTitle.getTitlesFromSearch(query, new ExtendedTitle.CallbackReference() {
-//			@Override
-//			public void callbackFunction(List<ExtendedTitle> titles) {
-//				SearchAdapter adapter = (SearchAdapter) _listview.getAdapter();
-//				_items.clear();
-//				_items.addAll(titles);
-//				adapter.clear();
-//				adapter.addAll(_items);
-//				
-////				ExtendedTitle test = new ExtendedTitle();
-////				test.TitleInformation = new Title();
-////				test.TitleInformation.BookTitle = "OAOAOAOAOA";
-////				test.TitleInformation.EditionYear = 2050;
-////				test.Authors = new ArrayList<Author>();
-////				adapter.add(test);
-//				
-//				adapter.notifyDataSetChanged();
-//				//TODO: FIXXX!!
-//			}
-//		});
+		ConnectivityManager conManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo info = conManager.getActiveNetworkInfo();
 		
-
-		ExtendedTitle test = new ExtendedTitle();
-		test.TitleInformation = new Title();
-		test.TitleInformation.BookTitle = "OAOAOAOAOA";
-		test.TitleInformation.EditionYear = 2050;
-		test.Authors = new ArrayList<Author>();
-		adapter.add(test);
-		adapter.notifyDataSetChanged();
-		
+		if (info != null && info.isConnected())
+		{
+			Bundle bundle = getArguments();
+			String query = bundle.getString(StoredDataName.ARGS_SEARCH_QUERY);
+			ExtendedTitle.getTitlesFromSearch(query, new ExtendedTitle.CallbackReference() {
+				@Override
+				public void callbackFunction(List<ExtendedTitle> titles) {
+					
+					_progressBar.setVisibility(View.GONE);
+					_listview.setVisibility(View.VISIBLE);
+					
+					SearchAdapter adapter = (SearchAdapter) _listview.getAdapter();
+					_items = titles;
+					adapter.clear();
+					if (_items != null && _items.size() != 0) adapter.addAll(_items);
+					adapter.notifyDataSetChanged();
+				}
+			});
+		}
+		else 
+		{
+			_progressBar.setVisibility(View.GONE);
+			_listview.setVisibility(View.VISIBLE);
+			Toast.makeText(getActivity(), "You are not connected to the internet", Toast.LENGTH_LONG).show();
+		}
 		return mainView;
 	}
 }

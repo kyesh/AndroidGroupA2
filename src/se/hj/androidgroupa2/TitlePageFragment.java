@@ -153,9 +153,6 @@ public class TitlePageFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		loanables = (ListView) getView().findViewById(R.id.loanables);
-		bookTitle = (TextView) getView().findViewById(R.id.Title);
-		loanables.setAdapter(loanableAdapter);
 		
 		//loanableAdapter.
 		
@@ -166,7 +163,13 @@ public class TitlePageFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_tittlepage, container,
 				false);
+		
+		loanables = (ListView) view.findViewById(R.id.loanables);
 		bookTitle = (TextView) view.findViewById(R.id.Title);
+		//loanables.setAdapter(loanableAdapter);
+		
+		Bundle args = getArguments();
+		new getBookTitle().execute(args.getString("TitleId"));
 		
 		bookTitle.setOnClickListener(new OnClickListener() {
 			@Override
@@ -179,8 +182,6 @@ public class TitlePageFragment extends Fragment {
 			}
 		});
 
-
 		return view;
 	}
-
 }

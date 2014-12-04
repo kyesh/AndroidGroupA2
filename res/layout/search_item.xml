@@ -1,57 +1,64 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/search_item_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
-    
-    
-<TextView
-    android:id="@+id/search_item_title"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingLeft="10sp"
-    android:text="Laga mat med Emil"
-    android:textSize="20sp"
-    android:textStyle="bold"
-    android:background="#24E050"
-    />
-
-    
-      
+    android:orientation="vertical"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+	>
+	
     <LinearLayout 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="#24E050"
         >
         
-    <TextView 
-        android:id="@+id/search_item_author"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:paddingLeft="10sp"
-        android:textSize="15sp"
-        android:maxLines = "6"
-        android:layout_weight="2"
-        android:text="Emil Lygnebrandt, Jonathan Holm, Alexander Lagerqvist" 
-        />
-    
-    <TextView 
-        android:id="@+id/search_item_year"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:paddingRight="10sp"
-        android:text="2014"
-        />
+		<TextView
+		    android:id="@+id/search_item_title"
+		    android:layout_width="0dp"
+		    android:layout_height="wrap_content"
+		    android:layout_weight="1"
+		    android:textSize="20sp"
+		    android:textStyle="bold"
+		    android:maxLines="1"
+		    />
+	    
+		<!-- 
+	    <TextView 
+	        android:id="@+id/search_item_year"
+	        android:layout_width="0dp"
+	        android:layout_weight="1"
+	        android:layout_height="wrap_content"
+	        android:gravity="right"
+	        android:text="2014"
+	        />
+	    -->
+	    <TextView 
+	        android:id="@+id/search_item_year"
+	        android:layout_width="50dp"
+	        android:layout_height="wrap_content"
+	        android:gravity="right"
+	        android:maxLines="1"
+	        />
     
     </LinearLayout>
     
+	    <TextView 
+	        android:id="@+id/search_item_author"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="left"
+	        android:textSize="15sp"
+	        android:maxLines = "6"
+	        />
+    <!--
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#666666" />
+    -->
   
 </LinearLayout>
 

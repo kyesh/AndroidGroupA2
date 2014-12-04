@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
@@ -29,5 +29,37 @@
     <color name="nav_item">#777</color>
     <color name="nav_item_pressed">#CCC</color>
     <color name="nav_item_checked">#AAA</color>
+    
+    <color name="search_item_divider">#999</color>
+    <color name="search_item_even">#FFF</color>
+    <!--<color name="search_item_odd">#EEE</color>-->
+    <color name="search_item_odd">#4BD9BF</color>
+    <color name="search_item_pressed">#BBB</color>
+    <color name="search_item_checked">#CCC</color>
+    <color name="search_item_textColor_even">#000</color>
+    <color name="search_item_textColor_odd">#FFF</color>
+    
+    <style name="title_detail_header">
+        <item name="android:background">#4BD9BF</item>
+        <item name="android:paddingLeft">5dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">#FFF</item>
+    </style>
+    
+    <color name="title_detail_divider">#EEE</color>
+    
+    <style name="title_detail_value">
+        <item name="android:background">#FFF</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:paddingRight">5dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">#000</item>
+    </style>
 
 </resources>
