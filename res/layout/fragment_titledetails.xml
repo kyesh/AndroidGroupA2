@@ -1,23 +1,29 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:layout_height="match_parent" >
+    
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#FFF">
+    
+    
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:orientation="vertical" >
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:text="@string/TitleDetail_Title"
             style="@style/title_detail_header" />
 
         <TextView
             android:id="@+id/TitleDetails_Title"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
             style="@style/title_detail_value" />
@@ -31,6 +37,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         >
 
         <TextView
@@ -42,8 +49,7 @@
 
         <TextView
             android:id="@+id/TitleDetails_Author"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
             style="@style/title_detail_value"
@@ -59,7 +65,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
@@ -70,8 +76,7 @@
 
         <TextView
             android:id="@+id/TitleDetails_ISBN10"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
             style="@style/title_detail_value"
@@ -87,7 +92,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:orientation="vertical" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -98,8 +103,7 @@
 
         <TextView
             android:id="@+id/TitleDetails_ISBN13"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
             style="@style/title_detail_value"
@@ -115,7 +119,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:orientation="vertical" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -126,8 +130,7 @@
 
         <TextView
             android:id="@+id/TitleDetails_Puplicationyear"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
             style="@style/title_detail_value"
@@ -143,7 +146,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:orientation="vertical" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -153,8 +156,7 @@
 
         <TextView
             android:id="@+id/TitleDetails_Publisher"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
             style="@style/title_detail_value"
@@ -170,7 +172,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:orientation="vertical" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -181,8 +183,7 @@
 
         <TextView
             android:id="@+id/TitleDetails_Topics"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
             style="@style/title_detail_value"
@@ -190,3 +191,4 @@
     </LinearLayout>
 
 </LinearLayout>
+</ScrollView>
