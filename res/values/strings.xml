@@ -41,6 +41,17 @@
     <string name="TitleDetail_Publisher">Publisher :</string>
     <string name="TitleDetail_Publicationyear">Publication year :</string>
     <string name="TitleDetail_Topics">Topics :</string>
+
+    <string name="borrowing_button_checkIn">Check in</string>
+    <string name="borrowing_button_checkOut">Check out</string>
+    <string name="borrowing_location">Location: </string>
+    <string name="borrowing_doelibsId">DoeLibs id: </string>
+    <string name="borrowing_recallDate">Expire date: </string>
+    <string name="borrowing_loansTitle">Loans</string>
+    <string name="borrowing_reservationsTitle">Reservations</string>
+    <string name="borrowing_recallDateNull">Not recalled</string>
     
+    <string name="info_noInternet">You are not connected to the internet</string>
+    <string name="info_technicalIssues">Technical issues please try again</string>
 
 </resources>

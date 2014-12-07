@@ -169,7 +169,7 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
     	{
     		setLoggedInUser(ApiHelper.LoggedInUser);
     		// TODO: set to borrower fragment
-    		setActiveFragment(new TestFragment(), R.string.title_activity_borrowings, false);
+    		setActiveFragment(new BorrowingsFragment(), R.string.title_activity_borrowings, false);
     	}
     	else
     	{
@@ -315,7 +315,7 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 		if (realPos == NAV_ITEM_STAFF.BORROWINGS.getNumVal())
 		{
 			//setActiveFragment(new TitleDetailFragment(), R.string.title_activity_titleDetailsPage, false);
-			setActiveFragment(new TestFragment(), item.Text, false);
+			setActiveFragment(new BorrowingsFragment(), item.Text, false);
 		}
 		else if (realPos == NAV_ITEM_STAFF.NOTIFICATIONS.getNumVal())
 		{
@@ -449,12 +449,12 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 				Toast.makeText(this, "Welcome " + param.FirstName + " " + param.LastName, Toast.LENGTH_SHORT).show();
 				setLoggedInUser(param);
 				//TODO: set fragment to borrowings
-				setActiveFragment(new TestFragment(), R.string.title_activity_borrowings, false);
+				setActiveFragment(new BorrowingsFragment(), R.string.title_activity_borrowings, false);
 			}
 			else
 			{
 				setLoggedInUser(ApiHelper.LoggedInUser);
-				setActiveFragment(new TestFragment(), R.string.title_activity_borrowings, false);
+				setActiveFragment(new BorrowingsFragment(), R.string.title_activity_borrowings, false);
 			}
 		}
 		else if (sender.getClass() == TitlePageFragment.class)

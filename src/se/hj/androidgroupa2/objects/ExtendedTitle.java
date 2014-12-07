@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 public class ExtendedTitle implements Serializable {
 
@@ -55,7 +56,14 @@ public class ExtendedTitle implements Serializable {
 
 				ArrayList<ExtendedTitle> returnTitles = new ArrayList<ExtendedTitle>();
 				
-				JSONObject raw = ApiHelper.getFromApi("http://doelibs-001-site1.myasp.net/api/search/?searchTerm=" + params[0] + "&searchOption=Title");
+				JSONObject raw;
+				try {
+				raw = new JSONObject(ApiHelper.getFromApi("http://doelibs-001-site1.myasp.net/api/search/?searchTerm=" + params[0] + "&searchOption=Title"));
+				} catch (Exception e) {
+					Log.e("JSON PARSE", "api search token parse");
+					return null;
+				}
+				
 				JSONArray titles = raw.optJSONArray("Titles");
 				
 				for (int i = 0; titles != null && i < titles.length(); i++)
