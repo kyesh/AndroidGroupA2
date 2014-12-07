@@ -489,6 +489,20 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 				setActiveFragment(fragment, "Title details", true);
 			}
 		}
+		else if (sender.getClass() == BorrowingsFragment.class)
+		{
+			if (params != null)
+			{
+				Integer titleId = (Integer) params;
+				
+//		        Fragment fragment = new TitlePageFragment();
+//		        Bundle args = new Bundle();
+//		        args.putString(StoredDataName.ARGS_TITLEID, titleId.toString());
+//		        fragment.setArguments(args);
+//		        setActiveFragment(fragment, R.string.title_activity_title_page, true);
+				Toast.makeText(this, "TEST: " + titleId.toString(), Toast.LENGTH_SHORT).show();
+			}
+		}
 	}
     
     private class DrawerItemClickListener implements ListView.OnItemClickListener {

@@ -3,6 +3,7 @@ package se.hj.androidgroupa2;
 import java.util.ArrayList;
 
 import se.hj.androidgroupa2.objects.Loan;
+import se.hj.androidgroupa2.objects.OnFragmentCompleteListener;
 import se.hj.androidgroupa2.objects.Reservation;
 import se.hj.androidgroupa2.objects.UpdateDataInterface;
 import android.app.Fragment;
@@ -14,6 +15,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -25,11 +27,19 @@ public class BorrowingsFragment extends Fragment implements UpdateDataInterface 
 	private ArrayList<BorrowingAdapterItem> _listItems;
 	private BorrowingAdapter _listAdapter;
 	private Resources _res;
+	private OnFragmentCompleteListener _onFragmentComplete;
 	
 	private boolean _doneLoadingSome;
 	
 	public BorrowingsFragment()
 	{}
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
+		_onFragmentComplete = (OnFragmentCompleteListener) getActivity();
+	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,6 +54,22 @@ public class BorrowingsFragment extends Fragment implements UpdateDataInterface 
 		_listItems = new ArrayList<BorrowingAdapterItem>();
 		_listAdapter = new BorrowingAdapter(getActivity(), R.layout.borrowing_list_item, R.id.borrowings_list_item_title, _listItems, this);
 		_list.setAdapter(_listAdapter);
+		
+		_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				
+				BorrowingAdapterItem item = _listItems.get(position);
+				if (item.BorrowerLoan != null || item.BorrowerReservation != null)
+				{
+					if (item.BorrowerLoan != null)
+						_onFragmentComplete.onFragmentComplete(BorrowingsFragment.this, item.BorrowerLoan.LoanLoanable.TitleInformation.TitleId);
+					else
+						_onFragmentComplete.onFragmentComplete(BorrowingsFragment.this, item.BorrowerReservation.ResTitle.TitleId);
+				}
+			}
+		});
+		
 		updateData();
 		
 		return rootView;
