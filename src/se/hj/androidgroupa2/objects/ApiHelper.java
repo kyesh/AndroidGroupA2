@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -67,5 +69,33 @@ public class ApiHelper {
 			Log.e("API", "deleteFromApi | " + e.getMessage());
 		}
 		return responseCode;
+	}
+	
+	public static String removeTimeFromDateString(String date)
+	{
+		if (date == null || date.isEmpty() || date == "null") return null;
+		String returnDate;
+		try {
+			returnDate = date.substring(0, date.indexOf("T"));
+		} catch (Exception e) {
+			Log.e("DATE PARSE", "in ApiHelper removing time from date");
+			return null;
+		}
+		return returnDate;
+	}
+	
+	public static Calendar parseDateFromString(String date)
+	{
+		
+		if (date == null || date.isEmpty()) return null;
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'");
+		Calendar returnDate = Calendar.getInstance();
+		try {
+			returnDate.setTime(format.parse(date));
+		} catch (Exception e) {
+			Log.e("DATE PARSING", "in ApiHelper");
+			return null;
+		}
+		return returnDate;
 	}
 }

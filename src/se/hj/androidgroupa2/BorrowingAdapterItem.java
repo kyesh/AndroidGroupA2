@@ -7,7 +7,7 @@ import android.graphics.drawable.Drawable;
 public class BorrowingAdapterItem {
 
 	public String Header = null;
-	public Drawable TitleImage = null;
+	public int ItemImage = -1;
 	public Loan BorrowerLoan = null;
 	public Reservation BorrowerReservation = null;
 }

@@ -50,6 +50,9 @@
     <string name="borrowing_loansTitle">Loans</string>
     <string name="borrowing_reservationsTitle">Reservations</string>
     <string name="borrowing_recallDateNull">Not recalled</string>
+    <string name="borrowing_status_available">Available for you</string>
+    <string name="borrowing_status_waiting">Waiting for loanable</string>
+    <string name="borrowing_info_loanableCheckedIn">Loanable was checked in</string>
     
     <string name="info_noInternet">You are not connected to the internet</string>
     <string name="info_technicalIssues">Technical issues please try again</string>

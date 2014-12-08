@@ -31,8 +31,8 @@ public class User implements Serializable {
 		user.LastName = json.optString("LastName");
 		user.Room = json.optString("Room");
 		user.UniPhone = json.optString("UniPhone");
-		user.RegistrationDate = json.optString("RegistrationDate");
-		user.UserExpirationDate = json.optString("UserExpirationDate");
+		user.RegistrationDate = ApiHelper.removeTimeFromDateString(json.optString("RegistrationDate"));
+		user.UserExpirationDate = ApiHelper.removeTimeFromDateString(json.optString("UserExpirationDate"));
 		user.IsPendingExpiration = json.optBoolean("IsPendingExpiration", false);
 		user.Category = UserCategory.parseCategoryFromJSONObject(json.optJSONObject("Category"));
 		

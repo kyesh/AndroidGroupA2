@@ -6,6 +6,7 @@ import se.hj.androidgroupa2.objects.Loan;
 import se.hj.androidgroupa2.objects.UpdateDataInterface;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.view.View;
@@ -63,8 +64,6 @@ public class BorrowingAdapter extends ArrayAdapter<BorrowingAdapterItem> impleme
 			container.setVisibility(View.VISIBLE);
 		}
 		
-		//if (item.TitleImage != null) imageView.setImageResource(R.drawable.ic_action_camera);
-		imageView.setImageResource(R.drawable.ic_action_camera);
 		if (item.BorrowerLoan != null)
 		{
 			title.setText(item.BorrowerLoan.LoanLoanable.TitleInformation.BookTitle);
@@ -79,10 +78,19 @@ public class BorrowingAdapter extends ArrayAdapter<BorrowingAdapterItem> impleme
 					item.BorrowerLoan.LoanLoanable.Barcode);
 			
 			if (item.BorrowerLoan.RecallExpiredDate == null || item.BorrowerLoan.RecallExpiredDate.isEmpty() || item.BorrowerLoan.RecallExpiredDate == "null")
-				item.BorrowerLoan.RecallExpiredDate = _res.getString(R.string.borrowing_recallDateNull);
-			
-			text3.setText(_res.getString(R.string.borrowing_recallDate) + " " +
-					item.BorrowerLoan.RecallExpiredDate);
+			{
+				text3.setText(_res.getString(R.string.borrowing_recallDate) + " " +
+						_res.getString(R.string.borrowing_recallDateNull));
+				item.ItemImage = R.drawable.ic_book_256;
+				container.setBackgroundColor(Color.WHITE);
+			}
+			else
+			{
+				item.ItemImage = R.drawable.ic_book_yellow_256;
+				text3.setText(_res.getString(R.string.borrowing_recallDate) + " " +
+						item.BorrowerLoan.RecallExpiredDate);
+				container.setBackgroundColor(_res.getColor(R.color.borrowing_item_yellow));
+			}
 			
 			button.setVisibility(View.VISIBLE);
 			button.setText(R.string.borrowing_button_checkIn);
@@ -93,12 +101,33 @@ public class BorrowingAdapter extends ArrayAdapter<BorrowingAdapterItem> impleme
 		{
 			title.setText(item.BorrowerReservation.ResTitle.BookTitle);
 			
-			text1.setVisibility(View.GONE);
+			text1.setVisibility(View.VISIBLE);
+			if (item.BorrowerReservation.LoanRecalled)
+			{
+				text1.setText(_res.getString(R.string.borrowing_status_available));
+				item.ItemImage = R.drawable.ic_book_bookmark_green_256;
+				container.setBackgroundColor(_res.getColor(R.color.borrowing_item_green));
+			}
+			else
+			{
+				text1.setText(_res.getString(R.string.borrowing_status_waiting));
+				item.ItemImage = R.drawable.ic_book_bookmark_256;
+				container.setBackgroundColor(Color.WHITE);
+			}
+			
 			text2.setVisibility(View.GONE);
 			text3.setVisibility(View.GONE);
 			
 			button.setVisibility(View.GONE);
 			button.setText(R.string.borrowing_button_checkOut);
+		}
+
+		if (item.ItemImage == -1)
+			imageView.setVisibility(View.GONE);
+		else
+		{
+			imageView.setVisibility(View.VISIBLE);
+			imageView.setImageResource(item.ItemImage);
 		}
 		
 		return rootView;
@@ -122,6 +151,7 @@ public class BorrowingAdapter extends ArrayAdapter<BorrowingAdapterItem> impleme
 					Boolean success = (Boolean) result;
 					if (success == null || !success)
 						Toast.makeText(_context, _res.getString(R.string.info_technicalIssues), Toast.LENGTH_LONG).show();
+					Toast.makeText(_context, _res.getString(R.string.borrowing_info_loanableCheckedIn), Toast.LENGTH_SHORT).show();
 					_updateRef.updateData();
 				}
 			});

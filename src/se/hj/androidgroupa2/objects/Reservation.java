@@ -29,8 +29,8 @@ public class Reservation implements Serializable {
     	res.ReservationId = (Integer) json.opt("ReservationId");
     	res.ResTitle = Title.parseTitleFromJSONObject(json.optJSONObject("Title"));
     	res.ResUser = User.parseUserFromJSONObject(json.optJSONObject("User"));
-    	res.ReserveDate = json.optString("ReserveDate");
-    	res.AvailableDate = json.optString("AvailableDate");
+    	res.ReserveDate = ApiHelper.removeTimeFromDateString(json.optString("ReserveDate"));
+    	res.AvailableDate = ApiHelper.removeTimeFromDateString(json.optString("AvailableDate"));
     	res.LoanRecalled = json.optBoolean("LoanRecalled");
     	
     	return res;

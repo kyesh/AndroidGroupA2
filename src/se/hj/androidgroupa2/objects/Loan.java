@@ -5,6 +5,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -34,10 +35,10 @@ public class Loan implements Serializable {
 		loan.LoanId = (Integer) json.opt("LoanId");
 		loan.LoanLoanable = Loanable.parseLoanableFromJSONObject(json.optJSONObject("Loanable"));
 		loan.Borrower = User.parseUserFromJSONObject(json.optJSONObject("Borrower"));
-		loan.BorrowDate = json.optString("BorrowDate");
-		loan.ReturnDate = json.optString("ReturnDate");
-		loan.ToBeReturnedDate = json.optString("ToBeReturnedDate");
-		loan.RecallExpiredDate = json.optString("RecallExpiredDate");
+		loan.BorrowDate = ApiHelper.removeTimeFromDateString(json.optString("BorrowDate"));
+		loan.ReturnDate = ApiHelper.removeTimeFromDateString(json.optString("ReturnDate"));
+		loan.ToBeReturnedDate = ApiHelper.removeTimeFromDateString(json.optString("ToBeReturnedDate"));
+		loan.RecallExpiredDate = ApiHelper.removeTimeFromDateString(json.optString("RecallExpiredDate"));
 		
 		return loan;
 	}
