@@ -2,6 +2,7 @@ package se.hj.androidgroupa2;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import se.hj.androidgroupa2.objects.ExtendedTitle;
 import se.hj.androidgroupa2.objects.OnFragmentCompleteListener;
@@ -30,6 +31,7 @@ public class SearchActivity extends Fragment {
 	private ListView _listview;
 	private ProgressBar _progressBar;
 	private List<ExtendedTitle> _items = new ArrayList<ExtendedTitle>();
+	private ExtendedTitle _item = new ExtendedTitle();
 	
 	private OnFragmentCompleteListener _callbackActivity;
 	
@@ -73,20 +75,43 @@ public class SearchActivity extends Fragment {
 		{
 			Bundle bundle = getArguments();
 			String query = bundle.getString(StoredDataName.ARGS_SEARCH_QUERY);
-			ExtendedTitle.getTitlesFromSearch(query, new ExtendedTitle.CallbackReference() {
-				@Override
-				public void callbackFunction(List<ExtendedTitle> titles) {
-					
-					_progressBar.setVisibility(View.GONE);
-					_listview.setVisibility(View.VISIBLE);
-					
-					SearchAdapter adapter = (SearchAdapter) _listview.getAdapter();
-					_items = titles;
-					adapter.clear();
-					if (_items != null && _items.size() != 0) adapter.addAll(_items);
-					adapter.notifyDataSetChanged();
-				}
-			});
+			String randQuery = bundle.getString(StoredDataName.ARGS_RANDOM_TITLE);
+			
+			if(query != null)
+			{
+				ExtendedTitle.getTitlesFromSearch(query, new ExtendedTitle.CallbackReference() {
+					@Override
+					public void callbackFunction(List<ExtendedTitle> titles) {
+						
+						_progressBar.setVisibility(View.GONE);
+						_listview.setVisibility(View.VISIBLE);
+						
+						SearchAdapter adapter = (SearchAdapter) _listview.getAdapter();
+						_items = titles;
+						adapter.clear();
+						if (_items != null && _items.size() != 0) adapter.addAll(_items);
+						adapter.notifyDataSetChanged();
+					}
+				});
+			}
+			else if(randQuery != null)
+			{
+				ExtendedTitle.getRandomTitle(new ExtendedTitle.CallbackReference() {
+					@Override
+					public void callbackFunction(List<ExtendedTitle> titles) {
+						
+						_progressBar.setVisibility(View.GONE);
+						_listview.setVisibility(View.VISIBLE);
+						
+						SearchAdapter adapter = (SearchAdapter) _listview.getAdapter();
+						_items = titles;
+						adapter.clear();
+						if (_items != null && _items.size() != 0) adapter.addAll(_items);
+						adapter.notifyDataSetChanged();
+					}
+				});
+			}
+			
 		}
 		else 
 		{

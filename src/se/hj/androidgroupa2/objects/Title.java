@@ -35,6 +35,39 @@ public class Title implements Serializable {
 		title.Publisher = se.hj.androidgroupa2.objects.Publisher.parsePublisherFromJSONObject(
 				json.optJSONObject("Publisher"));
 		
+		//Converts ISBN10 to ISBN13
+		if(title.ISBN13 == "" || title.ISBN13 == "null" && title.ISBN10.length() == 10)
+		{
+			String oldISBN = title.ISBN10;
+			oldISBN = oldISBN.substring(0,oldISBN.length()-1);
+			String newISBN = "";
+			int lastDigit=0;
+			int sum=0;	
+			int multiplier = 1;
+			String code = "978" + oldISBN;
+			
+			for(int i=0;i <= code.length()-1; i++){
+				int num = Character.getNumericValue(code.charAt(i));
+				sum = sum + (num * multiplier);
+
+	            if(multiplier == 1)
+	            	multiplier = 3;
+	            else
+	            	multiplier = 1;
+			}
+
+			sum = sum % 10;
+			if(sum == 0)
+				lastDigit = 0;
+			else
+				lastDigit = 10-sum;
+			
+			newISBN = code + lastDigit;
+			title.ISBN13 = newISBN;
+		}
+		else
+			title.ISBN13 = "Not Avaiable";
+		
 		return title;
     }
 }
