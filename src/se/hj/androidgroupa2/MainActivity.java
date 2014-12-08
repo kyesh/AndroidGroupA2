@@ -23,9 +23,14 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -93,6 +98,12 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 	    }
 	}
 	
+	//Shake
+	private SensorManager _SensorManager;
+	private float _Accel;
+	private float _AccelCurrent; 
+	private float _AccelLast; 
+	
 	private DrawerLayout _drawerLayout;
 	private ListView _nav_list;
 	private ActionBarDrawerToggle _actionBarDrawerToggle;
@@ -119,6 +130,13 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
         _nav_users_name = (TextView) findViewById(R.id.nav_users_name);
         _nav_users_email = (TextView) findViewById(R.id.nav_users_email);
         _nav_user = (LinearLayout) findViewById(R.id.nav_user);
+        
+        //Shake
+        _SensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+	    _SensorManager.registerListener(_SensorListener, _SensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+	    _Accel = 0.00f;
+	    _AccelCurrent = SensorManager.GRAVITY_EARTH;
+	    _AccelLast = SensorManager.GRAVITY_EARTH;
         
         boolean userLoggedIn = checkForLoggedInUser();
 
@@ -534,4 +552,50 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 			setActionBarArrow();
 		}
     }
+    
+  //Shake 
+    private final SensorEventListener _SensorListener = new SensorEventListener() {
+    	
+		public void onSensorChanged(SensorEvent se) {
+			float x = se.values[0];
+			float y = se.values[1];
+			float z = se.values[2];
+			_AccelLast = _AccelCurrent;
+			_AccelCurrent = (float) Math.sqrt((double) (x * x + y * y + z * z));
+			float delta = _AccelCurrent - _AccelLast;
+			_Accel = _Accel * 0.9f + delta;
+			
+			SharedPreferences prefs = getPreferences(MODE_PRIVATE); 
+			Boolean Shake = prefs.getBoolean(StoredDataName.SHAKE, true);
+
+			if (_Accel > 12 && Shake == true) {
+
+				Bundle args = new Bundle();
+				args.putString(StoredDataName.ARGS_RANDOM_TITLE, "");
+				SearchActivity fragment = new SearchActivity();
+				fragment.setArguments(args);
+				setActiveFragment(fragment, R.string.title_activity_search,
+						true);
+			}
+		}
+    	
+		public void onAccuracyChanged(Sensor sensor, int accuracy) {
+		}
+    };
+
+		
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		_SensorManager.registerListener(_SensorListener,
+				_SensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+				SensorManager.SENSOR_DELAY_NORMAL);
+	}
+
+	@Override
+	public void onPause() {
+		_SensorManager.unregisterListener(_SensorListener);
+		super.onPause();
+	}
 }

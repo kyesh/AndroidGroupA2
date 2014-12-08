@@ -3,6 +3,7 @@ package se.hj.androidgroupa2.objects;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -71,6 +72,34 @@ public class ExtendedTitle implements Serializable {
 			}
 		};
 		task.execute(query);
+    }
+    
+    public static void getRandomTitle(final CallbackReference callback)
+    {
+    	
+    	AsyncTask<String, Void, List<ExtendedTitle>> task = new AsyncTask<String, Void, List<ExtendedTitle>>() {
+			@Override
+			protected List<ExtendedTitle> doInBackground(String... params) {
+
+				ArrayList<ExtendedTitle> returnTitles = new ArrayList<ExtendedTitle>();
+				
+				JSONObject raw = ApiHelper.getFromApi("http://doelibs-001-site1.myasp.net/api/search/?searchTerm=&searchOption=Title");
+				JSONArray titles = raw.optJSONArray("Titles");
+				
+				Random random = new Random();
+				int nr = random.nextInt(titles.length());
+				returnTitles.add(ExtendedTitle.parseExtendedTitleFromJSONObject(titles.optJSONObject(nr)));
+				
+				if (returnTitles.size() == 0) return null;
+				else return returnTitles;
+			}
+			
+			@Override
+			protected void onPostExecute(List<ExtendedTitle> result) {
+				callback.callbackFunction(result);
+			}
+		};
+		task.execute();
     }
 
 	public interface CallbackReference {
