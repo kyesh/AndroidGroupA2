@@ -33,6 +33,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import se.hj.androidgroupa2.dummy.DummyContent;
+import se.hj.androidgroupa2.objects.Loanable;
 import se.hj.androidgroupa2.objects.OnFragmentCompleteListener;
 import se.hj.androidgroupa2.objects.Title;
 
@@ -106,22 +107,34 @@ public class TitlePageFragment extends Fragment {
 	    		//parse results
 	    		 JSONObject resultObject = new JSONObject(result);
 	    		 JSONArray LoanablesJSON = resultObject.getJSONArray("Loanables");
+	    		 Log.i("kyesh", "Loanables Parsed");
 	    		 JSONObject titleObject = resultObject.getJSONObject("Title");
+	    		 Log.i("kyesh", "Title Parsed");
 	    		 _title = Title.parseTitleFromJSONObject(titleObject);
 	    		 
-	    		 ArrayList<JSONObject> loanableList = new ArrayList<JSONObject>();
+	    		 ArrayList<Loanable> loanableList = new ArrayList<Loanable>();
 	    		 bookTitle.setText(titleObject.getString("BookTitle"));
-	    		 
+	    		 Log.i("kyesh", "Title:"+titleObject.getString("BookTitle"));
 	    		 
 	    		 
 	    		 for(int i = 0; i < LoanablesJSON.length(); i++){
-	    			 loanableList.add(LoanablesJSON.getJSONObject(i));
+	    			 
+	    			 loanableList.add(Loanable.parseLoanableFromJSONObject(LoanablesJSON.getJSONObject(i)));
 	    		 }
+	    		 Log.i("kyesh", "past For Loop");
 	    		 
-	    		 	loanableAdapter = new LoanableAdapter( getActivity(), R.layout.loanable_layout, R.id.DoeLibsId, loanableList);
+	    		 	//loanableAdapter = new LoanableAdapter( getActivity(), R.layout.loanable_layout, R.id.DoeLibsId, loanableList);
 	    			//LoanableAdapter  loanableAdapter = new LoanableAdapter( TitlePageFragment.this , R.layout.loanable_layout, R.id.DoeLibsId ,loanableList );
-	    			loanables.setAdapter(loanableAdapter);
+	    			
+	    		 //loanableAdapter.addAll(loanableList);
+	    		 Loanable tempLoanable = new Loanable();
+	    		 tempLoanable.Barcode = "Barcode";
+	    		 tempLoanable.Category = "Category";
+	    		 tempLoanable.Location = "Location";
 	    		 
+	    		 loanableAdapter.add(tempLoanable);
+
+	    			Log.i("kyesh", "end Try");
 	    		}
 	    		catch (Exception e) {
 	    		//no result
@@ -130,8 +143,6 @@ public class TitlePageFragment extends Fragment {
 	    		}
 	     }
 	 }
-	
-	private AbsListView mListView;
 
 	/**
 	 * The Adapter which will be used to populate the ListView/GridView with
@@ -166,10 +177,26 @@ public class TitlePageFragment extends Fragment {
 		
 		loanables = (ListView) view.findViewById(R.id.loanables);
 		bookTitle = (TextView) view.findViewById(R.id.Title);
-		//loanables.setAdapter(loanableAdapter);
+		
+		ArrayList<Loanable> temploanableList = new ArrayList<Loanable>();
+		loanableAdapter = new LoanableAdapter( getActivity(), R.layout.loanable_layout, R.id.DoeLibsId, temploanableList);
+		Log.i("kyesh","getActivity()"+getActivity());
+		
+		loanables.setAdapter(loanableAdapter);
+		
+		Loanable tempLoanable = new Loanable();
+		 tempLoanable.Barcode = "Barcode";
+		 tempLoanable.Category = "Category";
+		 tempLoanable.Location = "Location";
+		 
+		 loanableAdapter.add(tempLoanable);
+		
+		 loanableAdapter.notifyDataSetChanged();
+		 
+		bookTitle.setText("This is the book Title");
 		
 		Bundle args = getArguments();
-		new getBookTitle().execute(args.getString("TitleId"));
+		//new getBookTitle().execute(args.getString("TitleId"));
 		
 		bookTitle.setOnClickListener(new OnClickListener() {
 			@Override
