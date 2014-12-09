@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
@@ -91,7 +92,13 @@ public class ExtendedTitle implements Serializable {
 
 				ArrayList<ExtendedTitle> returnTitles = new ArrayList<ExtendedTitle>();
 				
-				JSONObject raw = ApiHelper.getFromApi("http://doelibs-001-site1.myasp.net/api/search/?searchTerm=&searchOption=Title");
+				JSONObject raw;
+				try {
+					raw = new JSONObject(ApiHelper.getFromApi("http://doelibs-001-site1.myasp.net/api/search/?searchTerm=&searchOption=Title"));
+				} catch (JSONException e) {
+					Log.e("JSON PARSE", "Parse to get current user from api");
+					return null;
+				}
 				JSONArray titles = raw.optJSONArray("Titles");
 				
 				Random random = new Random();

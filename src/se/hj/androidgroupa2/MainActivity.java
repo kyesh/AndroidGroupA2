@@ -579,8 +579,8 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 			float delta = _AccelCurrent - _AccelLast;
 			_Accel = _Accel * 0.9f + delta;
 			
-			SharedPreferences prefs = getPreferences(MODE_PRIVATE); 
-			Boolean Shake = prefs.getBoolean(StoredDataName.SHAKE, true);
+			SharedPreferences prefs = getSharedPreferences(StoredDataName.SHARED_PREF, MODE_PRIVATE); 
+			Boolean Shake = prefs.getBoolean(StoredDataName.PREF_SETTINGS_SHAKE, true);
 
 			if (_Accel > 12 && Shake == true) {
 
