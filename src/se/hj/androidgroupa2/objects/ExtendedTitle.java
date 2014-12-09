@@ -3,11 +3,14 @@ package se.hj.androidgroupa2.objects;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 public class ExtendedTitle implements Serializable {
 
@@ -55,7 +58,14 @@ public class ExtendedTitle implements Serializable {
 
 				ArrayList<ExtendedTitle> returnTitles = new ArrayList<ExtendedTitle>();
 				
-				JSONObject raw = ApiHelper.getFromApi("http://doelibs-001-site1.myasp.net/api/search/?searchTerm=" + params[0] + "&searchOption=Title");
+				JSONObject raw;
+				try {
+				raw = new JSONObject(ApiHelper.getFromApi("http://doelibs-001-site1.myasp.net/api/search/?searchTerm=" + params[0] + "&searchOption=Title"));
+				} catch (Exception e) {
+					Log.e("JSON PARSE", "api search token parse");
+					return null;
+				}
+				
 				JSONArray titles = raw.optJSONArray("Titles");
 				
 				for (int i = 0; titles != null && i < titles.length(); i++)
@@ -71,6 +81,40 @@ public class ExtendedTitle implements Serializable {
 			}
 		};
 		task.execute(query);
+    }
+    
+    public static void getRandomTitle(final CallbackReference callback)
+    {
+    	
+    	AsyncTask<String, Void, List<ExtendedTitle>> task = new AsyncTask<String, Void, List<ExtendedTitle>>() {
+			@Override
+			protected List<ExtendedTitle> doInBackground(String... params) {
+
+				ArrayList<ExtendedTitle> returnTitles = new ArrayList<ExtendedTitle>();
+				
+				JSONObject raw;
+				try {
+					raw = new JSONObject(ApiHelper.getFromApi("http://doelibs-001-site1.myasp.net/api/search/?searchTerm=&searchOption=Title"));
+				} catch (JSONException e) {
+					Log.e("JSON PARSE", "Parse to get current user from api");
+					return null;
+				}
+				JSONArray titles = raw.optJSONArray("Titles");
+				
+				Random random = new Random();
+				int nr = random.nextInt(titles.length());
+				returnTitles.add(ExtendedTitle.parseExtendedTitleFromJSONObject(titles.optJSONObject(nr)));
+				
+				if (returnTitles.size() == 0) return null;
+				else return returnTitles;
+			}
+			
+			@Override
+			protected void onPostExecute(List<ExtendedTitle> result) {
+				callback.callbackFunction(result);
+			}
+		};
+		task.execute();
     }
 
 	public interface CallbackReference {

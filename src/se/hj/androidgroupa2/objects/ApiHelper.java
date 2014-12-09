@@ -2,6 +2,10 @@ package se.hj.androidgroupa2.objects;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -20,7 +24,7 @@ public class ApiHelper {
 	public static BasicHeader AuthentificationHeader;
 	public static User LoggedInUser;
 	
-	public static JSONObject getFromApi(String url)
+	public static JSONTokener getFromApi(String url)
 	{
 		HttpClient client = new DefaultHttpClient();
 		HttpGet get = new HttpGet(url);
@@ -41,13 +45,57 @@ public class ApiHelper {
 			if (allLines.isEmpty()) return null;
 				
 			JSONTokener tokener = new JSONTokener(allLines);
-			JSONObject result = new JSONObject(tokener);
-
-			return result;
+			return tokener;
 			
 		} catch (Exception e) {
 			Log.e("API", e.getMessage());
 			return null;
 		}
+	}
+	
+	public static int deleteFromApi(String url)
+	{
+		int responseCode = -1;
+		try {
+			URL urlObj = new URL(url);
+			HttpURLConnection connection = (HttpURLConnection) urlObj.openConnection();
+			connection.setRequestMethod("DELETE");
+			if (AuthentificationHeader != null)
+				connection.addRequestProperty(AuthentificationHeader.getName(), AuthentificationHeader.getValue());
+			connection.connect();
+			responseCode = connection.getResponseCode();
+			
+		} catch (Exception e) {
+			Log.e("API", "deleteFromApi | " + e.getMessage());
+		}
+		return responseCode;
+	}
+	
+	public static String removeTimeFromDateString(String date)
+	{
+		if (date == null || date.isEmpty() || date == "null") return null;
+		String returnDate;
+		try {
+			returnDate = date.substring(0, date.indexOf("T"));
+		} catch (Exception e) {
+			Log.e("DATE PARSE", "in ApiHelper removing time from date");
+			return null;
+		}
+		return returnDate;
+	}
+	
+	public static Calendar parseDateFromString(String date)
+	{
+		
+		if (date == null || date.isEmpty()) return null;
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'");
+		Calendar returnDate = Calendar.getInstance();
+		try {
+			returnDate.setTime(format.parse(date));
+		} catch (Exception e) {
+			Log.e("DATE PARSING", "in ApiHelper");
+			return null;
+		}
+		return returnDate;
 	}
 }

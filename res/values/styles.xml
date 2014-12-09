@@ -39,6 +39,9 @@
     <color name="search_item_textColor_even">#000</color>
     <color name="search_item_textColor_odd">#FFF</color>
     
+    <color name="borrowing_item_yellow">#F7FF63</color>
+    <color name="borrowing_item_green">#A4E77D</color>
+    
     <style name="title_detail_header">
         <item name="android:background">#4BD9BF</item>
         <item name="android:paddingLeft">5dp</item>

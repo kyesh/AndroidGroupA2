@@ -1,0 +1,23 @@
+
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+    
+	<ProgressBar
+	    android:id="@+id/borrowings_progressBar"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_marginTop="40dp"
+	    android:visibility="visible"
+	    />
+    
+	<ListView
+	    android:id="@+id/borrowings_list"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:visibility="gone"
+	    />
+</LinearLayout>

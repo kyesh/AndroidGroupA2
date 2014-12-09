@@ -1,10 +1,12 @@
 package se.hj.androidgroupa2.objects;
 
 import org.apache.http.message.BasicHeader;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
 import android.util.Base64;
+import android.util.Log;
 
 public class LoginUser extends AsyncTask<String, Void, User> {
 
@@ -25,7 +27,13 @@ public class LoginUser extends AsyncTask<String, Void, User> {
 		ApiHelper.AuthentificationHeader = new BasicHeader("Authorization", "Basic " + 
 				Base64.encodeToString((username + ":" + password).getBytes(),
 				Base64.NO_WRAP));
-		JSONObject result = ApiHelper.getFromApi("http://doelibs-001-site1.myasp.net/api/User");
+		JSONObject result;
+		try {
+			result = new JSONObject(ApiHelper.getFromApi("http://doelibs-001-site1.myasp.net/api/User"));
+		} catch (JSONException e) {
+			Log.e("JSON PARSE", "Parse to get current user from api");
+			return null;
+		}
 		User loggedInUser = User.parseUserFromJSONObject(result);
 		if (loggedInUser != null)
 		{
