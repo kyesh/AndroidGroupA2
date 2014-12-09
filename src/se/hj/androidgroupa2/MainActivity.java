@@ -474,19 +474,19 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 			if (params != null)
 			{
 				ExtendedTitle title = (ExtendedTitle) params;
-				/*
+				
 		        Fragment fragment = new TitlePageFragment();
 		        Bundle args = new Bundle();
 		        args.putString("TitleId", title.TitleInformation.TitleId.toString());
 		        fragment.setArguments(args);
 		        setActiveFragment(fragment, R.string.title_activity_title_page, true);
-		        */
-				
+		        
+				/*
 				Fragment fragment = new TitleDetailFragment();
 				Bundle args = new Bundle();
 				args.putSerializable(StoredDataName.ARGS_EXTENDED_TITLE, title);
 				fragment.setArguments(args);
-				setActiveFragment(fragment, "Title details", true);
+				setActiveFragment(fragment, "Title details", true);*/
 			}
 		}
 	}

@@ -19,31 +19,33 @@ public class LoanableAdapter extends ArrayAdapter<Loanable> {
 	public LoanableAdapter(Context context, int resource, int textViewResourceId, List<Loanable> objects) {
 		super(context, resource, textViewResourceId, objects);
 	}
-	
+	/*
 	public LoanableAdapter(Context context, List<Loanable> objects) {
 		super(context, 0, objects);
-	}
+	}*/
 	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		Log.i("kyesh","Position:" + position);
+		/*Log.i("kyesh","Position:" + position);
 		Log.i("kyesh", "convertView"+convertView);
-		Log.i("kyesh", "parent"+parent);
+		Log.i("kyesh", "parent"+parent);*/
 		
-		if (convertView == null) {
-	          convertView = LayoutInflater.from(getContext()).inflate(R.layout.search_item, parent, false);
+		/*if (convertView == null) {
+	          convertView = LayoutInflater.from(getContext()).inflate(R.layout.loanable_layout, parent, false);
 	       }
-		
+		*/
 		View itemView = super.getView(position, convertView, parent);
-		
 		Loanable loanable = getItem(position);
 		
 		TextView DoeLibsId = (TextView) itemView.findViewById(R.id.DoeLibsId);
 		TextView Location = (TextView)itemView.findViewById(R.id.Location);
 
 		
-			DoeLibsId.setText(loanable.LoanableId);
-			Location.setText(loanable.Owner.Room + "("+ loanable.Category +")");
+			DoeLibsId.setText(loanable.Barcode.toString());
+			if (loanable.Owner != null)
+				Location.setText(loanable.Owner.Room + " ("+ loanable.Category +")");
+			else
+				Location.setText("Unknown" + " ("+ loanable.Category +")");
 
 		
 		
