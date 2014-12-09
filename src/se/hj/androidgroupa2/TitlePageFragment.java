@@ -126,15 +126,15 @@ public class TitlePageFragment extends Fragment {
 	    		 	//loanableAdapter = new LoanableAdapter( getActivity(), R.layout.loanable_layout, R.id.DoeLibsId, loanableList);
 	    			//LoanableAdapter  loanableAdapter = new LoanableAdapter( TitlePageFragment.this , R.layout.loanable_layout, R.id.DoeLibsId ,loanableList );
 	    			
-	    		 //loanableAdapter.addAll(loanableList);
-	    		 Loanable tempLoanable = new Loanable();
+	    		 loanableAdapter.addAll(loanableList);
+	    		 /*Loanable tempLoanable = new Loanable();
 	    		 tempLoanable.Barcode = "Barcode";
 	    		 tempLoanable.Category = "Category";
 	    		 tempLoanable.Location = "Location";
 	    		 
 	    		 loanableAdapter.add(tempLoanable);
 
-	    			Log.i("kyesh", "end Try");
+	    			Log.i("kyesh", "end Try");*/
 	    		}
 	    		catch (Exception e) {
 	    		//no result
@@ -172,18 +172,24 @@ public class TitlePageFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_tittlepage, container,
+		View view = inflater.inflate(R.layout.fragment_tittlepage_list, container,
 				false);
 		
 		loanables = (ListView) view.findViewById(R.id.loanables);
 		bookTitle = (TextView) view.findViewById(R.id.Title);
 		
 		ArrayList<Loanable> temploanableList = new ArrayList<Loanable>();
+		/*Loanable tempLoanable = new Loanable();
+		 tempLoanable.Barcode = "Barcode";
+		 tempLoanable.Category = "Category";
+		 tempLoanable.Location = "Location";
+		 temploanableList.add(tempLoanable);*/
 		loanableAdapter = new LoanableAdapter( getActivity(), R.layout.loanable_layout, R.id.DoeLibsId, temploanableList);
-		Log.i("kyesh","getActivity()"+getActivity());
+		//Log.i("kyesh","getActivity()"+getActivity());
 		
 		loanables.setAdapter(loanableAdapter);
-		
+		 //loanables.setAdapter(new ArrayAdapter<Loanable>(getActivity(), R.layout.loanable_layout, R.id.DoeLibsId, temploanableList));
+		/*
 		Loanable tempLoanable = new Loanable();
 		 tempLoanable.Barcode = "Barcode";
 		 tempLoanable.Category = "Category";
@@ -192,11 +198,11 @@ public class TitlePageFragment extends Fragment {
 		 loanableAdapter.add(tempLoanable);
 		
 		 loanableAdapter.notifyDataSetChanged();
-		 
+		 */
 		bookTitle.setText("This is the book Title");
 		
 		Bundle args = getArguments();
-		//new getBookTitle().execute(args.getString("TitleId"));
+		new getBookTitle().execute(args.getString("TitleId"));
 		
 		bookTitle.setOnClickListener(new OnClickListener() {
 			@Override
