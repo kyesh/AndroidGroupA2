@@ -505,8 +505,6 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 				args.putSerializable(StoredDataName.ARGS_EXTENDED_TITLE, title);
 				fragment.setArguments(args);
 				setActiveFragment(fragment, "Title details", true);*/
-<<<<<<< HEAD
-=======
 			}
 		}
 		else if (sender.getClass() == BorrowingsFragment.class)
@@ -521,7 +519,6 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 //		        fragment.setArguments(args);
 //		        setActiveFragment(fragment, R.string.title_activity_title_page, true);
 				Toast.makeText(this, "TEST: " + titleId.toString(), Toast.LENGTH_SHORT).show();
->>>>>>> origin/master
 			}
 		}
 	}
