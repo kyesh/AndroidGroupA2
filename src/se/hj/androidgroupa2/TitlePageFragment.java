@@ -54,6 +54,9 @@ public class TitlePageFragment extends Fragment {
 
 	private TextView bookTitle ;
 	private ListView loanables;
+	private TextView _TitleYear;
+	private TextView _Authors;
+	
 	private LoanableAdapter loanableAdapter;
 	
 	private OnFragmentCompleteListener _callbackActivity;
@@ -62,7 +65,7 @@ public class TitlePageFragment extends Fragment {
 	 private class getBookTitle extends AsyncTask<String, Integer, String> {
 	     protected String doInBackground(String... TitleId) {
 	    	 
-	    	 Log.i("kyesh", "doInBackground Running:"+TitleId[0]);
+//	    	 Log.i("kyesh", "doInBackground Running:"+TitleId[0]);
 	    	 String APIURL = "http://doelibs-001-site1.myasp.net/api/title/" + TitleId[0];
 	    	 StringBuilder bookBuilder = new StringBuilder();
 	    	 HttpClient bookClient = new DefaultHttpClient();
@@ -107,21 +110,24 @@ public class TitlePageFragment extends Fragment {
 	    		//parse results
 	    		 JSONObject resultObject = new JSONObject(result);
 	    		 JSONArray LoanablesJSON = resultObject.getJSONArray("Loanables");
-	    		 Log.i("kyesh", "Loanables Parsed");
+//	    		 Log.i("kyesh", "Loanables Parsed");
 	    		 JSONObject titleObject = resultObject.getJSONObject("Title");
-	    		 Log.i("kyesh", "Title Parsed");
-	    		 _title = Title.parseTitleFromJSONObject(titleObject);
+//	    		 Log.i("kyesh", "Title Parsed");
+	    		 JSONObject Authors = resultObject.getJSONObject("Author");
 	    		 
+	    		 _title = Title.parseTitleFromJSONObject(titleObject);
 	    		 ArrayList<Loanable> loanableList = new ArrayList<Loanable>();
 	    		 bookTitle.setText(titleObject.getString("BookTitle"));
-	    		 Log.i("kyesh", "Title:"+titleObject.getString("BookTitle"));
+//	    		 Log.i("kyesh", "Title:"+titleObject.getString("BookTitle"));
 	    		 
+	    		 _Authors.setText(Authors.getString("Authors"));
+	    		 _TitleYear.setText(titleObject.getString("EditionYear"));
 	    		 
 	    		 for(int i = 0; i < LoanablesJSON.length(); i++){
 	    			 
 	    			 loanableList.add(Loanable.parseLoanableFromJSONObject(LoanablesJSON.getJSONObject(i)));
 	    		 }
-	    		 Log.i("kyesh", "past For Loop");
+//	    		 Log.i("kyesh", "past For Loop");
 	    		 
 	    		 	//loanableAdapter = new LoanableAdapter( getActivity(), R.layout.loanable_layout, R.id.DoeLibsId, loanableList);
 	    			//LoanableAdapter  loanableAdapter = new LoanableAdapter( TitlePageFragment.this , R.layout.loanable_layout, R.id.DoeLibsId ,loanableList );
@@ -138,7 +144,7 @@ public class TitlePageFragment extends Fragment {
 	    		}
 	    		catch (Exception e) {
 	    		//no result
-	    			Log.i("kyesh", "Exeception",e);
+//	    			Log.i("kyesh", "Exeception",e);
 	    			e.printStackTrace();
 	    		}
 	     }
@@ -176,7 +182,11 @@ public class TitlePageFragment extends Fragment {
 				false);
 		
 		loanables = (ListView) view.findViewById(R.id.loanables);
-		bookTitle = (TextView) view.findViewById(R.id.Title);
+		bookTitle = (TextView) view.findViewById(R.id.title_item_title);
+		_Authors = (TextView) view.findViewById(R.id.title_author_item);
+		_TitleYear = (TextView) view.findViewById(R.id.title_item_year);
+		
+		
 		
 		ArrayList<Loanable> temploanableList = new ArrayList<Loanable>();
 		/*Loanable tempLoanable = new Loanable();
@@ -199,7 +209,7 @@ public class TitlePageFragment extends Fragment {
 		
 		 loanableAdapter.notifyDataSetChanged();
 		 */
-		bookTitle.setText("This is the book Title");
+//		bookTitle.setText("This is the book Title");
 		
 		Bundle args = getArguments();
 		new getBookTitle().execute(args.getString("TitleId"));

@@ -56,5 +56,10 @@
     
     <string name="info_noInternet">You are not connected to the internet</string>
     <string name="info_technicalIssues">Technical issues please try again</string>
+    
+    
+    <string name="checkoutbtn">Check Out</string>
+    <string name="loanablesheader">Loanables</string>
+    <string name="addloanablebtn">Add loanable</string>
 
 </resources>

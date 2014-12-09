@@ -12,6 +12,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
 import org.json.JSONObject;
@@ -51,6 +52,34 @@ public class ApiHelper {
 			Log.e("API", e.getMessage());
 			return null;
 		}
+	}
+	
+	public static int postToApi(String url)
+	{
+		return ApiHelper.postToApi(url, null);
+	}
+	
+	public static int postToApi(String url, HttpEntity entity)
+	{
+		int responseCode = -1;
+		HttpClient client = new DefaultHttpClient();
+		HttpPost post = new HttpPost(url);
+		if (AuthentificationHeader != null) post.addHeader(AuthentificationHeader);
+		if (entity != null) post.setEntity(entity);
+		
+		try
+		{
+//			URL urlObj = new URL(url);
+//			HttpURLConnection connection = (HttpURLConnection) urlObj.openConnection();
+//			connection.setRequestMethod("POST");
+			
+			
+		}
+		catch(Exception e)
+		{
+			Log.e("API", "postToApi | " + e.getMessage());
+		}
+		return responseCode;
 	}
 	
 	public static int deleteFromApi(String url)
