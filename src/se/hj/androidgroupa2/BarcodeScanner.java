@@ -121,6 +121,9 @@ public class BarcodeScanner extends Fragment implements OnClickListener{
 	private Button scanBtn;
 	private TextView formatTxt, contentTxt;
 
+	
+	
+	/*
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -133,7 +136,19 @@ public class BarcodeScanner extends Fragment implements OnClickListener{
 		
 		scanBtn.setOnClickListener(this);
 		
+		
+		IntentIntegrator scanIntegrator = new IntentIntegrator(this);
+		scanIntegrator.initiateScan();
+		
 		return rootView;
+	}*/
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		IntentIntegrator scanIntegrator = new IntentIntegrator(this);
+		scanIntegrator.initiateScan();
 	}
 
 	@Override
@@ -149,14 +164,14 @@ public class BarcodeScanner extends Fragment implements OnClickListener{
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		//retrieve scan result
 		IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-		
-		if (scanningResult != null) {
+		Log.i("kyesh","onActivityResult");
+		if (scanningResult.getContents() != null) {
 			//we have a result
 			String scanContent = scanningResult.getContents();
 			String scanFormat = scanningResult.getFormatName();
 			
-			formatTxt.setText("FORMAT: " + scanFormat);
-			contentTxt.setText("CONTENT: " + scanContent);
+			//formatTxt.setText("FORMAT: " + scanFormat);
+			//contentTxt.setText("CONTENT: " + scanContent);
 			Log.i("kyesh", "Sucessful Scan");
 			if(scanFormat.equalsIgnoreCase("EAN_13")){
 				//Search by ISBN 13
@@ -167,11 +182,20 @@ public class BarcodeScanner extends Fragment implements OnClickListener{
 			/*else if(scanFormat=="EAN_10"){
 				//Searh by ISBN 10
 			}*/
-			
+			//super.onActivityResult(requestCode, resultCode, intent);
+			/*Toast toast = Toast.makeText(getActivity().getApplicationContext(), 
+		    		"Not ISBN 13!", Toast.LENGTH_SHORT);
+		    toast.show();*/
 		}else{
+			//super.onActivityResult(requestCode, resultCode, intent);
 		    Toast toast = Toast.makeText(getActivity().getApplicationContext(), 
 		    		"No scan data received!", Toast.LENGTH_SHORT);
 		    toast.show();
+		    getFragmentManager().popBackStack();
 		}
+		//super.onActivityResult(requestCode, resultCode, intent);
+		
+		
+		
 	}
 }
