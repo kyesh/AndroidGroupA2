@@ -32,7 +32,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import se.hj.androidgroupa2.dummy.DummyContent;
 import se.hj.androidgroupa2.objects.ExtendedTitle;
 import se.hj.androidgroupa2.objects.Loanable;
@@ -210,7 +209,7 @@ public class TitlePageFragment extends Fragment {
 //		bookTitle.setText("This is the book Title");
 		
 		Bundle args = getArguments();
-		new getBookTitle().execute(args.getString("TitleId"));
+		new getBookTitle().execute(args.getString(StoredDataName.ARGS_TITLEID));
 		
 		_BookTitle.setOnClickListener(new OnClickListener() {
 			@Override

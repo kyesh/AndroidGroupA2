@@ -131,6 +131,7 @@ public class LoginActivity extends Fragment {
 							SharedPreferences.Editor pref = getActivity().getSharedPreferences(StoredDataName.SHARED_PREF, MainActivity.MODE_PRIVATE).edit();
 							pref.putString(StoredDataName.PREF_AUTH_HEADER_NAME, ApiHelper.AuthentificationHeader.getName());
 							pref.putString(StoredDataName.PREF_AUTH_HEADER_VALUE, ApiHelper.AuthentificationHeader.getValue());
+							pref.putString(StoredDataName.PREF_AUTH_COOKIE_VALUE, ApiHelper.AuthentificationCookieValue);
 							pref.commit();
 						}
 						catch (Exception e) {

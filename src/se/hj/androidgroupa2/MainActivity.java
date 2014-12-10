@@ -226,6 +226,7 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
     {
     	User currentUser = null;
     	BasicHeader authHeader = null;
+    	String authCookie = null;
     	
     	boolean success = false;
     	
@@ -235,15 +236,11 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
     		currentUser = (User) serializer.readObject();
     		input.close();
 
-    		/*FileInputStream input2 = openFileInput(StoredDataName.FILE_AUTH_HEADER);
-    		ObjectInputStream serializer2 = new ObjectInputStream(input2);
-    		authHeader = (BasicHeader) serializer2.readObject();
-    		input2.close();*/
-    		
     		SharedPreferences pref = getSharedPreferences(StoredDataName.SHARED_PREF, MODE_PRIVATE);
     		String headerName = pref.getString(StoredDataName.PREF_AUTH_HEADER_NAME, "");
     		String headerValue = pref.getString(StoredDataName.PREF_AUTH_HEADER_VALUE, "");
-    		if (headerName.isEmpty() || headerValue.isEmpty()) throw new Exception("Header load failed.");
+    		authCookie = pref.getString(StoredDataName.PREF_AUTH_COOKIE_VALUE, "");
+    		if (headerName.isEmpty() || headerValue.isEmpty() || authCookie.isEmpty()) throw new Exception("Header load failed.");
     		authHeader = new BasicHeader(headerName, headerValue);
 		}
 		catch (Exception e) {
@@ -256,6 +253,7 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
     	{
     		ApiHelper.LoggedInUser = currentUser;
     		ApiHelper.AuthentificationHeader = authHeader;
+    		ApiHelper.AuthentificationCookieValue = authCookie;
     		return true;
     	}
     	else
@@ -332,12 +330,11 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
         
 		if (realPos == NAV_ITEM_STAFF.BORROWINGS.getNumVal())
 		{
-			//setActiveFragment(new TitleDetailFragment(), R.string.title_activity_titleDetailsPage, false);
 			setActiveFragment(new BorrowingsFragment(), item.Text, false);
 		}
 		else if (realPos == NAV_ITEM_STAFF.NOTIFICATIONS.getNumVal())
 		{
-			//TODO: Start notifications activity
+			setActiveFragment(new NotificationFragment(), R.string.title_activity_notification, false);
 		}
 		else if (realPos == NAV_ITEM_STAFF.BARCODE_SCANNER.getNumVal())
 		{
@@ -346,6 +343,7 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 		else if (realPos == NAV_ITEM_STAFF.ADD_TITLE.getNumVal())
 		{
 			//TODO: Start add title activity
+			setActiveFragment(new AddTitleFragment(), item.Text, true);
 		}
 		else if (realPos == NAV_ITEM_STAFF.SETTINGS.getNumVal())
 		{
@@ -505,16 +503,9 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 				
 		        Fragment fragment = new TitlePageFragment();
 		        Bundle args = new Bundle();
-		        args.putString("TitleId", title.TitleInformation.TitleId.toString());
+		        args.putString(StoredDataName.ARGS_TITLEID, title.TitleInformation.TitleId.toString());
 		        fragment.setArguments(args);
 		        setActiveFragment(fragment, R.string.title_activity_title_page, true);
-		        
-				/*
-				Fragment fragment = new TitleDetailFragment();
-				Bundle args = new Bundle();
-				args.putSerializable(StoredDataName.ARGS_EXTENDED_TITLE, title);
-				fragment.setArguments(args);
-				setActiveFragment(fragment, "Title details", true);*/
 			}
 		}
 		else if (sender.getClass() == BorrowingsFragment.class)
@@ -523,12 +514,12 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 			{
 				Integer titleId = (Integer) params;
 				
-//		        Fragment fragment = new TitlePageFragment();
-//		        Bundle args = new Bundle();
-//		        args.putString(StoredDataName.ARGS_TITLEID, titleId.toString());
-//		        fragment.setArguments(args);
-//		        setActiveFragment(fragment, R.string.title_activity_title_page, true);
-				Toast.makeText(this, "TEST: " + titleId.toString(), Toast.LENGTH_SHORT).show();
+		        Fragment fragment = new TitlePageFragment();
+		        Bundle args = new Bundle();
+		        args.putString(StoredDataName.ARGS_TITLEID, titleId.toString());
+		        fragment.setArguments(args);
+		        setActiveFragment(fragment, R.string.title_activity_title_page, true);
+//				Toast.makeText(this, "TEST: " + titleId.toString(), Toast.LENGTH_SHORT).show();
 			}
 		}
 	}

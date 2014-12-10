@@ -38,10 +38,12 @@ import com.google.zxing.integration.android.IntentResult;
 public class BarcodeScanner extends Fragment implements OnClickListener{
 
 	 private class SearchBarcode extends AsyncTask<String, Integer, String> {
+		 private String saveISBN;
 	     protected String doInBackground(String... ISBN) {
 	    	 //For Testing Purposes
-	    	 ISBN[0]="9781118235959";
+	    	 //ISBN[0]="9781118235959";
 	    	 //
+	    	 saveISBN = ISBN[0];
 	    	 Log.i("kyesh", "doInBackground Running:"+ISBN[0]);
 	    	 String APIURL = "http://doelibs-001-site1.myasp.net/api/search/?searchTerm=" + ISBN[0] + "&searchOption=ISBN-13";
 	    	 StringBuilder bookBuilder = new StringBuilder();
@@ -88,8 +90,19 @@ public class BarcodeScanner extends Fragment implements OnClickListener{
 	    		 JSONObject resultObject = new JSONObject(result);
 	    		 JSONArray searchResult = resultObject.getJSONArray("Titles");
 	    		 if(searchResult.length()<1){
+	    			 String[] menuArray;
+	    			 menuArray = getResources().getStringArray(R.array.nav_list_items);
 	    			 // google API and Add Title page?
 	    			 Log.i("kyesh", "less than 1 title");
+	    			 //((MainActivity) getActivity()).setActiveFragment(new AddTitleFragment(), menuArray[4], true);
+	    			 FragmentManager fragmentManager = getFragmentManager();
+	    		        Fragment fragment = new TitlePageFragment();
+	    		        Bundle args = new Bundle();
+	    		        args.putString("ISBN13", saveISBN);
+	    		        fragment.setArguments(args);
+	    		        fragmentManager.beginTransaction()
+	    		        				.replace(R.id.content_frame, fragment)
+	    		        				.commit();
 	    		 }else if(searchResult.length()>1){
 	    			//Maybe provide a choice or something
 	    			 Log.i("kyesh", "more than 1 title");
@@ -121,6 +134,9 @@ public class BarcodeScanner extends Fragment implements OnClickListener{
 	private Button scanBtn;
 	private TextView formatTxt, contentTxt;
 
+	
+	
+	/*
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -133,7 +149,19 @@ public class BarcodeScanner extends Fragment implements OnClickListener{
 		
 		scanBtn.setOnClickListener(this);
 		
+		
+		IntentIntegrator scanIntegrator = new IntentIntegrator(this);
+		scanIntegrator.initiateScan();
+		
 		return rootView;
+	}*/
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		IntentIntegrator scanIntegrator = new IntentIntegrator(this);
+		scanIntegrator.initiateScan();
 	}
 
 	@Override
@@ -149,14 +177,14 @@ public class BarcodeScanner extends Fragment implements OnClickListener{
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		//retrieve scan result
 		IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-		
-		if (scanningResult != null) {
+		Log.i("kyesh","onActivityResult");
+		if (scanningResult.getContents() != null) {
 			//we have a result
 			String scanContent = scanningResult.getContents();
 			String scanFormat = scanningResult.getFormatName();
 			
-			formatTxt.setText("FORMAT: " + scanFormat);
-			contentTxt.setText("CONTENT: " + scanContent);
+			//formatTxt.setText("FORMAT: " + scanFormat);
+			//contentTxt.setText("CONTENT: " + scanContent);
 			Log.i("kyesh", "Sucessful Scan");
 			if(scanFormat.equalsIgnoreCase("EAN_13")){
 				//Search by ISBN 13
@@ -167,11 +195,20 @@ public class BarcodeScanner extends Fragment implements OnClickListener{
 			/*else if(scanFormat=="EAN_10"){
 				//Searh by ISBN 10
 			}*/
-			
+			//super.onActivityResult(requestCode, resultCode, intent);
+			/*Toast toast = Toast.makeText(getActivity().getApplicationContext(), 
+		    		"Not ISBN 13!", Toast.LENGTH_SHORT);
+		    toast.show();*/
 		}else{
+			//super.onActivityResult(requestCode, resultCode, intent);
 		    Toast toast = Toast.makeText(getActivity().getApplicationContext(), 
 		    		"No scan data received!", Toast.LENGTH_SHORT);
 		    toast.show();
+		    getFragmentManager().popBackStack();
 		}
+		//super.onActivityResult(requestCode, resultCode, intent);
+		
+		
+		
 	}
 }
