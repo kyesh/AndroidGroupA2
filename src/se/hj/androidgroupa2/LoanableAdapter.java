@@ -22,9 +22,13 @@ import se.hj.androidgroupa2.objects.*;
 import se.hj.androidgroupa2.objects.Loanable.STATUS;
 public class LoanableAdapter extends ArrayAdapter<Loanable> {
 private Context _context;
-	public LoanableAdapter(Context context, int resource, int textViewResourceId, List<Loanable> objects) {
+private Button CheckOutBtn;
+private UpdateDataInterface _dataUpdate;
+
+	public LoanableAdapter(Context context, int resource, int textViewResourceId, List<Loanable> objects, UpdateDataInterface ref) {
 		super(context, resource, textViewResourceId, objects);
 		_context = context;
+		_dataUpdate = ref;
 	}
 	/*
 	public LoanableAdapter(Context context, List<Loanable> objects) {
@@ -46,7 +50,7 @@ private Context _context;
 		
 		TextView DoeLibsId = (TextView) itemView.findViewById(R.id.DoeLibsId);
 		TextView Location = (TextView)itemView.findViewById(R.id.Location);
-		Button CheckOutBtn = (Button) itemView.findViewById(R.id.CheckOutBtn);
+		CheckOutBtn = (Button) itemView.findViewById(R.id.CheckOutBtn);
 
 		
 			DoeLibsId.setText(loanable.Barcode.toString());
@@ -56,14 +60,14 @@ private Context _context;
 				Location.setText("Unknown" + " ("+ loanable.Category +")");
 			if(loanable.Status != STATUS.AVAILABLE)
 			{
-				CheckOutBtn.setText("Unavailable");
 				CheckOutBtn.setActivated(false);
+				CheckOutBtn.setText("Unavailable");
 			}
 			else
 			{
 				CheckOutBtn.setActivated(true);
 				CheckOutBtn.setText(R.string.checkoutbtn);
-				CheckOutBtn.setBackgroundColor(Color.rgb(34, 230, 86));
+//				CheckOutBtn.setBackgroundColor(Color.rgb(34, 230, 86));
 				CheckOutBtn.setOnClickListener(new OnClickListener() {
 					
 					@Override
@@ -80,7 +84,7 @@ private Context _context;
 								{
 									Toast toast = Toast.makeText(_context, "Loanable successfully checked out", Toast.LENGTH_SHORT);
 									toast.show();
-									notifyDataSetChanged();
+									_dataUpdate.updateData();
 								}
 								else
 								{
