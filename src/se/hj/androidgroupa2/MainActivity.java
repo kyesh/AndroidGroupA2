@@ -343,6 +343,7 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 		else if (realPos == NAV_ITEM_STAFF.ADD_TITLE.getNumVal())
 		{
 			//TODO: Start add title activity
+			setActiveFragment(new AddTitleFragment(), item.Text, true);
 		}
 		else if (realPos == NAV_ITEM_STAFF.SETTINGS.getNumVal())
 		{

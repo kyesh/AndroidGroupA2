@@ -20,6 +20,7 @@ import android.app.FragmentManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,6 +55,9 @@ public class TitlePageFragment extends Fragment {
 
 	private TextView bookTitle ;
 	private ListView loanables;
+	private TextView _TitleYear;
+	private TextView _Authors;
+	
 	private LoanableAdapter loanableAdapter;
 	
 	private OnFragmentCompleteListener _callbackActivity;
@@ -62,7 +66,7 @@ public class TitlePageFragment extends Fragment {
 	 private class getBookTitle extends AsyncTask<String, Integer, String> {
 	     protected String doInBackground(String... TitleId) {
 	    	 
-	    	 Log.i("kyesh", "doInBackground Running:"+TitleId[0]);
+//	    	 Log.i("kyesh", "doInBackground Running:"+TitleId[0]);
 	    	 String APIURL = "http://doelibs-001-site1.myasp.net/api/title/" + TitleId[0];
 	    	 StringBuilder bookBuilder = new StringBuilder();
 	    	 HttpClient bookClient = new DefaultHttpClient();
@@ -107,21 +111,25 @@ public class TitlePageFragment extends Fragment {
 	    		//parse results
 	    		 JSONObject resultObject = new JSONObject(result);
 	    		 JSONArray LoanablesJSON = resultObject.getJSONArray("Loanables");
-	    		 Log.i("kyesh", "Loanables Parsed");
+//	    		 Log.i("kyesh", "Loanables Parsed");
 	    		 JSONObject titleObject = resultObject.getJSONObject("Title");
-	    		 Log.i("kyesh", "Title Parsed");
+//	    		 Log.i("kyesh", "Title Parsed");
+//	    		 JSONArray Authors = resultObject.getJSONArray("Authors");
+	    		 
 	    		 _title = Title.parseTitleFromJSONObject(titleObject);
-	    		 
 	    		 ArrayList<Loanable> loanableList = new ArrayList<Loanable>();
-	    		 bookTitle.setText(titleObject.getString("BookTitle"));
-	    		 Log.i("kyesh", "Title:"+titleObject.getString("BookTitle"));
+//	    		 bookTitle.setText(titleObject.getString("BookTitle"));
+//	    		 Log.i("kyesh", "Title:"+titleObject.getString("BookTitle"));
 	    		 
+	    		 bookTitle.setText(_title.BookTitle.toString());
+//	    		 _Authors.setText(Authors.getJSONArray(0).toString());
+	    		 _TitleYear.setText(_title.EditionYear.toString());
 	    		 
 	    		 for(int i = 0; i < LoanablesJSON.length(); i++){
 	    			 
 	    			 loanableList.add(Loanable.parseLoanableFromJSONObject(LoanablesJSON.getJSONObject(i)));
 	    		 }
-	    		 Log.i("kyesh", "past For Loop");
+//	    		 Log.i("kyesh", "past For Loop");
 	    		 
 	    		 	//loanableAdapter = new LoanableAdapter( getActivity(), R.layout.loanable_layout, R.id.DoeLibsId, loanableList);
 	    			//LoanableAdapter  loanableAdapter = new LoanableAdapter( TitlePageFragment.this , R.layout.loanable_layout, R.id.DoeLibsId ,loanableList );
@@ -176,7 +184,11 @@ public class TitlePageFragment extends Fragment {
 				false);
 		
 		loanables = (ListView) view.findViewById(R.id.loanables);
-		bookTitle = (TextView) view.findViewById(R.id.Title);
+		bookTitle = (TextView) view.findViewById(R.id.title_item_title);
+		_Authors = (TextView) view.findViewById(R.id.title_author_item);
+		_TitleYear = (TextView) view.findViewById(R.id.title_item_year);
+		
+		
 		
 		ArrayList<Loanable> temploanableList = new ArrayList<Loanable>();
 		/*Loanable tempLoanable = new Loanable();
@@ -199,7 +211,7 @@ public class TitlePageFragment extends Fragment {
 		
 		 loanableAdapter.notifyDataSetChanged();
 		 */
-		bookTitle.setText("This is the book Title");
+//		bookTitle.setText("This is the book Title");
 		
 		Bundle args = getArguments();
 		new getBookTitle().execute(args.getString(StoredDataName.ARGS_TITLEID));
@@ -207,11 +219,16 @@ public class TitlePageFragment extends Fragment {
 		bookTitle.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				//Fix
 				Bundle args = new Bundle();
-				args.putSerializable("TAG_TO_TITLE", _title);
+				args.putSerializable("ARGS_EXTENDED_TITLE", _title);
+				FragmentManager fragmentManager = getFragmentManager();
 				Fragment fragment = new TitleDetailFragment();
 				fragment.setArguments(args);
 				_callbackActivity.onFragmentComplete(TitlePageFragment.this, fragment);
+				fragmentManager.beginTransaction()
+				.replace(R.id.content_frame, fragment)
+				.commit();
 			}
 		});
 

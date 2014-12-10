@@ -1,0 +1,265 @@
+    <!-- TODO: Update blank fragment layout -->
+<ScrollView 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+  	xmlns:tools="http://schemas.android.com/tools"
+  	tools:context="se.hj.androidgroupa2.AddTitleFragment"
+  	android:layout_width="match_parent"
+  	android:layout_height="match_parent"
+    >	
+	<LinearLayout 
+	    android:orientation="vertical"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    >
+	    
+	    <RelativeLayout 
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:paddingLeft="10dp"
+    		android:paddingRight="10dp"
+	        >
+	        
+
+	        
+	        <Button 
+	            android:background="@drawable/ic_action_camera"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+				android:layout_alignParentRight="true"
+	            />
+
+	        <TextView
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_alignParentLeft="true"
+	            android:layout_centerVertical="true"
+	            android:text="@string/AddTitleByPhoto" />
+	        
+	    </RelativeLayout>
+	    
+	    <View 
+	        android:layout_width="match_parent"
+	        android:layout_height="1dp"
+	        android:background="#000000"
+	        />
+	    
+
+		    <LinearLayout 
+		        android:orientation="horizontal"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		       	android:paddingLeft="10dp"
+	    		android:paddingRight="10dp"
+		        >
+	
+		        <TextView
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:text="@string/Title" />
+	
+		        <EditText
+		            android:id="@+id/TitleField"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_weight="1"
+		            android:ems="10" />
+		        
+	
+		    </LinearLayout>
+		    
+		    <LinearLayout 
+		        android:orientation="horizontal"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:paddingLeft="10dp"
+	    		android:paddingRight="10dp"
+		        >
+	
+		        <TextView
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:text="@string/ISBN10" />
+	
+		        <EditText
+		            android:id="@+id/ISBN10Field"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_weight="1"
+		            android:ems="10" />
+		        
+	
+		    </LinearLayout>
+		    
+		    <LinearLayout 
+		        android:orientation="horizontal"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:paddingLeft="10dp"
+	    		android:paddingRight="10dp"
+		        >
+	
+		        <TextView
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:text="@string/ISBN13" />
+	
+		        <EditText
+		            android:id="@+id/ISBN13Field"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_weight="1"
+		            android:ems="10" />
+		        
+	
+		    </LinearLayout>
+		    
+		    <LinearLayout 
+		        android:orientation="horizontal"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:paddingLeft="10dp"
+	    		android:paddingRight="10dp"
+		        >
+	
+		        <TextView
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:text="@string/Authors" />
+	
+		        <EditText
+		            android:id="@+id/AuthorsField"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_weight="1"
+		            android:ems="10" />
+		        
+	
+		    </LinearLayout>
+		    
+		    <LinearLayout 
+		        android:orientation="horizontal"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:paddingLeft="10dp"
+	    		android:paddingRight="10dp"
+		        >
+	
+		        <TextView
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:text="@string/Year" />
+	
+		        <EditText
+		            android:id="@+id/YearField"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_weight="1"
+		            android:ems="10" />
+		        
+	
+		    </LinearLayout>
+		    
+		    <LinearLayout 
+		        android:orientation="horizontal"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:paddingLeft="10dp"
+	    		android:paddingRight="10dp"
+		        >
+	
+		        <TextView
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:text="@string/FirstEditionYear" />
+	
+		        <EditText
+		            android:id="@+id/FirstEditionYearField"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_weight="1"
+		            android:ems="10" />
+		        
+	
+		    </LinearLayout>
+		    
+		    <LinearLayout 
+		        android:orientation="horizontal"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:paddingLeft="10dp"
+	    		android:paddingRight="10dp"
+		        >
+	
+		        <TextView
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:text="@string/Edition" />
+	
+		        <EditText
+		            android:id="@+id/EditionField"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_weight="1"
+		            android:ems="10" />
+		        
+	
+		    </LinearLayout>
+		    
+		    <LinearLayout 
+		        android:orientation="horizontal"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:paddingLeft="10dp"
+	    		android:paddingRight="10dp"
+		        >
+	
+		        <TextView
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:text="@string/Publisher" />
+	
+		        <EditText
+		            android:id="@+id/PublisherField"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_weight="1"
+		            android:ems="10" />
+		        
+	
+		    </LinearLayout>
+		    
+		    <LinearLayout 
+		        android:orientation="horizontal"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:paddingLeft="10dp"
+	    		android:paddingRight="10dp"
+		        >
+	
+		        <TextView
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:text="@string/Topics" />
+	
+		        <EditText
+		            android:id="@+id/TopicsField"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_weight="1"
+		            android:ems="10" />
+		        
+	
+		    </LinearLayout>
+	
+		    <Button
+		        android:id="@+id/addTitleButton"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:gravity="center_vertical|center_horizontal"
+		        android:text="@string/addTitle"
+		        android:layout_margin="20dp"
+		         />
+
+	    
+	</LinearLayout>
+</ScrollView>
