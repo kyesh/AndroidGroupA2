@@ -13,6 +13,9 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import se.hj.androidgroupa2.objects.ApiHelper;
+import se.hj.androidgroupa2.objects.UserCategory;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -94,15 +97,24 @@ public class BarcodeScanner extends Fragment implements OnClickListener{
 	    			 menuArray = getResources().getStringArray(R.array.nav_list_items);
 	    			 // google API and Add Title page?
 	    			 Log.i("kyesh", "less than 1 title");
-	    			 //((MainActivity) getActivity()).setActiveFragment(new AddTitleFragment(), menuArray[4], true);
-	    			 FragmentManager fragmentManager = getFragmentManager();
-	    		        Fragment fragment = new TitlePageFragment();
-	    		        Bundle args = new Bundle();
-	    		        args.putString("ISBN13", saveISBN);
-	    		        fragment.setArguments(args);
-	    		        fragmentManager.beginTransaction()
-	    		        				.replace(R.id.content_frame, fragment)
-	    		        				.commit();
+	    			 
+	    			 if(ApiHelper.LoggedInUser.Category.CategoryId == UserCategory.CATEGORY.STAFF.getNumVal()){
+		    			 Fragment fragment = new AddTitleFragment();
+		    		        Bundle args = new Bundle();
+		    		        args.putString("ISBN13", saveISBN);
+		    		        fragment.setArguments(args);
+		    			 ((MainActivity) getActivity()).setActiveFragment(fragment, menuArray[3], true);
+		    			 /*FragmentManager fragmentManager = getFragmentManager();
+		    		        
+		    		        fragmentManager.beginTransaction()
+		    		        				.replace(R.id.content_frame, fragment)
+		    		        				.commit();*/
+	    			 }else{
+	    				 Toast toast = Toast.makeText(getActivity().getApplicationContext(), 
+	    				    		"No Titles Found!", Toast.LENGTH_SHORT);
+	    				 toast.show();
+	    				 getFragmentManager().popBackStack();
+	    			 }
 	    		 }else if(searchResult.length()>1){
 	    			//Maybe provide a choice or something
 	    			 Log.i("kyesh", "more than 1 title");
@@ -111,14 +123,15 @@ public class BarcodeScanner extends Fragment implements OnClickListener{
 	    			 JSONObject titleObject = searchResult.getJSONObject(0).getJSONObject("Title");
 	    			 TitleId = titleObject.getString("TitleId");
 	    			 Log.i("kyesh", "TitleId:"+TitleId);
-	    			 FragmentManager fragmentManager = getFragmentManager();
+	    			 //FragmentManager fragmentManager = getFragmentManager();
 	    		        Fragment fragment = new TitlePageFragment();
 	    		        Bundle args = new Bundle();
 	    		        args.putString("TitleId", TitleId);
 	    		        fragment.setArguments(args);
-	    		        fragmentManager.beginTransaction()
+	    		        ((MainActivity) getActivity()).setActiveFragment(fragment, "Title Page", true);
+	    		        /*fragmentManager.beginTransaction()
 	    		        				.replace(R.id.content_frame, fragment)
-	    		        				.commit();
+	    		        				.commit();*/
 	    		        
 	    		        Log.i("kyesh", "Fragment should have launched");
 	    		 }
