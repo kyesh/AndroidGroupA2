@@ -193,6 +193,29 @@
 		        <TextView
 		            android:layout_width="wrap_content"
 		            android:layout_height="wrap_content"
+		            android:text="@string/Edition" />
+	
+		        <EditText
+		            android:id="@+id/EditionField"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_weight="1"
+		            android:ems="10" />
+		        
+	
+		    </LinearLayout>
+		    
+		    <LinearLayout 
+		        android:orientation="horizontal"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:paddingLeft="10dp"
+	    		android:paddingRight="10dp"
+		        >
+	
+		        <TextView
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
 		            android:text="@string/Publisher" />
 	
 		        <EditText

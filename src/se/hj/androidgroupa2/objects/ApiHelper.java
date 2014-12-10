@@ -2,18 +2,25 @@ package se.hj.androidgroupa2.objects;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -97,5 +104,60 @@ public class ApiHelper {
 			return null;
 		}
 		return returnDate;
+	}
+	
+	public static String AddTitle(simpleTitle titleInfo){
+		String url = "http://doelibs-001-site1.myasp.net/api/title/";
+		
+		HttpPost post = new HttpPost(url);
+		List<NameValuePair> pairs = new ArrayList<NameValuePair>();
+		pairs.add(new BasicNameValuePair("Title", titleInfo.titleInfo));
+		pairs.add(new BasicNameValuePair("ISBN13", titleInfo.ISBN13info));
+		pairs.add(new BasicNameValuePair("ISBN10", titleInfo.ISBN10info));
+		pairs.add(new BasicNameValuePair("Authors", titleInfo.AuthorsInfo));
+		pairs.add(new BasicNameValuePair("FirstEditionYear", titleInfo.FirstEditonYearInfo));
+		pairs.add(new BasicNameValuePair("Edition", titleInfo.Edition));
+		pairs.add(new BasicNameValuePair("PublicationYear", titleInfo.YearInfo));
+		pairs.add(new BasicNameValuePair("Publisher", titleInfo.Publisher));
+		pairs.add(new BasicNameValuePair("Topics", titleInfo.Topics));
+		
+		try {
+			post.setEntity(new UrlEncodedFormEntity(pairs));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			Log.i("kyesh","",e);
+			e.printStackTrace();
+		}
+		
+		if (AuthentificationHeader != null) post.addHeader(AuthentificationHeader);
+		
+		HttpClient client = new DefaultHttpClient();
+		
+		try {
+			HttpResponse response = client.execute(post);
+			HttpEntity entity = response.getEntity();
+
+			BufferedReader reader = new BufferedReader(new InputStreamReader(entity.getContent(), "UTF-8"));
+			StringBuilder builder = new StringBuilder();
+			
+			String line;
+			while ((line = reader.readLine()) != null)
+				builder.append(line).append("\n");
+			
+			String allLines = builder.toString();
+			
+			Log.i("kyesh",allLines);
+			//if (allLines.isEmpty()) return null;
+			return allLines;
+			//JSONTokener tokener = new JSONTokener(allLines);
+			//return tokener;
+			
+		} catch (Exception e) {
+			Log.e("kyesh", e.getMessage());
+			//return null;
+		}
+		
+		return null;
+		
 	}
 }

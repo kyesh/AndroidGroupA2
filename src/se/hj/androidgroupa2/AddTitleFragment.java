@@ -1,11 +1,30 @@
 package se.hj.androidgroupa2;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import se.hj.androidgroupa2.objects.ApiHelper;
+import se.hj.androidgroupa2.objects.simpleTitle;
+
 import com.google.zxing.integration.android.IntentIntegrator;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,12 +45,30 @@ public class AddTitleFragment extends Fragment implements OnClickListener {
 	// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 	private static final String ARG_PARAM1 = "param1";
 	private static final String ARG_PARAM2 = "param2";
+	
+	private class addTitle extends AsyncTask<simpleTitle, Integer, String>{
+		protected String doInBackground(simpleTitle... simpleTitles) {
+			
+			
+			Log.i("kyesh","doInBackgroundRunning");
+			return ApiHelper.AddTitle(simpleTitles[0]);
+	    	 
+	     }
+
+	     protected void onProgressUpdate(Integer... progress) {
+	         //setProgressPercent(progress[0]);
+	     }
+
+	     protected void onPostExecute(String result) {
+	    	 Log.i("kyesh","onPostExecuteRunning");
+	     }
+	}
 
 	// TODO: Rename and change types of parameters
 	private String mParam1;
 	private String mParam2;
 	
-	private EditText _title, _ISBN10, _ISBN13, _Authors, _Year, _FirstEditionYear, _Publisher, _Topics;
+	private EditText _title, _ISBN10, _ISBN13, _Authors, _Year, _FirstEditionYear, _Publisher, _Topics, _Edition;
 	private Button _addTitle;
 
 	private OnFragmentInteractionListener mListener;
@@ -82,6 +119,7 @@ public class AddTitleFragment extends Fragment implements OnClickListener {
 		_FirstEditionYear = (EditText) rootView.findViewById(R.id.FirstEditionYearField);
 		_Publisher = (EditText) rootView.findViewById(R.id.PublisherField);
 		_Topics = (EditText) rootView.findViewById(R.id.TopicsField);
+		_Edition = (EditText) rootView.findViewById(R.id.EditionField);
 		
 		_addTitle = (Button) rootView.findViewById(R.id.addTitleButton);
 		
@@ -134,6 +172,19 @@ public class AddTitleFragment extends Fragment implements OnClickListener {
 		
 		if(v.getId()==R.id.addTitleButton){
 			//addTitle
+			simpleTitle titleValues = new simpleTitle();
+			titleValues.titleInfo = _title.getText().toString();
+			titleValues.ISBN10info = _ISBN10.getText().toString();
+			titleValues.ISBN13info = _ISBN13.getText().toString();
+			titleValues.AuthorsInfo = _Authors.getText().toString();
+			titleValues.YearInfo = _Year.getText().toString();
+			titleValues.FirstEditonYearInfo = _FirstEditionYear.getText().toString();
+			titleValues.Edition = _Edition.getText().toString();
+			titleValues.Publisher = _Publisher.getText().toString();
+			titleValues.Topics = _Topics.getText().toString();
+			
+			Log.i("kyesh","Started AsyncTask");
+			new addTitle().execute(titleValues);
 			
 			}
 		

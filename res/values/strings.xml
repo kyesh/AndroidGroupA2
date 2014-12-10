@@ -63,4 +63,6 @@
 	<string name="Publisher"> Publisher </string>
 	<string name="Topics"> Topics </string>
 	<string name="addTitle"> Add Title </string>
+	<string name="Edition">Edition</string>
+	
 </resources>
