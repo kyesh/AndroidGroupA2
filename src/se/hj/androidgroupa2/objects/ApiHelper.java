@@ -29,17 +29,31 @@ import android.util.Log;
 public class ApiHelper {
 
 	public static BasicHeader AuthentificationHeader;
+	public static String AuthentificationCookieValue;
 	public static User LoggedInUser;
 	
+
 	public static JSONTokener getFromApi(String url)
+	{
+		return getFromApi(url, false);
+	}
+	
+	public static JSONTokener getFromApi(String url, boolean isLoginRequest)
 	{
 		HttpClient client = new DefaultHttpClient();
 		HttpGet get = new HttpGet(url);
 		if (AuthentificationHeader != null) get.addHeader(AuthentificationHeader);
+		if (AuthentificationCookieValue != null) get.addHeader("Cookie", AuthentificationCookieValue);
 		
 		try {
 			HttpResponse response = client.execute(get);
 			HttpEntity entity = response.getEntity();
+			
+			if (isLoginRequest)
+			{
+				Header[] headers = response.getHeaders("Set-Cookie");
+				if (headers.length > 0) AuthentificationCookieValue = headers[0].getValue();
+			}
 
 			BufferedReader reader = new BufferedReader(new InputStreamReader(entity.getContent(), "UTF-8"));
 			StringBuilder builder = new StringBuilder();
@@ -60,6 +74,24 @@ public class ApiHelper {
 		}
 	}
 	
+	public static int getStatusCodeFromApi(String url)
+	{
+		HttpClient client = new DefaultHttpClient();
+		HttpGet get = new HttpGet(url);
+		if (AuthentificationHeader != null) get.addHeader(AuthentificationHeader);
+		if (AuthentificationCookieValue != null) get.addHeader("Cookie", AuthentificationCookieValue);
+		
+		int responseCode = -1;
+		try {
+			HttpResponse response = client.execute(get);
+			responseCode = response.getStatusLine().getStatusCode();
+			
+		} catch (Exception e) {
+			Log.e("API", e.getMessage());
+		}
+		return responseCode;
+	}
+
 	public static int postToApi(String url)
 	{
 		return ApiHelper.postToApi(url, null);
@@ -94,6 +126,7 @@ public class ApiHelper {
 			connection.setRequestMethod("DELETE");
 			if (AuthentificationHeader != null)
 				connection.addRequestProperty(AuthentificationHeader.getName(), AuthentificationHeader.getValue());
+			if (AuthentificationCookieValue != null) connection.addRequestProperty("Cookie", AuthentificationCookieValue);
 			connection.connect();
 			responseCode = connection.getResponseCode();
 			
@@ -183,6 +216,5 @@ public class ApiHelper {
 		}
 		
 		return null;
-		
 	}
 }

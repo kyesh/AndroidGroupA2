@@ -54,7 +54,7 @@ public class Loanable implements Serializable {
     	if (json == null) return null;
     	Loanable loanable = new Loanable();
     	
-    	loanable.LoanableId = (Integer) json.opt("LoanalbeId");
+    	loanable.LoanableId = (Integer) json.opt("LoanableId");
     	loanable.Barcode = json.optString("Barcode");
     	JSONObject category = json.optJSONObject("Category");
     	loanable.Category = category.optString("Name");
@@ -74,7 +74,7 @@ public class Loanable implements Serializable {
 			protected Boolean doInBackground(Integer... params) {
 				
 				int loanableId = params[0];
-				if (ApiHelper.postToApi("http://doelibs-001-site1.myasp.net/api/loan/" + Integer.toString(loanableId)) == 200)
+				if (ApiHelper.postToApi("http://doelibs-001-site1.myasp.net/api/loanable/" + Integer.toString(loanableId)) == 201)
 					return true;
 				else
 					return false;

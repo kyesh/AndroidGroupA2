@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +17,18 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import se.hj.androidgroupa2.objects.*;
 import se.hj.androidgroupa2.objects.Loanable.STATUS;
 public class LoanableAdapter extends ArrayAdapter<Loanable> {
+private Context _context;
+private Button CheckOutBtn;
+private UpdateDataInterface _dataUpdate;
 
-	public LoanableAdapter(Context context, int resource, int textViewResourceId, List<Loanable> objects) {
+	public LoanableAdapter(Context context, int resource, int textViewResourceId, List<Loanable> objects, UpdateDataInterface ref) {
 		super(context, resource, textViewResourceId, objects);
+		_context = context;
+		_dataUpdate = ref;
 	}
 	/*
 	public LoanableAdapter(Context context, List<Loanable> objects) {
@@ -43,7 +50,7 @@ public class LoanableAdapter extends ArrayAdapter<Loanable> {
 		
 		TextView DoeLibsId = (TextView) itemView.findViewById(R.id.DoeLibsId);
 		TextView Location = (TextView)itemView.findViewById(R.id.Location);
-		Button CheckOutBtn = (Button) itemView.findViewById(R.id.CheckOutBtn);
+		CheckOutBtn = (Button) itemView.findViewById(R.id.CheckOutBtn);
 
 		
 			DoeLibsId.setText(loanable.Barcode.toString());
@@ -53,21 +60,39 @@ public class LoanableAdapter extends ArrayAdapter<Loanable> {
 				Location.setText("Unknown" + " ("+ loanable.Category +")");
 			if(loanable.Status != STATUS.AVAILABLE)
 			{
-				CheckOutBtn.setText("Unavailable");
 				CheckOutBtn.setActivated(false);
+				CheckOutBtn.setText("Unavailable");
 			}
 			else
 			{
 				CheckOutBtn.setActivated(true);
 				CheckOutBtn.setText(R.string.checkoutbtn);
+//				CheckOutBtn.setBackgroundColor(Color.rgb(34, 230, 86));
 				CheckOutBtn.setOnClickListener(new OnClickListener() {
 					
 					@Override
 					public void onClick(View v) {
-////					if(Loanable.checkOutLoanable(loanable.LoanableId, ))
-//					{
-//						notifyDataSetChanged();
-//					}
+						
+						Loanable.checkOutLoanable(loanable.LoanableId, new Loanable.CallbackReference() {
+							@Override
+							public void callbackFunction(Object result) {
+								
+								Boolean success = (Boolean) result;
+								if (success == null) success = false;
+									
+								if(success)
+								{
+									Toast toast = Toast.makeText(_context, "Loanable successfully checked out", Toast.LENGTH_SHORT);
+									toast.show();
+									_dataUpdate.updateData();
+								}
+								else
+								{
+									Toast toast = Toast.makeText(_context, "Something went wrong", Toast.LENGTH_SHORT);
+									toast.show();
+								}
+							}
+						});
 					}
 				});
 			}

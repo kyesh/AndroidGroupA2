@@ -29,7 +29,7 @@ public class LoginUser extends AsyncTask<String, Void, User> {
 				Base64.NO_WRAP));
 		JSONObject result;
 		try {
-			result = new JSONObject(ApiHelper.getFromApi("http://doelibs-001-site1.myasp.net/api/User"));
+			result = new JSONObject(ApiHelper.getFromApi("http://doelibs-001-site1.myasp.net/api/User", true));
 		} catch (JSONException e) {
 			Log.e("JSON PARSE", "Parse to get current user from api");
 			return null;

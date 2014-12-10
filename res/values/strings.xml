@@ -24,6 +24,8 @@
     <string name="title_activity_borrowings">Borrowings</string>
     <string name="title_activity_titleDetailsPage">Title details</string>
     <string name="title_activity_login">Log in</string>
+    <string name="title_activity_notification">Notifications</string>
+    
     <string name="header">Welcome</string>
     <string name="subheader">Please log in</string>
     <string name="email_label">Email</string>
@@ -52,7 +54,14 @@
     <string name="borrowing_info_loanableCheckedIn">Loanable was checked in</string>
     <string name="info_noInternet">You are not connected to the internet</string>
     <string name="info_technicalIssues">Technical issues please try again</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    
+    <string name="notification_accept">Accept</string>
+    <string name="notification_decline">Decline</string>
+    <string name="notification_remove">Remove</string>
+    <string name="notification_fromSystem">System</string>
+    <string name="notification_info_removed">Notification removed</string>
+    <string name="notification_info_handled">Notification was handled</string>
+
     <string name="AddTitleByPhoto">Add Title By Photo</string>
 	<string name="Title">Title</string>
 	<string name="ISBN10"> ISBN10 </string>
@@ -67,4 +76,5 @@
     <string name="checkoutbtn">Check Out</string>
     <string name="loanablesheader">Loanables</string>
     <string name="addloanablebtn">Add loanable</string>
+
 </resources>
