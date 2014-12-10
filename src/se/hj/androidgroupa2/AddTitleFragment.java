@@ -11,6 +11,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import se.hj.androidgroupa2.objects.ApiHelper;
@@ -31,6 +32,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 /**
  * A simple {@link Fragment} subclass. Activities that contain this fragment
@@ -63,35 +65,108 @@ public class AddTitleFragment extends Fragment implements OnClickListener {
 	    	 Log.i("kyesh","onPostExecuteRunning");
 	     }
 	}
+	
+	private class getFromGoogleAPI extends AsyncTask<String, Integer, String>{
+		protected String doInBackground(String... ISBN) {
+			Log.i("kyesh","doInBackgroundRunning");
+			
+			String URL = "https://www.googleapis.com/books/v1/volumes?q=isbn:"+ISBN[0];
+			
+			StringBuilder bookBuilder = new StringBuilder();
+			
+			HttpClient bookClient = new DefaultHttpClient();
+			
+			try {
+			    //get the data
+				HttpGet bookGet = new HttpGet(URL);
+				HttpResponse bookResponse = bookClient.execute(bookGet);
+				StatusLine bookSearchStatus = bookResponse.getStatusLine();
+				if (bookSearchStatus.getStatusCode()==200) {
+				    //we have a result
+					HttpEntity bookEntity = bookResponse.getEntity();
+					InputStream bookContent = bookEntity.getContent();
+					InputStreamReader bookInput = new InputStreamReader(bookContent);
+					BufferedReader bookReader = new BufferedReader(bookInput);
+					String lineIn;
+					while ((lineIn=bookReader.readLine())!=null) {
+					    bookBuilder.append(lineIn);
+					}
+					
+				}
+			}
+			catch(Exception e){ e.printStackTrace(); }
+			
+			
+			return bookBuilder.toString();
+	    	 
+	     }
 
-	// TODO: Rename and change types of parameters
-	private String mParam1;
-	private String mParam2;
+	     protected void onProgressUpdate(Integer... progress) {
+	         //setProgressPercent(progress[0]);
+	     }
+
+	     protected void onPostExecute(String result) {
+	    	 Log.i("kyesh","onPostExecuteRunning");
+	    	 
+	    	 try{
+	    		//parse results
+	    		 JSONObject resultObject = new JSONObject(result);
+	    		 JSONArray bookArray = resultObject.getJSONArray("items");
+	    		 JSONObject bookObject = bookArray.getJSONObject(0);
+	    		 JSONObject volumeObject = bookObject.getJSONObject("volumeInfo");
+	    		 
+	    		 try{ _title.setText(volumeObject.getString("title")); }
+	    		 catch(JSONException jse){ 
+	    		     jse.printStackTrace(); 
+	    		 }
+	    		 
+	    		 StringBuilder authorBuild = new StringBuilder("");
+	    		 try{
+	    		     JSONArray authorArray = volumeObject.getJSONArray("authors");
+	    		     for(int a=0; a<authorArray.length(); a++){
+	    		         if(a>0) authorBuild.append(", ");
+	    		         authorBuild.append(authorArray.getString(a));
+	    		     }
+	    		     _Authors.setText(authorBuild.toString());
+	    		 }
+	    		 catch(JSONException jse){ 
+	    		     jse.printStackTrace(); 
+	    		 }
+	    		 
+	    		 try{ _Year.setText(volumeObject.getString("publishedDate").substring(0, 4)); }
+	    		 catch(JSONException jse){ 
+	    		     jse.printStackTrace(); 
+	    		 }
+	    		 
+	    		 try{_Publisher.setText(volumeObject.getString("publisher")); }
+	    		 catch(JSONException jse){ 
+	    		     jse.printStackTrace(); 
+	    		     Log.i("kyesh","Publisher Failed");
+	    		 }
+	    		 
+	    		 /*try{
+	    			 _ISBN10.setText(volumeObject.getJSONArray("industryIdentifiers").getJSONObject(0).getString("identifier"));
+	    			 }
+	    		 catch(JSONException jse){ 
+	    		     jse.printStackTrace(); 
+	    		 }*/	    		 
+	    		 
+	    		}
+	    		catch (Exception e) {
+	    		//no result
+	    			e.printStackTrace();
+	    			Toast toast = Toast.makeText(getActivity().getApplicationContext(), 
+	    		    		"Uh Oh! Something went wrong", Toast.LENGTH_SHORT);
+	    		    toast.show();
+	    		}
+	    	 
+	     }
+	}
 	
 	private EditText _title, _ISBN10, _ISBN13, _Authors, _Year, _FirstEditionYear, _Publisher, _Topics, _Edition;
 	private Button _addTitle;
+	private View _addByCamera;
 
-	private OnFragmentInteractionListener mListener;
-
-	/**
-	 * Use this factory method to create a new instance of this fragment using
-	 * the provided parameters.
-	 * 
-	 * @param param1
-	 *            Parameter 1.
-	 * @param param2
-	 *            Parameter 2.
-	 * @return A new instance of fragment AddTitleFragment.
-	 */
-	// TODO: Rename and change types and number of parameters
-	public static AddTitleFragment newInstance(String param1, String param2) {
-		AddTitleFragment fragment = new AddTitleFragment();
-		Bundle args = new Bundle();
-		args.putString(ARG_PARAM1, param1);
-		args.putString(ARG_PARAM2, param2);
-		fragment.setArguments(args);
-		return fragment;
-	}
 
 	public AddTitleFragment() {
 		// Required empty public constructor
@@ -100,16 +175,16 @@ public class AddTitleFragment extends Fragment implements OnClickListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		if (getArguments() != null) {
-			mParam1 = getArguments().getString(ARG_PARAM1);
-			mParam2 = getArguments().getString(ARG_PARAM2);
-		}
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
+		Log.i("kyesh","AddTitleFragment-OnCreateView");
+		
+		String ISBN13;
+		
 		View rootView =  inflater.inflate(R.layout.fragment_add_title, container, false);
 		_title = (EditText) rootView.findViewById(R.id.TitleField);
 		_ISBN10 = (EditText) rootView.findViewById(R.id.ISBN10Field);
@@ -122,17 +197,21 @@ public class AddTitleFragment extends Fragment implements OnClickListener {
 		_Edition = (EditText) rootView.findViewById(R.id.EditionField);
 		
 		_addTitle = (Button) rootView.findViewById(R.id.addTitleButton);
+		_addByCamera = rootView.findViewById(R.id.addByCamera);
 		
 		_addTitle.setOnClickListener(this);
+		_addByCamera.setOnClickListener(this);
+		
+		Bundle passedArugments = getArguments();
+		
+		Log.i("kyesh",passedArugments.toString());
+		if(passedArugments != null && passedArugments.getString("ISBN13") != null){
+			ISBN13 = passedArugments.getString("ISBN13");
+			_ISBN13.setText(ISBN13);
+			new getFromGoogleAPI().execute(ISBN13);
+		}
 		
 		return rootView;
-	}
-
-	// TODO: Rename method, update argument and hook method into UI event
-	public void onButtonPressed(Uri uri) {
-		if (mListener != null) {
-			mListener.onFragmentInteraction(uri);
-		}
 	}
 
 	@Override
@@ -149,7 +228,6 @@ public class AddTitleFragment extends Fragment implements OnClickListener {
 	@Override
 	public void onDetach() {
 		super.onDetach();
-		mListener = null;
 	}
 
 	/**
@@ -186,7 +264,13 @@ public class AddTitleFragment extends Fragment implements OnClickListener {
 			Log.i("kyesh","Started AsyncTask");
 			new addTitle().execute(titleValues);
 			
-			}
+		}else if(v.getId()==R.id.addByCamera){
+			FragmentManager fragmentManager = getFragmentManager();
+	        Fragment fragment = new BarcodeScanner();
+	        fragmentManager.beginTransaction()
+	        				.add(R.id.content_frame, fragment)
+	        				.commit();
+		}
 		
 	}
 

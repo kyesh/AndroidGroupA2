@@ -201,7 +201,7 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
     	setActiveFragment(fragment, getResources().getString(titleRes), useBackStack);
     }
     
-    private void setActiveFragment(Fragment fragment, String title, boolean useBackStack)
+    public void setActiveFragment(Fragment fragment, String title, boolean useBackStack)
     {
     	_drawerLayout.closeDrawers();
     	setTitle(title);
