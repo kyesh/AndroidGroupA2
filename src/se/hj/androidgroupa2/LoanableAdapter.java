@@ -10,10 +10,14 @@ import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import se.hj.androidgroupa2.objects.*;
+import se.hj.androidgroupa2.objects.Loanable.STATUS;
 public class LoanableAdapter extends ArrayAdapter<Loanable> {
 
 	public LoanableAdapter(Context context, int resource, int textViewResourceId, List<Loanable> objects) {
@@ -35,10 +39,11 @@ public class LoanableAdapter extends ArrayAdapter<Loanable> {
 	       }
 		*/
 		View itemView = super.getView(position, convertView, parent);
-		Loanable loanable = getItem(position);
+		final Loanable loanable = getItem(position);
 		
 		TextView DoeLibsId = (TextView) itemView.findViewById(R.id.DoeLibsId);
 		TextView Location = (TextView)itemView.findViewById(R.id.Location);
+		Button CheckOutBtn = (Button) itemView.findViewById(R.id.CheckOutBtn);
 
 		
 			DoeLibsId.setText(loanable.Barcode.toString());
@@ -46,7 +51,26 @@ public class LoanableAdapter extends ArrayAdapter<Loanable> {
 				Location.setText(loanable.Owner.Room + " ("+ loanable.Category +")");
 			else
 				Location.setText("Unknown" + " ("+ loanable.Category +")");
-
+			if(loanable.Status != STATUS.AVAILABLE)
+			{
+				CheckOutBtn.setText("Unavailable");
+				CheckOutBtn.setActivated(false);
+			}
+			else
+			{
+				CheckOutBtn.setActivated(true);
+				CheckOutBtn.setText(R.string.checkoutbtn);
+				CheckOutBtn.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+////					if(Loanable.checkOutLoanable(loanable.LoanableId, ))
+//					{
+//						notifyDataSetChanged();
+//					}
+					}
+				});
+			}
 		
 		
 		return itemView;

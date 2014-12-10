@@ -60,6 +60,31 @@ public class ApiHelper {
 		}
 	}
 	
+	public static int postToApi(String url)
+	{
+		return ApiHelper.postToApi(url, null);
+	}
+	
+	public static int postToApi(String url, HttpEntity entity)
+	{
+		int responseCode = -1;
+		HttpClient client = new DefaultHttpClient();
+		HttpPost post = new HttpPost(url);
+		if (AuthentificationHeader != null) post.addHeader(AuthentificationHeader);
+		if (entity != null) post.setEntity(entity);
+		
+		try
+		{
+			HttpResponse response = client.execute(post);
+			responseCode = response.getStatusLine().getStatusCode();		
+		}
+		catch(Exception e)
+		{
+			Log.e("API", "postToApi | " + e.getMessage());
+		}
+		return responseCode;
+	}
+	
 	public static int deleteFromApi(String url)
 	{
 		int responseCode = -1;

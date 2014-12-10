@@ -4,6 +4,9 @@ import java.io.Serializable;
 
 import org.json.JSONObject;
 
+import se.hj.androidgroupa2.objects.Loan.CallbackReference;
+import android.os.AsyncTask;
+
 public class Loanable implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -62,4 +65,30 @@ public class Loanable implements Serializable {
     	
     	return loanable;
     }
+    
+    public static void checkOutLoanable(int loanableId, final CallbackReference callback)
+	{
+		AsyncTask<Integer, Void, Boolean> task = new AsyncTask<Integer, Void, Boolean>() {
+			
+			@Override
+			protected Boolean doInBackground(Integer... params) {
+				
+				int loanableId = params[0];
+				if (ApiHelper.postToApi("http://doelibs-001-site1.myasp.net/api/loan/" + Integer.toString(loanableId)) == 200)
+					return true;
+				else
+					return false;
+			}
+			
+			@Override
+			protected void onPostExecute(Boolean result) {
+				callback.callbackFunction(result);
+			}
+		};
+		task.execute(loanableId);
+	}
+
+	public interface CallbackReference {
+		abstract void callbackFunction(Object result);
+	}
 }
