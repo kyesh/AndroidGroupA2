@@ -1,12 +1,17 @@
 package se.hj.androidgroupa2;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 /**
  * A simple {@link Fragment} subclass. Activities that contain this fragment
@@ -16,7 +21,7 @@ import android.view.ViewGroup;
  * this fragment.
  * 
  */
-public class AddTitleFragment extends Fragment {
+public class AddTitleFragment extends Fragment implements OnClickListener {
 	// TODO: Rename parameter arguments, choose names that match
 	// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 	private static final String ARG_PARAM1 = "param1";
@@ -25,6 +30,9 @@ public class AddTitleFragment extends Fragment {
 	// TODO: Rename and change types of parameters
 	private String mParam1;
 	private String mParam2;
+	
+	private EditText _title, _ISBN10, _ISBN13, _Authors, _Year, _FirstEditionYear, _Publisher, _Topics;
+	private Button _addTitle;
 
 	private OnFragmentInteractionListener mListener;
 
@@ -65,7 +73,21 @@ public class AddTitleFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-		return inflater.inflate(R.layout.fragment_add_title, container, false);
+		View rootView =  inflater.inflate(R.layout.fragment_add_title, container, false);
+		_title = (EditText) rootView.findViewById(R.id.TitleField);
+		_ISBN10 = (EditText) rootView.findViewById(R.id.ISBN10Field);
+		_ISBN13 = (EditText) rootView.findViewById(R.id.ISBN13Field);
+		_Authors = (EditText) rootView.findViewById(R.id.AuthorsField);
+		_Year = (EditText) rootView.findViewById(R.id.YearField);
+		_FirstEditionYear = (EditText) rootView.findViewById(R.id.FirstEditionYearField);
+		_Publisher = (EditText) rootView.findViewById(R.id.PublisherField);
+		_Topics = (EditText) rootView.findViewById(R.id.TopicsField);
+		
+		_addTitle = (Button) rootView.findViewById(R.id.addTitleButton);
+		
+		_addTitle.setOnClickListener(this);
+		
+		return rootView;
 	}
 
 	// TODO: Rename method, update argument and hook method into UI event
@@ -104,6 +126,17 @@ public class AddTitleFragment extends Fragment {
 	public interface OnFragmentInteractionListener {
 		// TODO: Update argument type and name
 		public void onFragmentInteraction(Uri uri);
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		
+		if(v.getId()==R.id.addTitleButton){
+			//addTitle
+			
+			}
+		
 	}
 
 }
