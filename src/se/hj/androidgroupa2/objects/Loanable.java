@@ -66,7 +66,7 @@ public class Loanable implements Serializable {
     	return loanable;
     }
     
-    public static void checkOutLoan(int loanableId, final CallbackReference callback)
+    public static void checkOutLoanable(int loanableId, final CallbackReference callback)
 	{
 		AsyncTask<Integer, Void, Boolean> task = new AsyncTask<Integer, Void, Boolean>() {
 			

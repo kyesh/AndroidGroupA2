@@ -14,6 +14,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import se.hj.androidgroupa2.objects.*;
 import se.hj.androidgroupa2.objects.Loanable.STATUS;
@@ -38,7 +39,7 @@ public class LoanableAdapter extends ArrayAdapter<Loanable> {
 	       }
 		*/
 		View itemView = super.getView(position, convertView, parent);
-		Loanable loanable = getItem(position);
+		final Loanable loanable = getItem(position);
 		
 		TextView DoeLibsId = (TextView) itemView.findViewById(R.id.DoeLibsId);
 		TextView Location = (TextView)itemView.findViewById(R.id.Location);
@@ -63,8 +64,10 @@ public class LoanableAdapter extends ArrayAdapter<Loanable> {
 					
 					@Override
 					public void onClick(View v) {
-						// TODO Auto-generated method stub
-						
+////					if(Loanable.checkOutLoanable(loanable.LoanableId, ))
+//					{
+//						notifyDataSetChanged();
+//					}
 					}
 				});
 			}

@@ -69,11 +69,8 @@ public class ApiHelper {
 		
 		try
 		{
-//			URL urlObj = new URL(url);
-//			HttpURLConnection connection = (HttpURLConnection) urlObj.openConnection();
-//			connection.setRequestMethod("POST");
-			
-			
+			HttpResponse response = client.execute(post);
+			responseCode = response.getStatusLine().getStatusCode();		
 		}
 		catch(Exception e)
 		{
