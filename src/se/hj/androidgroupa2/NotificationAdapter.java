@@ -43,31 +43,77 @@ public class NotificationAdapter extends ArrayAdapter<DoelibsNotification> {
 			@Override
 			public void onClick(View v) {
 				// TODO: CONTINUE
-				Integer notId = (Integer) v.getTag();
-				if (notId == null) return;
-			}
-		};
-		_onDeclineClickListener = new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				
-				Integer notId = (Integer) v.getTag();
-				if (notId == null) return;
-			}
-		};
-		_onRemoveClickListener = new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				
-				Integer notId = (Integer) v.getTag();
-				if (notId == null) return;
+				DoelibsNotification noti = (DoelibsNotification) v.getTag();
+				if (noti == null) return;
 
 				ConnectivityManager conManager = (ConnectivityManager) _context.getSystemService(Context.CONNECTIVITY_SERVICE);
 				NetworkInfo info = conManager.getActiveNetworkInfo();
 				
 				if (info != null && info.isConnected())
 				{
-					DoelibsNotification.deleteNotification(notId, new DoelibsNotification.CallbackReference() {
+					DoelibsNotification.handleNotification(noti, true, new DoelibsNotification.CallbackReference() {
+						@Override
+						public void callbackFunction(Object result) {
+							Boolean success = (Boolean) result;
+							if (success == null) success = false;
+							if (success)
+							{
+								Toast.makeText(_context, _res.getString(R.string.notification_info_handled), Toast.LENGTH_SHORT).show();
+								_updateRef.updateData(); //TODO: remove just item instead of refreshing.
+							}
+							else
+								Toast.makeText(_context, _res.getString(R.string.info_technicalIssues), Toast.LENGTH_LONG).show();
+						}
+					});
+				}
+				else
+					Toast.makeText(_context, _res.getString(R.string.info_noInternet), Toast.LENGTH_LONG).show();
+			}
+		};
+		_onDeclineClickListener = new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				
+				DoelibsNotification noti = (DoelibsNotification) v.getTag();
+				if (noti == null) return;
+
+				ConnectivityManager conManager = (ConnectivityManager) _context.getSystemService(Context.CONNECTIVITY_SERVICE);
+				NetworkInfo info = conManager.getActiveNetworkInfo();
+				
+				if (info != null && info.isConnected())
+				{
+					DoelibsNotification.handleNotification(noti, false, new DoelibsNotification.CallbackReference() {
+						@Override
+						public void callbackFunction(Object result) {
+							Boolean success = (Boolean) result;
+							if (success == null) success = false;
+							if (success)
+							{
+								Toast.makeText(_context, _res.getString(R.string.notification_info_handled), Toast.LENGTH_SHORT).show();
+								_updateRef.updateData(); //TODO: remove just item instead of refreshing.
+							}
+							else
+								Toast.makeText(_context, _res.getString(R.string.info_technicalIssues), Toast.LENGTH_LONG).show();
+						}
+					});
+				}
+				else
+					Toast.makeText(_context, _res.getString(R.string.info_noInternet), Toast.LENGTH_LONG).show();
+			}
+		};
+		_onRemoveClickListener = new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+
+				DoelibsNotification noti = (DoelibsNotification) v.getTag();
+				if (noti == null) return;
+
+				ConnectivityManager conManager = (ConnectivityManager) _context.getSystemService(Context.CONNECTIVITY_SERVICE);
+				NetworkInfo info = conManager.getActiveNetworkInfo();
+				
+				if (info != null && info.isConnected())
+				{
+					DoelibsNotification.deleteNotification(noti.NotificationId, new DoelibsNotification.CallbackReference() {
 						@Override
 						public void callbackFunction(Object result) {
 							Boolean success = (Boolean) result;
@@ -108,13 +154,13 @@ public class NotificationAdapter extends ArrayAdapter<DoelibsNotification> {
 			leftButton.setVisibility(View.VISIBLE);
 			leftButton.setText(R.string.notification_accept);
 			leftButton.setBackgroundColor(_res.getColor(R.color.notification_button_green));
-			leftButton.setTag(not.NotificationId);
+			leftButton.setTag(not);
 			leftButton.setOnClickListener(_onAcceptClickListener);
 			
 			rightButton.setVisibility(View.VISIBLE);
 			rightButton.setText(R.string.notification_decline);
 			rightButton.setBackgroundColor(_res.getColor(R.color.notification_button_red));
-			rightButton.setTag(not.NotificationId);
+			rightButton.setTag(not);
 			rightButton.setOnClickListener(_onDeclineClickListener);
 		}
 		else
@@ -125,7 +171,7 @@ public class NotificationAdapter extends ArrayAdapter<DoelibsNotification> {
 			rightButton.setVisibility(View.VISIBLE);
 			rightButton.setText(R.string.notification_remove);
 			rightButton.setBackgroundColor(_res.getColor(R.color.notification_button_red));
-			rightButton.setTag(not.NotificationId);
+			rightButton.setTag(not);
 			rightButton.setOnClickListener(_onRemoveClickListener);
 		}
 		

@@ -62,13 +62,35 @@ public class DoelibsNotification implements Serializable {
     	return not;
     }
     
-    public static void acceptUserRegistrationRequest(int userId, final CallbackReference callback)
+    public static void handleNotification(final DoelibsNotification noti, final boolean allow, final CallbackReference callback)
     {
-    	AsyncTask<Integer, Void, Boolean> task = new AsyncTask<Integer, Void, Boolean>() {
+    	AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>() {
 			@Override
-			protected Boolean doInBackground(Integer... params) {
-				// TODO: finish
-				return null;
+			protected Boolean doInBackground(Void... params) {
+
+				int responseCode = -1;
+				if (noti.Type == NOTIFICATION_TYPE.REGISTRATION_ACCEPT_REQUEST.getNumVal())
+				{
+					if (allow) 
+						responseCode = ApiHelper.getStatusCodeFromApi("http://doelibs-001-site1.myasp.net/Authentification/ActivateAccount/" + 
+								noti.Sender.UserId.toString() + "?msgId=" + noti.NotificationId.toString());
+					else 
+						responseCode = ApiHelper.getStatusCodeFromApi("http://doelibs-001-site1.myasp.net/Authentification/DenyAccount/" + 
+								noti.Sender.UserId.toString() + "?msgId=" + noti.NotificationId.toString());
+				}
+				else if (noti.Type == NOTIFICATION_TYPE.RENEW_EXPIRE_DATE_REQUEST.getNumVal())
+				{
+					if (allow) ;// POST
+					else
+					{
+						responseCode = ApiHelper.deleteFromApi("http://doelibs-001-site1.myasp.net/api/notification/" + noti.NotificationId.toString());
+					}
+				}
+				else
+				{
+					responseCode = ApiHelper.deleteFromApi("http://doelibs-001-site1.myasp.net/api/notification/" + noti.NotificationId.toString());
+				}
+				return (responseCode == 200);
 			}
 			
 			@Override
@@ -76,6 +98,7 @@ public class DoelibsNotification implements Serializable {
 				callback.callbackFunction(result);
 			}
 		};
+		task.execute();
     }
     
     public static void deleteNotification(int notId, final CallbackReference callback)

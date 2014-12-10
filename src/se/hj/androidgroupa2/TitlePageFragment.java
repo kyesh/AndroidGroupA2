@@ -31,10 +31,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import se.hj.androidgroupa2.dummy.DummyContent;
 import se.hj.androidgroupa2.objects.Loanable;
 import se.hj.androidgroupa2.objects.OnFragmentCompleteListener;
+import se.hj.androidgroupa2.objects.StoredDataName;
 import se.hj.androidgroupa2.objects.Title;
 
 
@@ -202,7 +202,7 @@ public class TitlePageFragment extends Fragment {
 		bookTitle.setText("This is the book Title");
 		
 		Bundle args = getArguments();
-		new getBookTitle().execute(args.getString("TitleId"));
+		new getBookTitle().execute(args.getString(StoredDataName.ARGS_TITLEID));
 		
 		bookTitle.setOnClickListener(new OnClickListener() {
 			@Override

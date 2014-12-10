@@ -64,5 +64,6 @@
     <string name="notification_remove">Remove</string>
     <string name="notification_fromSystem">System</string>
     <string name="notification_info_removed">Notification removed</string>
+    <string name="notification_info_handled">Notification was handled</string>
 
 </resources>
