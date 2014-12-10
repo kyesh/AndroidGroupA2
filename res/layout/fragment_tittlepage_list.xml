@@ -15,8 +15,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:maxLines="1"
-            android:text="Laga mat med Emil" />
+            android:maxLines="1" />
 
         <TextView
             android:id="@+id/title_item_year"
@@ -24,8 +23,7 @@
             android:layout_height="wrap_content"
             android:gravity="right"
             android:maxLines="1"
-            android:paddingRight="5dp"
-            android:text="2012" />
+            android:paddingRight="5dp" />
     </LinearLayout>
 
     <TextView
@@ -35,13 +33,12 @@
         android:layout_gravity="left"
         android:maxLines="6"
         android:paddingLeft="5dp"
-        android:text="Emil Lygnebrandt"
         android:textSize="15sp" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/search_item_divider" />
+        android:background="@color/title_detail_divider" />
 
     <TextView
         android:id="@+id/title_loanables_header"
@@ -66,8 +63,9 @@
     </ListView>
     
     <Button 
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         android:layout_gravity="center_horizontal"
         android:background="#22E656"
         android:text="@string/addloanablebtn"

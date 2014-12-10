@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +17,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import se.hj.androidgroupa2.objects.*;
 import se.hj.androidgroupa2.objects.Loanable.STATUS;
 public class LoanableAdapter extends ArrayAdapter<Loanable> {
-
+private Context _context;
 	public LoanableAdapter(Context context, int resource, int textViewResourceId, List<Loanable> objects) {
 		super(context, resource, textViewResourceId, objects);
+		_context = context;
 	}
 	/*
 	public LoanableAdapter(Context context, List<Loanable> objects) {
@@ -60,14 +63,32 @@ public class LoanableAdapter extends ArrayAdapter<Loanable> {
 			{
 				CheckOutBtn.setActivated(true);
 				CheckOutBtn.setText(R.string.checkoutbtn);
+				CheckOutBtn.setBackgroundColor(Color.rgb(34, 230, 86));
 				CheckOutBtn.setOnClickListener(new OnClickListener() {
 					
 					@Override
 					public void onClick(View v) {
-////					if(Loanable.checkOutLoanable(loanable.LoanableId, ))
-//					{
-//						notifyDataSetChanged();
-//					}
+						
+						Loanable.checkOutLoanable(loanable.LoanableId, new Loanable.CallbackReference() {
+							@Override
+							public void callbackFunction(Object result) {
+								
+								Boolean success = (Boolean) result;
+								if (success == null) success = false;
+									
+								if(success)
+								{
+									Toast toast = Toast.makeText(_context, "Loanable successfully checked out", Toast.LENGTH_SHORT);
+									toast.show();
+									notifyDataSetChanged();
+								}
+								else
+								{
+									Toast toast = Toast.makeText(_context, "Something went wrong", Toast.LENGTH_SHORT);
+									toast.show();
+								}
+							}
+						});
 					}
 				});
 			}

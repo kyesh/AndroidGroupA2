@@ -34,8 +34,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import se.hj.androidgroupa2.dummy.DummyContent;
+import se.hj.androidgroupa2.objects.ExtendedTitle;
 import se.hj.androidgroupa2.objects.Loanable;
 import se.hj.androidgroupa2.objects.OnFragmentCompleteListener;
+import se.hj.androidgroupa2.objects.StoredDataName;
 import se.hj.androidgroupa2.objects.Title;
 
 
@@ -53,15 +55,15 @@ import se.hj.androidgroupa2.objects.Title;
  */
 public class TitlePageFragment extends Fragment {
 
-	private TextView bookTitle ;
-	private ListView loanables;
+	private TextView _BookTitle ;
+	private ListView _Loanables;
 	private TextView _TitleYear;
 	private TextView _Authors;
 	
 	private LoanableAdapter loanableAdapter;
 	
 	private OnFragmentCompleteListener _callbackActivity;
-	private Title _title;
+	private ExtendedTitle _extendedTitle;
 	
 	 private class getBookTitle extends AsyncTask<String, Integer, String> {
 	     protected String doInBackground(String... TitleId) {
@@ -105,58 +107,57 @@ public class TitlePageFragment extends Fragment {
 	     }
 
 	     protected void onPostExecute(String result) {
-	    	 String TitleId;
-	    	 Log.i("kyesh", "onPostExecute running");
+//	    	 String TitleId;
+//	    	 Log.i("kyesh", "onPostExecute running");
 	    	 try{
 	    		//parse results
 	    		 JSONObject resultObject = new JSONObject(result);
-	    		 JSONArray LoanablesJSON = resultObject.getJSONArray("Loanables");
-//	    		 Log.i("kyesh", "Loanables Parsed");
-	    		 JSONObject titleObject = resultObject.getJSONObject("Title");
-//	    		 Log.i("kyesh", "Title Parsed");
+	    		 _extendedTitle = ExtendedTitle.parseExtendedTitleFromJSONObject(resultObject);
+//	    		 JSONArray LoanablesJSON = resultObject.getJSONArray("Loanables");
+////	    		 Log.i("kyesh", "Loanables Parsed");
+//	    		 JSONObject titleObject = resultObject.getJSONObject("Title");
+////	    		 Log.i("kyesh", "Title Parsed");
 //	    		 JSONArray Authors = resultObject.getJSONArray("Authors");
-	    		 
-	    		 _title = Title.parseTitleFromJSONObject(titleObject);
-	    		 ArrayList<Loanable> loanableList = new ArrayList<Loanable>();
-//	    		 bookTitle.setText(titleObject.getString("BookTitle"));
-//	    		 Log.i("kyesh", "Title:"+titleObject.getString("BookTitle"));
-	    		 
-	    		 bookTitle.setText(_title.BookTitle.toString());
-//	    		 _Authors.setText(Authors.getJSONArray(0).toString());
-	    		 _TitleYear.setText(_title.EditionYear.toString());
-	    		 
-	    		 for(int i = 0; i < LoanablesJSON.length(); i++){
-	    			 
-	    			 loanableList.add(Loanable.parseLoanableFromJSONObject(LoanablesJSON.getJSONObject(i)));
-	    		 }
+//	    		 
+//	    		 _title = Title.parseTitleFromJSONObject(titleObject);
+//	    		 ArrayList<Loanable> loanableList = new ArrayList<Loanable>();
+////	    		 bookTitle.setText(titleObject.getString("BookTitle"));
+////	    		 Log.i("kyesh", "Title:"+titleObject.getString("BookTitle"));
+//	    		 
+//	    		 bookTitle.setText(_title.BookTitle.toString());
+//	    		 String authors = "";
+//	    		 for(int i = 0; i < Authors.length(); i++ )
+//	    		 {
+//	    			authors += Authors.getString(i);
+//	    		 }
+//	    		 _Authors.setText(authors);
+//	    		 _TitleYear.setText(_title.EditionYear.toString());
+//	    		 
+//	    		 for(int i = 0; i < LoanablesJSON.length(); i++){
+//	    			 
+//	    			 loanableList.add(Loanable.parseLoanableFromJSONObject(LoanablesJSON.getJSONObject(i)));
+//	    		 }
 //	    		 Log.i("kyesh", "past For Loop");
 	    		 
 	    		 	//loanableAdapter = new LoanableAdapter( getActivity(), R.layout.loanable_layout, R.id.DoeLibsId, loanableList);
 	    			//LoanableAdapter  loanableAdapter = new LoanableAdapter( TitlePageFragment.this , R.layout.loanable_layout, R.id.DoeLibsId ,loanableList );
-	    			
-	    		 loanableAdapter.addAll(loanableList);
-	    		 /*Loanable tempLoanable = new Loanable();
-	    		 tempLoanable.Barcode = "Barcode";
-	    		 tempLoanable.Category = "Category";
-	    		 tempLoanable.Location = "Location";
-	    		 
-	    		 loanableAdapter.add(tempLoanable);
-
-	    			Log.i("kyesh", "end Try");*/
+	    		 String authors = "";
+	    		 for(int i = 0; i < _extendedTitle.Authors.size(); i++)
+	    		 {
+	    			 authors += _extendedTitle.Authors.get(i).Name;
+	    		 }
+	    		 _Authors.setText(authors);
+	    	     _BookTitle.setText(_extendedTitle.TitleInformation.BookTitle);
+	    	     _TitleYear.setText(_extendedTitle.TitleInformation.EditionYear.toString());
+	    		 loanableAdapter.addAll(_extendedTitle.Loanables);
 	    		}
 	    		catch (Exception e) {
 	    		//no result
-	    			Log.i("kyesh", "Exeception",e);
+//	    			Log.i("kyesh", "Exeception",e);
 	    			e.printStackTrace();
 	    		}
 	     }
 	 }
-
-	/**
-	 * The Adapter which will be used to populate the ListView/GridView with
-	 * Views.
-	 */
-
 
 	public TitlePageFragment() {
 	}
@@ -171,10 +172,7 @@ public class TitlePageFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		
 		//loanableAdapter.
-		
 	}
 
 	@Override
@@ -183,12 +181,10 @@ public class TitlePageFragment extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_tittlepage_list, container,
 				false);
 		
-		loanables = (ListView) view.findViewById(R.id.loanables);
-		bookTitle = (TextView) view.findViewById(R.id.title_item_title);
+		_Loanables = (ListView) view.findViewById(R.id.loanables);
+		_BookTitle = (TextView) view.findViewById(R.id.title_item_title);
 		_Authors = (TextView) view.findViewById(R.id.title_author_item);
 		_TitleYear = (TextView) view.findViewById(R.id.title_item_year);
-		
-		
 		
 		ArrayList<Loanable> temploanableList = new ArrayList<Loanable>();
 		/*Loanable tempLoanable = new Loanable();
@@ -199,7 +195,7 @@ public class TitlePageFragment extends Fragment {
 		loanableAdapter = new LoanableAdapter( getActivity(), R.layout.loanable_layout, R.id.DoeLibsId, temploanableList);
 		//Log.i("kyesh","getActivity()"+getActivity());
 		
-		loanables.setAdapter(loanableAdapter);
+		_Loanables.setAdapter(loanableAdapter);
 		 //loanables.setAdapter(new ArrayAdapter<Loanable>(getActivity(), R.layout.loanable_layout, R.id.DoeLibsId, temploanableList));
 		/*
 		Loanable tempLoanable = new Loanable();
@@ -216,19 +212,13 @@ public class TitlePageFragment extends Fragment {
 		Bundle args = getArguments();
 		new getBookTitle().execute(args.getString("TitleId"));
 		
-		bookTitle.setOnClickListener(new OnClickListener() {
+		_BookTitle.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				//Fix
-				Bundle args = new Bundle();
-				args.putSerializable("ARGS_EXTENDED_TITLE", _title);
-				FragmentManager fragmentManager = getFragmentManager();
-				Fragment fragment = new TitleDetailFragment();
-				fragment.setArguments(args);
-				_callbackActivity.onFragmentComplete(TitlePageFragment.this, fragment);
-				fragmentManager.beginTransaction()
-				.replace(R.id.content_frame, fragment)
-				.commit();
+				_callbackActivity.onFragmentComplete(TitlePageFragment.this, _extendedTitle);
+//				fragmentManager.beginTransaction()
+//					.replace(R.id.content_frame, fragment)
+//					.commit();
 			}
 		});
 

@@ -485,6 +485,16 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 //				    .replace(R.id.content_frame, fragment, "TAG_TO_FRAGMENT")
 //				    .addToBackStack("TAG_TO_FRAGMENT").commit();
 //				setActiveFragment(fragment, R.string.title_activity_title_page, true);
+				
+				if (params.getClass() == ExtendedTitle.class)
+				{
+					ExtendedTitle param = (ExtendedTitle) params;
+					Bundle args = new Bundle();
+					args.putSerializable(StoredDataName.ARGS_EXTENDED_TITLE, param);
+					Fragment fragment = new TitleDetailFragment();
+					fragment.setArguments(args);
+					setActiveFragment(fragment, R.string.title_activity_titleDetailsPage, true);
+				}
 			}
 		}
 		else if (sender.getClass() == SearchActivity.class)
