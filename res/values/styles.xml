@@ -42,6 +42,9 @@
     <color name="borrowing_item_yellow">#F7FF63</color>
     <color name="borrowing_item_green">#A4E77D</color>
     
+    <color name="notification_button_green">#AABBFF52</color>
+    <color name="notification_button_red">#AAFF8282</color>
+    
     <style name="title_detail_header">
         <item name="android:background">#4BD9BF</item>
         <item name="android:paddingLeft">5dp</item>
