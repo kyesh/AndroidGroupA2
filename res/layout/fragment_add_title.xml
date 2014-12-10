@@ -1,12 +1,15 @@
     <!-- TODO: Update blank fragment layout -->
+<ScrollView 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+  	xmlns:tools="http://schemas.android.com/tools"
+  	tools:context="se.hj.androidgroupa2.AddTitleFragment"
+  	android:layout_width="match_parent"
+  	android:layout_height="match_parent"
+    >	
 	<LinearLayout 
-	    xmlns:android="http://schemas.android.com/apk/res/android"
-  		xmlns:tools="http://schemas.android.com/tools"
 	    android:orientation="vertical"
 	    android:layout_width="match_parent"
-	    android:layout_height="match_parent"
-	    tools:context="se.hj.androidgroupa2.AddTitleFragment" 
-	   
+	    android:layout_height="wrap_content"
 	    >
 	    
 	    <RelativeLayout 
@@ -40,7 +43,7 @@
 	        android:background="#000000"
 	        />
 	    
-	    
+
 		    <LinearLayout 
 		        android:orientation="horizontal"
 		        android:layout_width="match_parent"
@@ -236,3 +239,4 @@
 
 	    
 	</LinearLayout>
+</ScrollView>
