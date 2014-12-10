@@ -197,7 +197,7 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
     	}
     }
     
-    private void setActiveFragment(Fragment fragment, int titleRes, boolean useBackStack)
+    public void setActiveFragment(Fragment fragment, int titleRes, boolean useBackStack)
     {
     	setActiveFragment(fragment, getResources().getString(titleRes), useBackStack);
     }
@@ -215,6 +215,16 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
     	}
     	
         FragmentTransaction transaction = fragmentManager.beginTransaction();
+        
+        // Special cases: -----------------------------
+        if (fragment.getClass() == BarcodeScanner.class)
+        {
+        	transaction.add(fragment, fragment.getClass().toString());
+        	_nav_list.setItemChecked(-1, true);
+        	transaction.commit();
+        	return;
+        } // ------------------------------------------
+        
         transaction.replace(R.id.content_frame, fragment, fragment.getClass().toString());
         if (useBackStack)
         {
@@ -580,6 +590,11 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 		@Override
 		public void onBackStackChanged() {
 			setActionBarArrow();
+
+			FragmentManager fragmentManager = MainActivity.this.getFragmentManager();
+	    	Fragment check = fragmentManager.findFragmentByTag(BarcodeScanner.class.toString());
+	    	if (check != null)
+	    		fragmentManager.beginTransaction().remove(check).commit();
 		}
     }
     

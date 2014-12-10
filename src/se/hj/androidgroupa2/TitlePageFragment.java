@@ -38,6 +38,7 @@ import se.hj.androidgroupa2.objects.Loanable;
 import se.hj.androidgroupa2.objects.OnFragmentCompleteListener;
 import se.hj.androidgroupa2.objects.StoredDataName;
 import se.hj.androidgroupa2.objects.Title;
+import se.hj.androidgroupa2.objects.UpdateDataInterface;
 
 
 /*
@@ -52,7 +53,7 @@ import se.hj.androidgroupa2.objects.Title;
 	        				.replace(R.id.content_frame, fragment)
 	        				.commit();
  */
-public class TitlePageFragment extends Fragment {
+public class TitlePageFragment extends Fragment implements UpdateDataInterface {
 
 	private TextView _BookTitle ;
 	private ListView _Loanables;
@@ -63,6 +64,7 @@ public class TitlePageFragment extends Fragment {
 	
 	private OnFragmentCompleteListener _callbackActivity;
 	private ExtendedTitle _extendedTitle;
+	private String _argTitleId;
 	
 	 private class getBookTitle extends AsyncTask<String, Integer, String> {
 	     protected String doInBackground(String... TitleId) {
@@ -192,7 +194,7 @@ public class TitlePageFragment extends Fragment {
 		 tempLoanable.Category = "Category";
 		 tempLoanable.Location = "Location";
 		 temploanableList.add(tempLoanable);*/
-		loanableAdapter = new LoanableAdapter( getActivity(), R.layout.loanable_layout, R.id.DoeLibsId, temploanableList);
+		loanableAdapter = new LoanableAdapter(getActivity(), R.layout.loanable_layout, R.id.DoeLibsId, temploanableList, this);
 		//Log.i("kyesh","getActivity()"+getActivity());
 		
 		_Loanables.setAdapter(loanableAdapter);
@@ -210,7 +212,8 @@ public class TitlePageFragment extends Fragment {
 //		bookTitle.setText("This is the book Title");
 		
 		Bundle args = getArguments();
-		new getBookTitle().execute(args.getString(StoredDataName.ARGS_TITLEID));
+		_argTitleId = args.getString(StoredDataName.ARGS_TITLEID);
+		updateData();
 		
 		_BookTitle.setOnClickListener(new OnClickListener() {
 			@Override
@@ -223,5 +226,12 @@ public class TitlePageFragment extends Fragment {
 		});
 
 		return view;
+	}
+
+	@Override
+	public void updateData() {
+		
+		loanableAdapter.clear();
+		new getBookTitle().execute(_argTitleId);
 	}
 }

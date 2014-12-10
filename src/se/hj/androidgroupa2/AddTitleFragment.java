@@ -49,6 +49,8 @@ public class AddTitleFragment extends Fragment implements OnClickListener {
 	private static final String ARG_PARAM1 = "param1";
 	private static final String ARG_PARAM2 = "param2";
 	
+	private MainActivity _ref;
+	
 	private class addTitle extends AsyncTask<simpleTitle, Integer, String>{
 		protected String doInBackground(simpleTitle... simpleTitles) {
 			
@@ -212,6 +214,7 @@ public class AddTitleFragment extends Fragment implements OnClickListener {
 		if (getActivity().getClass() == MainActivity.class)
 		{
 			MainActivity mainActivity = (MainActivity) getActivity();
+			_ref = mainActivity;
 			mainActivity.updateCheckedMenuItem(mainActivity.getMenuItemPosition(MainActivity.NAV_ITEM_STAFF.ADD_TITLE.getNumVal()));
 		}
 		
@@ -294,11 +297,12 @@ public class AddTitleFragment extends Fragment implements OnClickListener {
 			new addTitle().execute(titleValues);
 			
 		}else if(v.getId()==R.id.addByCamera){
-			FragmentManager fragmentManager = getFragmentManager();
-	        Fragment fragment = new BarcodeScanner();
-	        fragmentManager.beginTransaction()
-	        				.add(R.id.content_frame, fragment)
-	        				.commit();
+//			FragmentManager fragmentManager = getFragmentManager();
+//	        Fragment fragment = new BarcodeScanner();
+//	        fragmentManager.beginTransaction()
+//	        				.add(R.id.content_frame, fragment)
+//	        				.commit();
+			_ref.setActiveFragment(new BarcodeScanner(), R.string.title_activity_barcode_scanner, true);
 		}
 		
 	}
