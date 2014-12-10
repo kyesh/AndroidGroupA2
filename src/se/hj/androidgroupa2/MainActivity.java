@@ -332,12 +332,11 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
         
 		if (realPos == NAV_ITEM_STAFF.BORROWINGS.getNumVal())
 		{
-			//setActiveFragment(new TitleDetailFragment(), R.string.title_activity_titleDetailsPage, false);
 			setActiveFragment(new BorrowingsFragment(), item.Text, false);
 		}
 		else if (realPos == NAV_ITEM_STAFF.NOTIFICATIONS.getNumVal())
 		{
-			//TODO: Start notifications activity
+			setActiveFragment(new NotificationFragment(), R.string.title_activity_notification, false);
 		}
 		else if (realPos == NAV_ITEM_STAFF.BARCODE_SCANNER.getNumVal())
 		{
