@@ -2,10 +2,12 @@ package se.hj.androidgroupa2;
 
 import java.util.ArrayList;
 
+import se.hj.androidgroupa2.objects.ApiHelper;
 import se.hj.androidgroupa2.objects.Loan;
 import se.hj.androidgroupa2.objects.OnFragmentCompleteListener;
 import se.hj.androidgroupa2.objects.Reservation;
 import se.hj.androidgroupa2.objects.UpdateDataInterface;
+import se.hj.androidgroupa2.objects.UserCategory;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.res.Resources;
@@ -47,6 +49,13 @@ public class BorrowingsFragment extends Fragment implements UpdateDataInterface 
 		View rootView = inflater.inflate(R.layout.fragment_borrowings, container, false);
 		
 		_res = getActivity().getResources();
+		getActivity().setTitle(R.string.title_activity_borrowings);
+		
+		if (getActivity().getClass() == MainActivity.class)
+		{
+			MainActivity mainActivity = (MainActivity) getActivity();
+			mainActivity.updateCheckedMenuItem(mainActivity.getMenuItemPosition(MainActivity.NAV_ITEM_STAFF.BORROWINGS.getNumVal()));
+		}
 		
 		_progressBar = (ProgressBar) rootView.findViewById(R.id.borrowings_progressBar);
 		_list = (ListView) rootView.findViewById(R.id.borrowings_list);

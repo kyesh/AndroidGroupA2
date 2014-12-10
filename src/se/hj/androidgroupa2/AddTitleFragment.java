@@ -207,6 +207,14 @@ public class AddTitleFragment extends Fragment implements OnClickListener {
 		String ISBN13;
 		
 		View rootView =  inflater.inflate(R.layout.fragment_add_title, container, false);
+		getActivity().setTitle(R.string.title_activity_addTitle);
+		
+		if (getActivity().getClass() == MainActivity.class)
+		{
+			MainActivity mainActivity = (MainActivity) getActivity();
+			mainActivity.updateCheckedMenuItem(mainActivity.getMenuItemPosition(MainActivity.NAV_ITEM_STAFF.ADD_TITLE.getNumVal()));
+		}
+		
 		_title = (EditText) rootView.findViewById(R.id.TitleField);
 		_ISBN10 = (EditText) rootView.findViewById(R.id.ISBN10Field);
 		_ISBN13 = (EditText) rootView.findViewById(R.id.ISBN13Field);

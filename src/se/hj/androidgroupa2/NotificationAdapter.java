@@ -1,24 +1,20 @@
 package se.hj.androidgroupa2;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import se.hj.androidgroupa2.objects.DoelibsNotification;
 import se.hj.androidgroupa2.objects.UpdateDataInterface;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -144,8 +140,12 @@ public class NotificationAdapter extends ArrayAdapter<DoelibsNotification> {
 		TextView message = (TextView) rootView.findViewById(R.id.notification_list_item_text);
 		Button leftButton = (Button) rootView.findViewById(R.id.notification_list_item_leftButton);
 		Button rightButton = (Button) rootView.findViewById(R.id.notification_list_item_rightButton);
+		LinearLayout root = (LinearLayout) rootView.findViewById(R.id.notification_list_item_root);
 		
 		DoelibsNotification not = getItem(position);
+		
+//		if (not.Read) root.setBackgroundColor(Color.WHITE);
+//		else root.setBackgroundColor(_res.getColor(R.color.borrowing_item_yellow));
 		
 		if (not.Type == DoelibsNotification.NOTIFICATION_TYPE.REGISTRATION_ACCEPT_REQUEST.getNumVal() ||
 				not.Type == DoelibsNotification.NOTIFICATION_TYPE.RENEW_EXPIRE_DATE_REQUEST.getNumVal())

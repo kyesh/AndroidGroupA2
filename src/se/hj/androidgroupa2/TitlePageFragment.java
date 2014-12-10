@@ -179,6 +179,7 @@ public class TitlePageFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_tittlepage_list, container,
 				false);
+		getActivity().setTitle(R.string.title_activity_title_page);
 		
 		_Loanables = (ListView) view.findViewById(R.id.loanables);
 		_BookTitle = (TextView) view.findViewById(R.id.title_item_title);

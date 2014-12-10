@@ -30,6 +30,7 @@ public class TitleDetailFragment extends Fragment {
 			Bundle savedInstanceState) {
 		
 		View rootView = inflater.inflate(R.layout.fragment_titledetails, container, false);
+		getActivity().setTitle(R.string.title_activity_titleDetailsPage);
 		
 		_title = (TextView) rootView.findViewById(R.id.TitleDetails_Title);
 		_authors = (TextView) rootView.findViewById(R.id.TitleDetails_Author);

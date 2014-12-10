@@ -25,6 +25,7 @@
     <string name="title_activity_titleDetailsPage">Title details</string>
     <string name="title_activity_login">Log in</string>
     <string name="title_activity_notification">Notifications</string>
+    <string name="title_activity_addTitle">Add title</string>
     
     <string name="header">Welcome</string>
     <string name="subheader">Please log in</string>

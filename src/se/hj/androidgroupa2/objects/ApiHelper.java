@@ -18,6 +18,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
@@ -113,6 +114,31 @@ public class ApiHelper {
 		catch(Exception e)
 		{
 			Log.e("API", "postToApi | " + e.getMessage());
+		}
+		return responseCode;
+	}
+
+	public static int putToApi(String url)
+	{
+		return ApiHelper.putToApi(url, null);
+	}
+	
+	public static int putToApi(String url, HttpEntity entity)
+	{
+		int responseCode = -1;
+		HttpClient client = new DefaultHttpClient();
+		HttpPut put = new HttpPut(url);
+		if (AuthentificationHeader != null) put.addHeader(AuthentificationHeader);
+		if (entity != null) put.setEntity(entity);
+		
+		try
+		{
+			HttpResponse response = client.execute(put);
+			responseCode = response.getStatusLine().getStatusCode();		
+		}
+		catch(Exception e)
+		{
+			Log.e("API", "putToApi | " + e.getMessage());
 		}
 		return responseCode;
 	}
