@@ -15,6 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import se.hj.androidgroupa2.objects.ApiHelper;
+import se.hj.androidgroupa2.objects.StoredDataName;
 import se.hj.androidgroupa2.objects.simpleTitle;
 
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -62,7 +63,27 @@ public class AddTitleFragment extends Fragment implements OnClickListener {
 	     }
 
 	     protected void onPostExecute(String result) {
+	    	 
 	    	 Log.i("kyesh","onPostExecuteRunning");
+	    	 
+	    	 try {
+				JSONObject resultObject = new JSONObject(result);
+				Fragment fragment = new TitlePageFragment();
+		        Bundle args = new Bundle();
+		        args.putString(StoredDataName.ARGS_TITLEID, resultObject.getString("TitleId"));
+		        Log.i("kyesh",resultObject.getString("TitleId"));
+		        fragment.setArguments(args);
+		        ((MainActivity) getActivity()).setActiveFragment(fragment, "Title Page", true);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				Toast toast = Toast.makeText(getActivity().getApplicationContext(), 
+			    		result, Toast.LENGTH_LONG);
+				toast.show();
+				e.printStackTrace();
+			}
+	    	 
+	    	 
+	    	 
 	     }
 	}
 	
@@ -204,7 +225,7 @@ public class AddTitleFragment extends Fragment implements OnClickListener {
 		
 		Bundle passedArugments = getArguments();
 		
-		Log.i("kyesh",passedArugments.toString());
+		//Log.i("kyesh",passedArugments.toString());
 		if(passedArugments != null && passedArugments.getString("ISBN13") != null){
 			ISBN13 = passedArugments.getString("ISBN13");
 			_ISBN13.setText(ISBN13);
