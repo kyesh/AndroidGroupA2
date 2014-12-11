@@ -14,8 +14,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import se.hj.androidgroupa2.objects.ApiHelper;
+import se.hj.androidgroupa2.objects.StoredDataName;
 import se.hj.androidgroupa2.objects.UserCategory;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -126,7 +126,7 @@ public class BarcodeScanner extends Fragment implements OnClickListener{
 	    			 //FragmentManager fragmentManager = getFragmentManager();
 	    		        Fragment fragment = new TitlePageFragment();
 	    		        Bundle args = new Bundle();
-	    		        args.putString("TitleId", TitleId);
+	    		        args.putString(StoredDataName.ARGS_TITLEID, TitleId);
 	    		        fragment.setArguments(args);
 	    		        ((MainActivity) getActivity()).setActiveFragment(fragment, "Title Page", true);
 	    		        /*fragmentManager.beginTransaction()

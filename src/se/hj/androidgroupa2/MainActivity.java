@@ -341,12 +341,11 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 		}
 		else if (realPos == NAV_ITEM_STAFF.ADD_TITLE.getNumVal())
 		{
-			//TODO: Start add title activity
 			setActiveFragment(new AddTitleFragment(), item.Text, true);
 		}
 		else if (realPos == NAV_ITEM_STAFF.SETTINGS.getNumVal())
 		{
-	        // TODO: Start settings activity
+			setActiveFragment(new SettingsFragment(), R.string.title_activity_settings, true);
 		}
 	}
 	
@@ -495,7 +494,16 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 			else
 			{
 				setLoggedInUser(ApiHelper.LoggedInUser);
-				setActiveFragment(new BorrowingsFragment(), R.string.title_activity_borrowings, false);
+				if (ApiHelper.LoggedInUser != null)
+					setActiveFragment(new BorrowingsFragment(), R.string.title_activity_borrowings, false);
+				else
+				{
+					SearchActivity newFragment = new SearchActivity();
+					Bundle args = new Bundle();
+					args.putString(StoredDataName.ARGS_SEARCH_QUERY, "");
+					newFragment.setArguments(args);
+					setActiveFragment(newFragment, R.string.title_activity_search, true);
+				}
 			}
 		}
 		else if (sender.getClass() == TitlePageFragment.class)

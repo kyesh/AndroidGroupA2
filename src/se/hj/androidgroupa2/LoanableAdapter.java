@@ -63,6 +63,11 @@ private UpdateDataInterface _dataUpdate;
 				CheckOutBtn.setActivated(false);
 				CheckOutBtn.setText("Unavailable");
 			}
+			else if (ApiHelper.LoggedInUser == null)
+			{
+				CheckOutBtn.setActivated(false);
+				CheckOutBtn.setText("Not logged in");
+			}
 			else
 			{
 				CheckOutBtn.setActivated(true);

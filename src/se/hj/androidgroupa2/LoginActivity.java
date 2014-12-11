@@ -11,9 +11,11 @@ import se.hj.androidgroupa2.objects.User;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -36,6 +38,7 @@ public class LoginActivity extends Fragment {
 	
 	Button _notNowBtn;
 	Button _loginBtn;
+	TextView _registerText;
 	
 	OnFragmentCompleteListener _fragmentCallback;
 	
@@ -87,6 +90,17 @@ public class LoginActivity extends Fragment {
 			@Override
 			public void onClick(View v) {
 				onLogIn(v);
+			}
+		});
+        
+        _registerText = (TextView) rootView.findViewById(R.id.registerText);
+        _registerText.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				String url = "http://doelibs-001-site1.myasp.net/Authentification/Register";
+				Intent i = new Intent(Intent.ACTION_VIEW);
+				i.setData(Uri.parse(url));
+				startActivity(i);
 			}
 		});
     	

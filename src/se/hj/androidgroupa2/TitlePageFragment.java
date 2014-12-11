@@ -29,10 +29,12 @@ import android.view.View.OnClickListener;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import se.hj.androidgroupa2.dummy.DummyContent;
+import se.hj.androidgroupa2.objects.ApiHelper;
 import se.hj.androidgroupa2.objects.ExtendedTitle;
 import se.hj.androidgroupa2.objects.Loanable;
 import se.hj.androidgroupa2.objects.OnFragmentCompleteListener;
@@ -59,6 +61,7 @@ public class TitlePageFragment extends Fragment implements UpdateDataInterface {
 	private ListView _Loanables;
 	private TextView _TitleYear;
 	private TextView _Authors;
+	private Button _AddLoanable;
 	
 	private LoanableAdapter loanableAdapter;
 	
@@ -187,6 +190,7 @@ public class TitlePageFragment extends Fragment implements UpdateDataInterface {
 		_BookTitle = (TextView) view.findViewById(R.id.title_item_title);
 		_Authors = (TextView) view.findViewById(R.id.title_author_item);
 		_TitleYear = (TextView) view.findViewById(R.id.title_item_year);
+		_AddLoanable = (Button) view.findViewById(R.id.addLoanableBtn);
 		
 		ArrayList<Loanable> temploanableList = new ArrayList<Loanable>();
 		/*Loanable tempLoanable = new Loanable();
@@ -222,6 +226,23 @@ public class TitlePageFragment extends Fragment implements UpdateDataInterface {
 //				fragmentManager.beginTransaction()
 //					.replace(R.id.content_frame, fragment)
 //					.commit();
+			}
+		});
+		
+		if (ApiHelper.LoggedInUser != null)
+		{
+			_AddLoanable.setEnabled(true);
+			_AddLoanable.setVisibility(View.VISIBLE);
+		}
+		else
+		{
+			_AddLoanable.setEnabled(false);
+			_AddLoanable.setVisibility(View.GONE);
+		}
+		_AddLoanable.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				//TODO: Add loanable
 			}
 		});
 
