@@ -49,6 +49,13 @@ public class NotificationFragment extends Fragment implements UpdateDataInterfac
 		View rootView = inflater.inflate(R.layout.fragment_notification, container, false);
 		
 		_res = getActivity().getResources();
+		getActivity().setTitle(R.string.title_activity_notification);
+		
+		if (getActivity().getClass() == MainActivity.class)
+		{
+			MainActivity mainActivity = (MainActivity) getActivity();
+			mainActivity.updateCheckedMenuItem(mainActivity.getMenuItemPosition(MainActivity.NAV_ITEM_STAFF.NOTIFICATIONS.getNumVal()));
+		}
 		
 		_progressBar = (ProgressBar) rootView.findViewById(R.id.notification_progressBar);
 		_list = (ListView) rootView.findViewById(R.id.notification_list);
@@ -110,6 +117,7 @@ public class NotificationFragment extends Fragment implements UpdateDataInterfac
 					_list.setVisibility(View.VISIBLE);
 				}
 			});
+//			DoelibsNotification.setNotificationsAsRead(_listItems);
 		}
 		else
 		{

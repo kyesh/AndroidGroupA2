@@ -19,6 +19,7 @@ import se.hj.androidgroupa2.objects.StoredDataName;
 import se.hj.androidgroupa2.objects.User;
 import se.hj.androidgroupa2.objects.UserCategory;
 import se.hj.androidgroupa2.objects.UserCategory.CATEGORY;
+import android.R.integer;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -196,7 +197,7 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
     	}
     }
     
-    private void setActiveFragment(Fragment fragment, int titleRes, boolean useBackStack)
+    public void setActiveFragment(Fragment fragment, int titleRes, boolean useBackStack)
     {
     	setActiveFragment(fragment, getResources().getString(titleRes), useBackStack);
     }
@@ -214,9 +215,22 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
     	}
     	
         FragmentTransaction transaction = fragmentManager.beginTransaction();
+        
+        // Special cases: -----------------------------
+        if (fragment.getClass() == BarcodeScanner.class)
+        {
+        	transaction.add(fragment, fragment.getClass().toString());
+        	_nav_list.setItemChecked(-1, true);
+        	transaction.commit();
+        	return;
+        } // ------------------------------------------
+        
         transaction.replace(R.id.content_frame, fragment, fragment.getClass().toString());
         if (useBackStack)
+        {
         	transaction.addToBackStack(null);
+        	_nav_list.setItemChecked(-1, true);
+        }
         else
         	fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         transaction.commit();    	
@@ -296,6 +310,11 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 		return list;
     }
     
+    public void updateCheckedMenuItem(int position)
+    {
+    	_nav_list.setItemChecked(position, true);
+    }
+    
 	public void drawerSelectItem(int position) {
 		
 		NavAdapterItem item = null;
@@ -304,27 +323,7 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 		{
 			_nav_list.setItemChecked(position, true);
 			item = _nav_items.get(position);
-			
-			if (ApiHelper.LoggedInUser == null)
-			{
-				if (position == NAV_ITEM_UNKNOWN.BARCODE_SCANNER.getNumVal())
-					realPos = NAV_ITEM_STAFF.BARCODE_SCANNER.getNumVal();
-				else if (position == NAV_ITEM_UNKNOWN.SETTINGS.getNumVal())
-					realPos = NAV_ITEM_STAFF.SETTINGS.getNumVal();
-			}
-			else if (ApiHelper.LoggedInUser.Category.CategoryId == UserCategory.CATEGORY.STUDENT.getNumVal())
-			{
-				if (position == NAV_ITEM_STUDENT.BORROWINGS.getNumVal())
-					realPos = NAV_ITEM_STAFF.BORROWINGS.getNumVal();
-				else if (position == NAV_ITEM_STUDENT.NOTIFICATIONS.getNumVal())
-					realPos = NAV_ITEM_STAFF.NOTIFICATIONS.getNumVal();
-				else if (position == NAV_ITEM_STUDENT.BARCODE_SCANNER.getNumVal())
-					realPos = NAV_ITEM_STAFF.BARCODE_SCANNER.getNumVal();
-				else if (position == NAV_ITEM_STUDENT.SETTINGS.getNumVal())
-					realPos = NAV_ITEM_STAFF.SETTINGS.getNumVal();
-			}
-			else
-				realPos = position;
+			realPos = getMenuItemPosition(position);
 		}
 		else return;
         
@@ -349,6 +348,32 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 		{
 	        // TODO: Start settings activity
 		}
+	}
+	
+	public int getMenuItemPosition(int position)
+	{
+		int realPos = 0;
+		if (ApiHelper.LoggedInUser == null)
+		{
+			if (position == NAV_ITEM_UNKNOWN.BARCODE_SCANNER.getNumVal())
+				realPos = NAV_ITEM_STAFF.BARCODE_SCANNER.getNumVal();
+			else if (position == NAV_ITEM_UNKNOWN.SETTINGS.getNumVal())
+				realPos = NAV_ITEM_STAFF.SETTINGS.getNumVal();
+		}
+		else if (ApiHelper.LoggedInUser.Category.CategoryId == UserCategory.CATEGORY.STUDENT.getNumVal())
+		{
+			if (position == NAV_ITEM_STUDENT.BORROWINGS.getNumVal())
+				realPos = NAV_ITEM_STAFF.BORROWINGS.getNumVal();
+			else if (position == NAV_ITEM_STUDENT.NOTIFICATIONS.getNumVal())
+				realPos = NAV_ITEM_STAFF.NOTIFICATIONS.getNumVal();
+			else if (position == NAV_ITEM_STUDENT.BARCODE_SCANNER.getNumVal())
+				realPos = NAV_ITEM_STAFF.BARCODE_SCANNER.getNumVal();
+			else if (position == NAV_ITEM_STUDENT.SETTINGS.getNumVal())
+				realPos = NAV_ITEM_STAFF.SETTINGS.getNumVal();
+		}
+		else
+			realPos = position;
+		return realPos;
 	}
 	
 	public void setLoggedInUser(User user)
@@ -565,6 +590,11 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 		@Override
 		public void onBackStackChanged() {
 			setActionBarArrow();
+
+			FragmentManager fragmentManager = MainActivity.this.getFragmentManager();
+	    	Fragment check = fragmentManager.findFragmentByTag(BarcodeScanner.class.toString());
+	    	if (check != null)
+	    		fragmentManager.beginTransaction().remove(check).commit();
 		}
     }
     

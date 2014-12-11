@@ -2,6 +2,7 @@ package se.hj.androidgroupa2.objects;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -9,6 +10,7 @@ import org.json.JSONObject;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.EditText;
 
 public class DoelibsNotification implements Serializable {
 
@@ -80,11 +82,11 @@ public class DoelibsNotification implements Serializable {
 				}
 				else if (noti.Type == NOTIFICATION_TYPE.RENEW_EXPIRE_DATE_REQUEST.getNumVal())
 				{
-					if (allow) ;// POST
+					if (allow)
+						responseCode = ApiHelper.postToApi("http://doelibs-001-site1.myasp.net/api/user/" + 
+								noti.Sender.UserId.toString() + "/?renewExpireDate");
 					else
-					{
 						responseCode = ApiHelper.deleteFromApi("http://doelibs-001-site1.myasp.net/api/notification/" + noti.NotificationId.toString());
-					}
 				}
 				else
 				{
@@ -148,6 +150,23 @@ public class DoelibsNotification implements Serializable {
 			@Override
 			protected void onPostExecute(ArrayList<DoelibsNotification> result) {
 				callback.callbackFunction(result);
+			}
+		};
+		task.execute();
+    }
+    
+    public static void setNotificationsAsRead(final ArrayList<DoelibsNotification> nots)
+    {
+    	AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+			@Override
+			protected Void doInBackground(Void... params) {
+				
+				for (int i = 0; i < nots.size(); i++)
+				{
+					DoelibsNotification item = nots.get(i);
+					if (!item.Read) ApiHelper.putToApi("/api/notification/" + item.NotificationId + "?read=true");
+				}
+				return null;
 			}
 		};
 		task.execute();
