@@ -55,7 +55,8 @@ private UpdateDataInterface _dataUpdate;
 		
 			DoeLibsId.setText(loanable.Barcode.toString());
 			if (loanable.Owner != null)
-				Location.setText(loanable.Owner.Room + " ("+ loanable.Category +")");
+				//Location.setText(loanable.Owner.Room + " ("+ loanable.Category +")");
+				Location.setText(loanable.Location + " (" + loanable.Category + ")");
 			else
 				Location.setText("Unknown" + " ("+ loanable.Category +")");
 			if(loanable.Status != STATUS.AVAILABLE)

@@ -128,7 +128,7 @@ public class LoginActivity extends Fragment {
 	        //LoginUser.logIn("rob.day@hj.see", "secret", new LoginUser.CallbackReference() {
 				@Override
 				public void callbackFunction(User user) {
-					if (ApiHelper.LoggedInUser == null || ApiHelper.AuthentificationHeader == null)
+					if (ApiHelper.LoggedInUser == null || ApiHelper.AuthentificationHeader == null || ApiHelper.AuthentificationCookieValue == null)
 			        	_error.setText("Wrong email or password");
 					else
 					{

@@ -54,7 +54,7 @@ public class Loan implements Serializable {
 				JSONArray loans;
 				try {
 					loans = new JSONArray(ApiHelper.getFromApi("http://doelibs-001-site1.myasp.net/api/loan/"));
-				} catch (JSONException e) {
+				} catch (Exception e) {
 					Log.e("JSON PARSE", "get loans from user api");
 					return null;
 				}

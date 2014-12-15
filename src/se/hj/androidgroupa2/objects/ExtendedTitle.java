@@ -95,7 +95,7 @@ public class ExtendedTitle implements Serializable {
 				JSONObject raw;
 				try {
 					raw = new JSONObject(ApiHelper.getFromApi("http://doelibs-001-site1.myasp.net/api/search/?searchTerm=&searchOption=Title"));
-				} catch (JSONException e) {
+				} catch (Exception e) {
 					Log.e("JSON PARSE", "Parse to get current user from api");
 					return null;
 				}

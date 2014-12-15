@@ -41,6 +41,7 @@ import se.hj.androidgroupa2.objects.OnFragmentCompleteListener;
 import se.hj.androidgroupa2.objects.StoredDataName;
 import se.hj.androidgroupa2.objects.Title;
 import se.hj.androidgroupa2.objects.UpdateDataInterface;
+import se.hj.androidgroupa2.objects.UserCategory;
 
 
 /*
@@ -229,7 +230,7 @@ public class TitlePageFragment extends Fragment implements UpdateDataInterface {
 			}
 		});
 		
-		if (ApiHelper.LoggedInUser != null)
+		if (ApiHelper.LoggedInUser != null && ApiHelper.LoggedInUser.Category.CategoryId == UserCategory.CATEGORY.STAFF.getNumVal())// && false
 		{
 			_AddLoanable.setEnabled(true);
 			_AddLoanable.setVisibility(View.VISIBLE);
@@ -242,7 +243,7 @@ public class TitlePageFragment extends Fragment implements UpdateDataInterface {
 		_AddLoanable.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				//TODO: Add loanable
+				_callbackActivity.onFragmentComplete(TitlePageFragment.this, _extendedTitle.TitleInformation.TitleId);
 			}
 		});
 

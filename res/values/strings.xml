@@ -26,6 +26,7 @@
     <string name="title_activity_login">Log in</string>
     <string name="title_activity_notification">Notifications</string>
     <string name="title_activity_addTitle">Add title</string>
+    <string name="title_activity_addLoanable">Add loanable</string>
     <string name="title_activity_settings">Settings</string>
     
     <string name="header">Welcome</string>

@@ -54,6 +54,7 @@ public class ApiHelper {
 			{
 				Header[] headers = response.getHeaders("Set-Cookie");
 				if (headers.length > 0) AuthentificationCookieValue = headers[0].getValue();
+				else AuthentificationCookieValue = null;
 			}
 
 			BufferedReader reader = new BufferedReader(new InputStreamReader(entity.getContent(), "UTF-8"));

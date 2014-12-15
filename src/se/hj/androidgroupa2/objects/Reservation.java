@@ -47,7 +47,7 @@ public class Reservation implements Serializable {
 				JSONArray reservations;
 				try {
 					reservations = new JSONArray(ApiHelper.getFromApi("http://doelibs-001-site1.myasp.net/api/reservation/"));
-				} catch (JSONException e) {
+				} catch (Exception e) {
 					Log.e("JSON PARSE", "get reservations from user api");
 					return null;
 				}

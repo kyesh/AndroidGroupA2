@@ -102,20 +102,22 @@ public class BorrowingsFragment extends Fragment implements UpdateDataInterface 
 				public void callbackFunction(Object result) {
 
 					ArrayList<Loan> loans = (ArrayList<Loan>) result;
-					
-					if (loans.size() != 0)
+					if (loans != null)
 					{
-						BorrowingAdapterItem item = new BorrowingAdapterItem();
-						item.Header = _res.getString(R.string.borrowing_loansTitle);
-						_listItems.add(item);
+						if (loans.size() != 0)
+						{
+							BorrowingAdapterItem item = new BorrowingAdapterItem();
+							item.Header = _res.getString(R.string.borrowing_loansTitle);
+							_listItems.add(item);
+						}
+						for (int i = 0; i < loans.size(); i++)
+						{
+							BorrowingAdapterItem item = new BorrowingAdapterItem();
+							item.BorrowerLoan = loans.get(i);
+							_listItems.add(item);
+						}
+						_listAdapter.notifyDataSetChanged();
 					}
-					for (int i = 0; i < loans.size(); i++)
-					{
-						BorrowingAdapterItem item = new BorrowingAdapterItem();
-						item.BorrowerLoan = loans.get(i);
-						_listItems.add(item);
-					}
-					_listAdapter.notifyDataSetChanged();
 					
 					if (_doneLoadingSome)
 					{
@@ -130,19 +132,22 @@ public class BorrowingsFragment extends Fragment implements UpdateDataInterface 
 				@Override
 				public void callbackFunction(ArrayList<Reservation> reservations) {
 
-					if (reservations.size() != 0)
+					if (reservations != null)
 					{
-						BorrowingAdapterItem item = new BorrowingAdapterItem();
-						item.Header = _res.getString(R.string.borrowing_reservationsTitle);
-						_listItems.add(item);
+						if (reservations.size() != 0)
+						{
+							BorrowingAdapterItem item = new BorrowingAdapterItem();
+							item.Header = _res.getString(R.string.borrowing_reservationsTitle);
+							_listItems.add(item);
+						}
+						for (int i = 0; i < reservations.size(); i++)
+						{
+							BorrowingAdapterItem item = new BorrowingAdapterItem();
+							item.BorrowerReservation = reservations.get(i);
+							_listItems.add(item);
+						}
+						_listAdapter.notifyDataSetChanged();
 					}
-					for (int i = 0; i < reservations.size(); i++)
-					{
-						BorrowingAdapterItem item = new BorrowingAdapterItem();
-						item.BorrowerReservation = reservations.get(i);
-						_listItems.add(item);
-					}
-					_listAdapter.notifyDataSetChanged();
 
 					if (_doneLoadingSome)
 					{

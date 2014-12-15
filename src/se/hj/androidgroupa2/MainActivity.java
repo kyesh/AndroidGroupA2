@@ -526,6 +526,14 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 					fragment.setArguments(args);
 					setActiveFragment(fragment, R.string.title_activity_titleDetailsPage, true);
 				}
+				else if (params.getClass() == Integer.class)
+				{
+					Bundle args = new Bundle();
+					args.putString(StoredDataName.ARGS_TITLEID, ((Integer) params).toString());
+					Fragment fragment = new AddLoanable();
+					fragment.setArguments(args);
+					setActiveFragment(fragment, "Add Loanable", true);
+				}
 			}
 		}
 		else if (sender.getClass() == SearchActivity.class)
@@ -621,7 +629,8 @@ public class MainActivity extends Activity implements OnFragmentCompleteListener
 			SharedPreferences prefs = getSharedPreferences(StoredDataName.SHARED_PREF, MODE_PRIVATE); 
 			Boolean Shake = prefs.getBoolean(StoredDataName.PREF_SETTINGS_SHAKE, true);
 
-			if (_Accel > 12 && Shake == true) {
+			//Log.e("TEST: ", "Accel: " + Float.toString(_Accel) + " | Shake: " + Boolean.toString(Shake));
+			if (_Accel > 6 && Shake == true) {
 
 				Bundle args = new Bundle();
 				args.putString(StoredDataName.ARGS_RANDOM_TITLE, "");

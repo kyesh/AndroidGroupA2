@@ -30,9 +30,9 @@ public class LoginUser extends AsyncTask<String, Void, User> {
 		JSONObject result;
 		try {
 			result = new JSONObject(ApiHelper.getFromApi("http://doelibs-001-site1.myasp.net/api/User", true));
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			Log.e("JSON PARSE", "Parse to get current user from api");
-			return null;
+			result = null;
 		}
 		User loggedInUser = User.parseUserFromJSONObject(result);
 		if (loggedInUser != null)
@@ -42,7 +42,9 @@ public class LoginUser extends AsyncTask<String, Void, User> {
 		}
 		else
 		{
+			ApiHelper.LoggedInUser = null;
 			ApiHelper.AuthentificationHeader = null;
+			ApiHelper.AuthentificationCookieValue = null;
 			return null;
 		}
 	}
